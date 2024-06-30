@@ -13,6 +13,7 @@ let already_stopped = false;
 
 run({
 	files: [
+		`${__dirname}/tests/src/AjvUtilities.spec.ts`,
 	],
 	concurrency: true,
 	signal: ac.signal,
