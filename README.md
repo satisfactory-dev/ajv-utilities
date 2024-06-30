@@ -3,7 +3,7 @@
 
 # Installation
 
-`npm install --save-dev @satisfactory-dev/ajv-utlities`
+`npm install --save-dev @satisfactory-dev/ajv-utilities`
 
 # Usage
 
@@ -11,7 +11,7 @@
 
 ```ts
 import Ajv from 'ajv/dist/2020';
-import {compile, FailedToCompileSchema} from '@satisfactory-dev/ajv-utlities';
+import {compile, FailedToCompileSchema} from '@satisfactory-dev/ajv-utilities';
 
 const schema = {type: 'string'};
 
@@ -31,7 +31,7 @@ try {
 ```ts
 import Ajv from 'ajv/dist/2020';
 import standalone from 'ajv/dist/standalone';
-import {compile, esmify} from '@satisfactory-dev/ajv-utlities';
+import {compile, esmify} from '@satisfactory-dev/ajv-utilities';
 
 const ajv = new Ajv();
 
