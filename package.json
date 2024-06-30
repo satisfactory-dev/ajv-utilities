@@ -1,13 +1,13 @@
 {
   "type": "module",
-  "name": "@satisfactory-dev/ajv-utlities",
-  "description": "Ajv Utlities",
+  "name": "@satisfactory-dev/ajv-utilities",
+  "description": "Ajv Utilities",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/satisfactory-dev/ajv-utlities.git"
+    "url": "git+https://github.com/satisfactory-dev/ajv-utilities.git"
   },
-  "funding": "https://github.com/satisfactory-dev/ajv-utlities?sponsor=1",
+  "funding": "https://github.com/satisfactory-dev/ajv-utilities?sponsor=1",
   "exports": "./index.js",
   "types": "./index.d.ts",
   "devDependencies": {
