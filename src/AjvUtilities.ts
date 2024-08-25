@@ -15,7 +15,7 @@ export class FailedToCompileSchema extends Error
 	constructor(
 		schema:SchemaObject,
 		err:unknown,
-		message = 'Failed to compile schema'
+		message = 'Failed to compile schema',
 	) {
 		super(message);
 		this.schema = schema;

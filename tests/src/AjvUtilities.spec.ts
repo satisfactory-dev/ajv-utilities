@@ -45,7 +45,7 @@ void describe('AjvUtilities', () => {
 				() => {
 					const get_result = () => compile(
 						ajv,
-						schema as SchemaObject
+						schema as SchemaObject,
 					);
 
 					if (true === expectation) {
@@ -58,16 +58,16 @@ void describe('AjvUtilities', () => {
 							] = test_to_trigger_cache;
 							assert.strictEqual(
 								!!get_result()(input),
-								input_expectation
+								input_expectation,
 							);
 						}
 					} else {
 						assert.throws(
 							get_result,
-							expectation
+							expectation,
 						);
 					}
-				}
+				},
 			);
 		}
 	})
@@ -107,9 +107,9 @@ void describe('AjvUtilities', () => {
 				() => {
 					assert.equal(
 						esmify(input),
-						expectation
+						expectation,
 					)
-				}
+				},
 			)
 		}
 	});
