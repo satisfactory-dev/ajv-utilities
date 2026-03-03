@@ -3,13 +3,14 @@ import {
 	it,
 } from 'node:test';
 import assert from 'node:assert/strict';
-import Ajv, {
+import type {
 	SchemaObject,
-} from 'ajv/dist/2020';
+} from 'ajv/dist/2020.js';
+import Ajv from 'ajv/dist/2020.js';
 import {
 	compile,
 	esmify,
-} from '../../';
+} from '../../index.ts';
 
 void describe('AjvUtilities', () => {
 	void describe('compile', () => {

@@ -1,1 +1,1 @@
-export * from './src/AjvUtilities';
+export * from './src/AjvUtilities.ts';

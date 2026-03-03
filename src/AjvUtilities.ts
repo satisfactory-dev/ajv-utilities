@@ -1,7 +1,8 @@
-import Ajv, {
+import type {
 	SchemaObject,
 	ValidateFunction,
-} from 'ajv/dist/2020';
+} from 'ajv/dist/2020.js';
+import type Ajv from 'ajv/dist/2020.js';
 
 const cache = new WeakMap<SchemaObject, ValidateFunction>();
 

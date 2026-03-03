@@ -23,12 +23,12 @@ lint--eslint:
 lint: lint--prettier lint--tsc lint--eslint
 
 .PHONY: tests
-tests: build
-	@./node_modules/.bin/ts-node ./tests.ts
+tests:
+	@node ./tests.ts
 
 .PHONY: coverage
-coverage: build
-	@./node_modules/.bin/c8 ./node_modules/.bin/ts-node ./tests.ts
+coverage:
+	@./node_modules/.bin/c8 node ./tests.ts
 
 npm-prep: tests
 	@echo 'building from ./tsconfig.app-npm.json'
