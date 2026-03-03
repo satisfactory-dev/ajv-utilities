@@ -15,7 +15,7 @@ import {
 void describe('AjvUtilities', () => {
 	void describe('compile', () => {
 		const ajv = new Ajv();
-		const data_sets:(
+		const data_sets: (
 			| [unknown, {[key: string]: unknown}]
 			| [SchemaObject, true, [unknown, boolean][]]
 		)[] = [
@@ -71,18 +71,20 @@ void describe('AjvUtilities', () => {
 				},
 			);
 		}
-	})
+	});
 
 	void describe('esmify', () => {
-		const data_sets:[string, string][] = [
+		const data_sets: [string, string][] = [
 			['', ''],
 			[
 				'require("ajv/dist/runtime/equal").default',
+
 				// no import because there's no "use strict;" header
 				'fast_deep_equal',
 			],
 			[
 				'"use strict";',
+
 				// nothing to modify
 				'"use strict";',
 			],
@@ -109,9 +111,9 @@ void describe('AjvUtilities', () => {
 					assert.equal(
 						esmify(input),
 						expectation,
-					)
+					);
 				},
-			)
+			);
 		}
 	});
-})
+});

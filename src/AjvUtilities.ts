@@ -8,14 +8,14 @@ const cache = new WeakMap<SchemaObject, ValidateFunction>();
 
 const duplicate_compile_check: {[key: string]: ValidateFunction} = {};
 
-export class FailedToCompileSchema extends Error
-{
-	readonly err:unknown;
-	readonly schema:SchemaObject;
+export class FailedToCompileSchema extends Error {
+	readonly err: unknown;
+
+	readonly schema: SchemaObject;
 
 	constructor(
-		schema:SchemaObject,
-		err:unknown,
+		schema: SchemaObject,
+		err: unknown,
 		message = 'Failed to compile schema',
 	) {
 		super(message);
@@ -25,9 +25,9 @@ export class FailedToCompileSchema extends Error
 }
 
 export function compile<T>(
-	ajv:Ajv,
-	schema:SchemaObject,
-) : ValidateFunction<T> {
+	ajv: Ajv,
+	schema: SchemaObject,
+): ValidateFunction<T> {
 	try {
 		performance.mark('ajv compile start');
 
@@ -58,9 +58,8 @@ export function compile<T>(
 	}
 }
 
-export function esmify(code:string): string
-{
-	const replacements:{[key: string]: [string, string]} = {
+export function esmify(code: string): string {
+	const replacements: {[key: string]: [string, string]} = {
 		'require("ajv/dist/runtime/equal").default': [
 			'fast_deep_equal',
 			`import fast_deep_equal from 'fast-deep-equal';`,
@@ -71,7 +70,7 @@ export function esmify(code:string): string
 		],
 	};
 
-	const import_these:string[] = [];
+	const import_these: string[] = [];
 
 	for (const entry of Object.entries(replacements)) {
 		const [look_for, [replace_with, add_to_import]] = entry;
