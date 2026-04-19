@@ -7,6 +7,7 @@ import type {
 	FunctionDeclaration,
 	ImportDeclaration,
 	Node,
+	NodeArray,
 	SourceFile,
 	Statement,
 	TransformationContext,
@@ -174,6 +175,16 @@ export default class TypeScriptify {
 		);
 	}
 
+	#replace_is_array(
+		args?: Expression[]|NodeArray<Expression>,
+	) {
+		return factory.createCallExpression(
+			factory.createIdentifier('ajv_utilities__is_probably_array'),
+			undefined,
+			args,
+		);
+	}
+
 	#replace_is_object(
 		name: Expression,
 		then: Statement,
@@ -187,6 +198,47 @@ export default class TypeScriptify {
 			),
 			then,
 			else_statement,
+		);
+	}
+
+	#patch_is_array() {
+		return factory.createFunctionDeclaration(
+			undefined,
+			undefined,
+			'ajv_utilities__is_probably_array',
+			undefined,
+			[
+				factory.createParameterDeclaration(
+					undefined,
+					undefined,
+					'maybe',
+					undefined,
+					factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
+				),
+			],
+			factory.createTypePredicateNode(
+				undefined,
+				'maybe',
+				factory.createArrayTypeNode(
+					factory.createKeywordTypeNode(
+						SyntaxKind.UnknownKeyword,
+					),
+				),
+			),
+			factory.createBlock([
+				factory.createReturnStatement(
+					factory.createCallExpression(
+						factory.createPropertyAccessExpression(
+							factory.createIdentifier('Array'),
+							factory.createIdentifier('isArray'),
+						),
+						undefined,
+						[
+							factory.createIdentifier('maybe'),
+						],
+					),
+				),
+			]),
 		);
 	}
 
@@ -280,6 +332,7 @@ export default class TypeScriptify {
 			ajv: new Set<string>(),
 		};
 
+		let patch_with_is_array = false;
 		let patch_with_is_object = false;
 
 		const visitor: Visitor = (node: Node) => {
@@ -512,6 +565,30 @@ export default class TypeScriptify {
 					visitor,
 					context,
 				);
+			} else if (
+				isIfStatement(node)
+				&& isCallExpression(node.expression)
+				&& isPropertyAccessExpression(node.expression.expression)
+				&& isIdentifier(node.expression.expression.expression)
+				&& isIdentifier(node.expression.expression.name)
+				&& 'Array.isArray' === `${
+					node.expression.expression.expression.getText()
+				}.${
+					node.expression.expression.name.getText()
+				}`
+			) {
+				patch_with_is_array = true;
+
+				return visitEachChild(
+					factory.updateIfStatement(
+						node,
+						this.#replace_is_array(node.expression.arguments),
+						node.thenStatement,
+						node.elseStatement,
+					),
+					visitor,
+					context,
+				);
 			}
 
 			return visitEachChild(node, visitor, context);
@@ -549,6 +626,13 @@ export default class TypeScriptify {
 			}
 
 			let modified: Statement[] | undefined = undefined;
+
+			if (patch_with_is_array) {
+				modified = [
+					this.#patch_is_array(),
+					...(modified || result.statements),
+				];
+			}
 
 			if (patch_with_is_object) {
 				modified = [

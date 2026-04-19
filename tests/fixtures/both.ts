@@ -1,6 +1,7 @@
 import type { ErrorObject, ValidateFunction } from 'ajv';
 import type { const_string, enum_string } from './types.ts';
 function ajv_utilities__is_probably_object(maybe: unknown): maybe is Record<string, unknown> { return !!maybe && typeof maybe === "object" && !Array.isArray(maybe); }
+function ajv_utilities__is_probably_array(maybe: unknown): maybe is unknown[] { return Array.isArray(maybe); }
 import ucs2length from 'ajv/dist/runtime/ucs2length.js';
 export const validate_as_ConstString = validate20;
 const schema31 = { "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "docs.json.ts--lib--PropertySchemaToRegex--ConstString", "type": "object", "additionalProperties": false, "required": ["type", "const"], "properties": { "type": { "type": "string", "const": "string" }, "const": { "type": "string" } } };
@@ -174,7 +175,7 @@ function validate21(data: unknown, { instancePath = "", parentData, parentDataPr
         }
         if (data.enum !== undefined) {
             let data1 = data.enum;
-            if (Array.isArray(data1)) {
+            if (ajv_utilities__is_probably_array(data1)) {
                 if (data1.length < 2) {
                     const err5: ErrorObject = { instancePath: instancePath + "/enum", schemaPath: "#/properties/enum/minItems", keyword: "minItems", params: { limit: 2 }, message: "must NOT have fewer than 2 items" };
                     if (vErrors === null) {
