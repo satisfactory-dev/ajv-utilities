@@ -40,3 +40,7 @@ await writeFile(
 	esmify(standalone(ajv, compile(ajv, schema)))
 );
 ```
+
+## `typescriptify`
+
+Please refer to [the usage in tests for now](tests/src/AjvUtilities.test.ts).
