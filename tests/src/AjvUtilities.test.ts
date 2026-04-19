@@ -16,6 +16,9 @@ import Ajv from 'ajv/dist/2020.js';
 
 import standaloneCode from 'ajv/dist/standalone/index.js';
 
+import type {
+	TypeScriptifyConfig,
+} from '../../index.ts';
 import {
 	compile,
 	esmify,
@@ -152,13 +155,9 @@ void describe('AjvUtilities', () => {
 			`${import.meta.dirname}/../fixtures/both.ts`,
 		);
 
-		type typescriptify_config = {
-			[key: string]: [string, string],
-		};
-
 		const data_sets: (
 			| [string, string]
-			| [string, string, typescriptify_config]
+			| [string, string, TypeScriptifyConfig]
 		)[] = [
 			['', ''],
 			[
@@ -267,10 +266,12 @@ void describe('AjvUtilities', () => {
 				),
 				ConstStringCode_with_types.toString(),
 				{
+					specify_types: {
 					[ConstString.$id]: [
 						'const_string',
 						'./types.ts',
 					],
+				},
 				},
 			],
 			[
@@ -319,10 +320,12 @@ void describe('AjvUtilities', () => {
 				),
 				EnumStringCode_with_types.toString(),
 				{
+					specify_types: {
 					[EnumString.$id]: [
 						'enum_string',
 						'./types.ts',
 					],
+					},
 				},
 			],
 			[
@@ -349,6 +352,7 @@ void describe('AjvUtilities', () => {
 				),
 				both.toString(),
 				{
+					specify_types: {
 					[ConstString.$id]: [
 						'const_string',
 						'./types.ts',
@@ -357,6 +361,7 @@ void describe('AjvUtilities', () => {
 						'enum_string',
 						'./types.ts',
 					],
+					},
 				},
 			],
 		];

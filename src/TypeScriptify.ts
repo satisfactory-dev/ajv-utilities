@@ -38,13 +38,15 @@ import {
 } from 'typescript';
 
 export type Config = {
+	specify_types: {
 	[key: string]: [string, string],
+	},
 };
 
 export default class TypeScriptify {
 	#validate_function_name = /^validate\d+$/;
 
-	ify(code: string, config: Config): string {
+	ify(code: string, config?: Partial<Config>): string {
 		code = esmify(code);
 		const source = createSourceFile(
 			'ify.js',
@@ -54,13 +56,13 @@ export default class TypeScriptify {
 		);
 
 		const specify_types: {
-			[key: string]: Config[string][0],
+			[key: string]: Config['specify_types'][string][0],
 		} = {};
 
 		let result = transform(source, [
 			(context) => this.#first_pass(
 				context,
-				config,
+				config || {},
 				specify_types,
 			),
 		]);
@@ -78,9 +80,9 @@ export default class TypeScriptify {
 	}
 
 	#configEntry(
-		config: Config,
+		config: Config['specify_types'],
 		node: EmptyStatement,
-	): Config[string] | undefined {
+	): Config['specify_types'][string] | undefined {
 		const keys = Object.keys(config);
 
 		if (0 === keys.length) {
@@ -320,9 +322,9 @@ export default class TypeScriptify {
 
 	#first_pass(
 		context: TransformationContext,
-		config: Config,
+		config: Partial<Config>,
 		specify_types: {
-			[key: string]: Config[string][0],
+			[key: string]: Config['specify_types'][string][0],
 		},
 	) {
 		const prepend_with_imports: {
@@ -337,14 +339,15 @@ export default class TypeScriptify {
 
 		const visitor: Visitor = (node: Node) => {
 			if (
-				isEmptyStatement(node)
+				config.specify_types
+				&& isEmptyStatement(node)
 				&& isFunctionDeclaration(node.parent.parent)
 				&& node.parent.parent.name
 				&& this.#validate_function_name.test(
 					node.parent.parent.name.getText(),
 				)
 			) {
-				const maybe = this.#configEntry(config, node);
+				const maybe = this.#configEntry(config.specify_types, node);
 
 				if (maybe) {
 					specify_types[
@@ -664,7 +667,7 @@ export default class TypeScriptify {
 	#second_pass(
 		context: TransformationContext,
 		specify_types: Readonly<{
-			[key: string]: Config[string][0],
+			[key: string]: Config['specify_types'][string][0],
 		}>,
 	) {
 		if (Object.keys(specify_types).length < 1) {

@@ -98,7 +98,7 @@ export function esmify(code: string): string {
 
 export function typescriptify(
 	code: string,
-	config?: Config,
+	config?: Partial<Config>,
 ): string {
 	return (new TypeScriptify()).ify(code, config || {});
 }
