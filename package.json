@@ -18,7 +18,7 @@
     "prettier": "^3.8.2",
     "typescript": "^6.0.3"
   },
-  "dependencies": {
+  "peerDependencies": {
     "ajv": "^8.18.0"
   }
 }
