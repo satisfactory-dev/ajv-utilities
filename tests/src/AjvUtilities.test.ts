@@ -148,6 +148,11 @@ void describe('AjvUtilities', () => {
 		const ConstStringCode_without_schema = await readFile(
 			`${import.meta.dirname}/../fixtures/ConstString.without-schema.ts`,
 		);
+		const ConstStringCode_without_schema_or_unused_keys = await readFile(
+			`${
+				import.meta.dirname
+			}/../fixtures/ConstString.without-schema-or-unused-keys.ts`,
+		);
 		const ConstStringCode_verbose = await readFile(
 			`${import.meta.dirname}/../fixtures/ConstString.verbose.ts`,
 		);
@@ -348,6 +353,44 @@ void describe('AjvUtilities', () => {
 				ConstStringCode_without_schema.toString(),
 				{
 					remove_schema: true,
+					specify_types: {
+						[ConstString.$id]: [
+							'const_string',
+							'./types.ts',
+						],
+					},
+				},
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: false,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
+							ConstString,
+						],
+					}),
+					{
+						// oxlint-disable-next-line @stylistic/max-len
+						foo: ConstString.$id,
+					},
+				),
+				ConstStringCode_without_schema_or_unused_keys.toString(),
+				{
+					remove_schema: true,
+					remove_dataCtxKeys: [
+						'parentData',
+						'parentDataProperty',
+						'rootData',
+						'dynamicAnchors',
+					],
 					specify_types: {
 						[ConstString.$id]: [
 							'const_string',

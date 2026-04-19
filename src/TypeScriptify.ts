@@ -1,10 +1,16 @@
+import type {
+	ValidateFunction,
+} from 'ajv';
+
 import {
 	esmify,
 } from './AjvUtilities.ts';
 import type {
+	BindingPattern,
 	EmptyStatement,
 	Expression,
 	FunctionDeclaration,
+	Identifier,
 	ImportDeclaration,
 	Node,
 	NodeArray,
@@ -24,6 +30,7 @@ import {
 	isFunctionDeclaration,
 	isIdentifier,
 	isIfStatement,
+	isObjectBindingPattern,
 	isObjectLiteralExpression,
 	isPrefixUnaryExpression,
 	isPropertyAccessExpression,
@@ -40,6 +47,13 @@ import {
 
 export type Config = {
 	remove_schema: boolean,
+	remove_dataCtxKeys: [
+		keyof Exclude<Parameters<ValidateFunction>[1], undefined>,
+		...(keyof Exclude<
+			Parameters<ValidateFunction>[1],
+			undefined
+		>)[],
+	],
 	specify_types: {
 		[key: string]: [string, string],
 	},
@@ -136,6 +150,7 @@ export default class TypeScriptify {
 
 	#modify_validate(
 		node: FunctionDeclaration,
+		config: Partial<Config>,
 	) {
 		const [
 			data,
@@ -152,11 +167,39 @@ export default class TypeScriptify {
 			data.initializer,
 		);
 
+		let options_name: (
+			| BindingPattern
+			| Identifier
+		) = options.name;
+
+		if (
+			config.remove_dataCtxKeys
+			&& options_name
+			&& isObjectBindingPattern(options_name)
+			&& options_name.elements.length > 0
+		) {
+			const elements = options_name.elements.filter((
+				maybe,
+			) => {
+				return (
+					isIdentifier(maybe.name)
+					&& !(
+						config.remove_dataCtxKeys as string[]
+					).includes(maybe.name.getText())
+				);
+			});
+
+			options_name = factory.updateObjectBindingPattern(
+				options_name,
+				elements,
+			);
+		}
+
 		const new_options = factory.updateParameterDeclaration(
 			options,
 			options.modifiers,
 			options.dotDotDotToken,
-			options.name,
+			options_name,
 			options.questionToken,
 			factory.createTypeReferenceNode('Partial', [
 				this.#shim_DataValidationCxt(),
@@ -414,7 +457,7 @@ export default class TypeScriptify {
 				prepend_with_imports.ajv.add('ValidateFunction');
 
 				return visitEachChild(
-					this.#modify_validate(node),
+					this.#modify_validate(node, config),
 					visitor,
 					context,
 				);
