@@ -1,7 +1,9 @@
-import type { ErrorObject, SchemaValidateFunction, ValidateFunction } from 'ajv';
+import type { ErrorObject, ValidateFunction } from 'ajv';
 export const foo = validate20;
 const schema31 = { "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "docs.json.ts--lib--PropertySchemaToRegex--ConstString", "type": "object", "additionalProperties": false, "required": ["type", "const"], "properties": { "type": { "type": "string", "const": "string" }, "const": { "type": "string" } } };
-function validate20(data: Exclude<Parameters<SchemaValidateFunction>[3], undefined>["rootData"], { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Exclude<Parameters<SchemaValidateFunction>[3], undefined>> = {}) {
+function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Parameters<ValidateFunction>[1] & {
+    rootData: unknown;
+}> = {}) {
     /*# sourceURL="docs.json.ts--lib--PropertySchemaToRegex--ConstString" */ ;
     let vErrors: ErrorObject[] | null = null;
     let errors = 0;

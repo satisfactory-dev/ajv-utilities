@@ -203,12 +203,14 @@ void describe('AjvUtilities', () => {
 				),
 				[
 					// oxlint-disable-next-line @stylistic/max-len
-					`import type { SchemaValidateFunction, ValidateFunction } from 'ajv';`,
+					`import type { ValidateFunction } from 'ajv';`,
 					'export const foo = validate20;',
 					'const schema31 = { "$id": "foo" };',
 
 					// oxlint-disable-next-line @stylistic/max-len
-					'function validate20(data: Exclude<Parameters<SchemaValidateFunction>[3], undefined>["rootData"], { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Exclude<Parameters<SchemaValidateFunction>[3], undefined>> = {}) {',
+					'function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Parameters<ValidateFunction>[1] & {',
+					'    rootData: unknown;',
+					'}> = {}) {',
 					'    /*# sourceURL="foo" */ ;',
 					'    (validate20 as ValidateFunction).errors = null;',
 					'    return true;',

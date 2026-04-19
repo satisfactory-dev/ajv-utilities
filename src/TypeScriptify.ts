@@ -97,25 +97,31 @@ export default class TypeScriptify {
 	}
 
 	#shim_DataValidationCxt() {
-		return factory.createTypeReferenceNode(
-			'Exclude',
-			[
-				factory.createIndexedAccessTypeNode(
+		return factory.createIntersectionTypeNode([
+			factory.createIndexedAccessTypeNode(
 					factory.createTypeReferenceNode(
 						'Parameters',
 						[
 							factory.createTypeReferenceNode(
-								'SchemaValidateFunction',
+								'ValidateFunction',
 							),
 						],
 					),
 					factory.createLiteralTypeNode(
-						factory.createNumericLiteral(3),
+						factory.createNumericLiteral(1),
+					),
+			),
+			factory.createTypeLiteralNode([
+				factory.createPropertySignature(
+					undefined,
+					'rootData',
+					undefined,
+					factory.createKeywordTypeNode(
+						SyntaxKind.UnknownKeyword,
 					),
 				),
-				factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword),
-			],
-		);
+			]),
+		]);
 	}
 
 	#modify_validate(
@@ -132,12 +138,7 @@ export default class TypeScriptify {
 			data.dotDotDotToken,
 			data.name,
 			data.questionToken,
-			factory.createIndexedAccessTypeNode(
-				this.#shim_DataValidationCxt(),
-				factory.createLiteralTypeNode(
-					factory.createStringLiteral('rootData'),
-				),
-			),
+			factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
 			data.initializer,
 		);
 
@@ -215,7 +216,7 @@ export default class TypeScriptify {
 				)
 				&& 2 === node.parameters.length
 			) {
-				prepend_with_imports.ajv.add('SchemaValidateFunction');
+				prepend_with_imports.ajv.add('ValidateFunction');
 
 				return visitEachChild(
 					this.#modify_validate(node),
@@ -430,12 +431,7 @@ export default class TypeScriptify {
 							undefined,
 							'data',
 							factory.createTypeReferenceNode(
-								'ValidateFunction',
-								[
-									factory.createTypeReferenceNode(
 										specify_types[function_name],
-									),
-								],
 							),
 						),
 						node.body,
