@@ -39,7 +39,7 @@ import {
 
 export type Config = {
 	specify_types: {
-	[key: string]: [string, string],
+		[key: string]: [string, string],
 	},
 };
 

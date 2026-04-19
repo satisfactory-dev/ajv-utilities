@@ -267,11 +267,11 @@ void describe('AjvUtilities', () => {
 				ConstStringCode_with_types.toString(),
 				{
 					specify_types: {
-					[ConstString.$id]: [
-						'const_string',
-						'./types.ts',
-					],
-				},
+						[ConstString.$id]: [
+							'const_string',
+							'./types.ts',
+						],
+					},
 				},
 			],
 			[
@@ -321,10 +321,10 @@ void describe('AjvUtilities', () => {
 				EnumStringCode_with_types.toString(),
 				{
 					specify_types: {
-					[EnumString.$id]: [
-						'enum_string',
-						'./types.ts',
-					],
+						[EnumString.$id]: [
+							'enum_string',
+							'./types.ts',
+						],
 					},
 				},
 			],
@@ -353,14 +353,14 @@ void describe('AjvUtilities', () => {
 				both.toString(),
 				{
 					specify_types: {
-					[ConstString.$id]: [
-						'const_string',
-						'./types.ts',
-					],
-					[EnumString.$id]: [
-						'enum_string',
-						'./types.ts',
-					],
+						[ConstString.$id]: [
+							'const_string',
+							'./types.ts',
+						],
+						[EnumString.$id]: [
+							'enum_string',
+							'./types.ts',
+						],
 					},
 				},
 			],
