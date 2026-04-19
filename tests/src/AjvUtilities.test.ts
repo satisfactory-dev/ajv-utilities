@@ -145,6 +145,12 @@ void describe('AjvUtilities', () => {
 		const ConstStringCode_with_types = await readFile(
 			`${import.meta.dirname}/../fixtures/ConstString.with-types.ts`,
 		);
+		const ConstStringCode_without_schema = await readFile(
+			`${import.meta.dirname}/../fixtures/ConstString.without-schema.ts`,
+		);
+		const ConstStringCode_verbose = await readFile(
+			`${import.meta.dirname}/../fixtures/ConstString.verbose.ts`,
+		);
 		const EnumStringCode = await readFile(
 			`${import.meta.dirname}/../fixtures/EnumString.ts`,
 		);
@@ -157,7 +163,7 @@ void describe('AjvUtilities', () => {
 
 		const data_sets: (
 			| [string, string]
-			| [string, string, TypeScriptifyConfig]
+			| [string, string, Partial<TypeScriptifyConfig>]
 		)[] = [
 			['', ''],
 			[
@@ -233,6 +239,50 @@ void describe('AjvUtilities', () => {
 							optimize: 2,
 						},
 						schemas: [
+							{
+								$id: 'foo',
+							},
+						],
+					}),
+					{
+						foo: 'foo',
+					},
+				),
+				[
+					// oxlint-disable-next-line @stylistic/max-len
+					`import type { ValidateFunction } from 'ajv';`,
+					'export const foo = validate20;',
+
+					// oxlint-disable-next-line @stylistic/max-len
+					'function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Parameters<ValidateFunction>[1] & {',
+					'    rootData: unknown;',
+					'}> = {}) {',
+					'    /*# sourceURL="foo" */ ;',
+					'    (validate20 as ValidateFunction).errors = null;',
+					'    return true;',
+					'}',
+
+					// oxlint-disable-next-line @stylistic/max-len
+					'validate20.evaluated = { "dynamicProps": false, "dynamicItems": false } as ValidateFunction["evaluated"];',
+					'',
+				].join('\n'),
+				{
+					remove_schema: true,
+				},
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: false,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
 							ConstString,
 						],
 					}),
@@ -265,6 +315,69 @@ void describe('AjvUtilities', () => {
 					},
 				),
 				ConstStringCode_with_types.toString(),
+				{
+					specify_types: {
+						[ConstString.$id]: [
+							'const_string',
+							'./types.ts',
+						],
+					},
+				},
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: false,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
+							ConstString,
+						],
+					}),
+					{
+						// oxlint-disable-next-line @stylistic/max-len
+						foo: ConstString.$id,
+					},
+				),
+				ConstStringCode_without_schema.toString(),
+				{
+					remove_schema: true,
+					specify_types: {
+						[ConstString.$id]: [
+							'const_string',
+							'./types.ts',
+						],
+					},
+				},
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: true,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
+							ConstString,
+						],
+					}),
+					{
+						// oxlint-disable-next-line @stylistic/max-len
+						foo: ConstString.$id,
+					},
+				),
+				ConstStringCode_verbose.toString(),
 				{
 					specify_types: {
 						[ConstString.$id]: [

@@ -30,6 +30,7 @@ import {
 	isStringLiteral,
 	isTypeOfExpression,
 	isVariableDeclaration,
+	isVariableStatement,
 	ScriptTarget,
 	SyntaxKind,
 	transform,
@@ -38,6 +39,7 @@ import {
 } from 'typescript';
 
 export type Config = {
+	remove_schema: boolean,
 	specify_types: {
 		[key: string]: [string, string],
 	},
@@ -338,6 +340,44 @@ export default class TypeScriptify {
 		let patch_with_is_object = false;
 
 		const visitor: Visitor = (node: Node) => {
+			if (
+				config.remove_schema
+				&& isVariableStatement(node)
+				&& !node.modifiers
+				&& node.declarationList.declarations.length > 0
+			) {
+				const was = node.declarationList.declarations.length;
+
+				const declarartions = node.declarationList.declarations
+					.filter((
+						maybe,
+					) => {
+						return (
+							!isIdentifier(maybe.name)
+							|| !/^schema\d+$/.test(maybe.name.getText())
+						);
+					});
+
+				if (was !== declarartions.length) {
+					if (declarartions.length < 1) {
+						return undefined;
+					} else {
+						return visitEachChild(
+							factory.updateVariableStatement(
+								node,
+								node.modifiers,
+								factory.updateVariableDeclarationList(
+									node.declarationList,
+									declarartions,
+								),
+							),
+							visitor,
+							context,
+						);
+					}
+				}
+			}
+
 			if (
 				config.specify_types
 				&& isEmptyStatement(node)
