@@ -1,11 +1,11 @@
 import type { ErrorObject, ValidateFunction } from 'ajv';
-import type { Bar, Foo } from '@satisfactory-dev/docs.json.ts';
+import type { const_string, enum_string } from './types.ts';
 import ucs2length from 'ajv/dist/runtime/ucs2length.js';
 export const validate_as_ConstString = validate20;
 const schema31 = { "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "docs.json.ts--lib--PropertySchemaToRegex--ConstString", "type": "object", "additionalProperties": false, "required": ["type", "const"], "properties": { "type": { "type": "string", "const": "string" }, "const": { "type": "string" } } };
 function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Parameters<ValidateFunction>[1] & {
     rootData: unknown;
-}> = {}): data is Foo {
+}> = {}): data is const_string {
     /*# sourceURL="docs.json.ts--lib--PropertySchemaToRegex--ConstString" */ ;
     let vErrors: ErrorObject[] | null = null;
     let errors = 0;
@@ -104,7 +104,7 @@ const schema32 = { "$schema": "https://json-schema.org/draft/2020-12/schema", "$
 const func1 = ucs2length;
 function validate21(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Parameters<ValidateFunction>[1] & {
     rootData: unknown;
-}> = {}): data is Bar {
+}> = {}): data is enum_string {
     /*# sourceURL="docs.json.ts--lib--PropertySchemaToRegex--EnumString" */ ;
     let vErrors: ErrorObject[] | null = null;
     let errors = 0;

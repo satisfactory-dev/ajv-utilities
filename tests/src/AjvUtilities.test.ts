@@ -268,8 +268,8 @@ void describe('AjvUtilities', () => {
 				ConstStringCode_with_types.toString(),
 				{
 					[ConstString.$id]: [
-						'Foo',
-						'@satisfactory-dev/docs.json.ts',
+						'const_string',
+						'./types.ts',
 					],
 				},
 			],
@@ -320,8 +320,8 @@ void describe('AjvUtilities', () => {
 				EnumStringCode_with_types.toString(),
 				{
 					[EnumString.$id]: [
-						'Foo',
-						'@satisfactory-dev/docs.json.ts',
+						'enum_string',
+						'./types.ts',
 					],
 				},
 			],
@@ -350,12 +350,12 @@ void describe('AjvUtilities', () => {
 				both.toString(),
 				{
 					[ConstString.$id]: [
-						'Foo',
-						'@satisfactory-dev/docs.json.ts',
+						'const_string',
+						'./types.ts',
 					],
 					[EnumString.$id]: [
-						'Bar',
-						'@satisfactory-dev/docs.json.ts',
+						'enum_string',
+						'./types.ts',
 					],
 				},
 			],
