@@ -186,15 +186,16 @@ export default class TypeScriptify {
 			if (
 				isEmptyStatement(node)
 				&& isFunctionDeclaration(node.parent.parent)
+				&& node.parent.parent.name
 				&& this.#validate_function_name.test(
-					node.parent.parent.name?.getText() || '',
+					node.parent.parent.name.getText(),
 				)
 			) {
 				const maybe = this.#configEntry(config, node);
 
 				if (maybe) {
 					specify_types[
-						node.parent.parent.name?.getText() || ''
+						node.parent.parent.name.getText()
 					] = maybe[0];
 					prepend_with_imports.ajv.add('ValidateFunction');
 
@@ -208,8 +209,9 @@ export default class TypeScriptify {
 
 			if (
 				isFunctionDeclaration(node)
+				&& node.name
 				&& this.#validate_function_name.test(
-					node.name?.getText() || '',
+					node.name.getText(),
 				)
 				&& 2 === node.parameters.length
 			) {
