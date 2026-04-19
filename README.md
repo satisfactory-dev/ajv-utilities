@@ -43,4 +43,4 @@ await writeFile(
 
 ## `typescriptify`
 
-Please refer to [the usage in tests for now](tests/src/AjvUtilities.test.ts).
+Please refer to [the usage in tests for now](https://github.com/satisfactory-dev/ajv-utilities/blob/1ec5d2182aa7a44b76c1c77dc7398073d0f15438/tests/src/AjvUtilities.test.ts#L277).
