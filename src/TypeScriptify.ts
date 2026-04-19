@@ -99,17 +99,17 @@ export default class TypeScriptify {
 	#shim_DataValidationCxt() {
 		return factory.createIntersectionTypeNode([
 			factory.createIndexedAccessTypeNode(
-					factory.createTypeReferenceNode(
-						'Parameters',
-						[
-							factory.createTypeReferenceNode(
-								'ValidateFunction',
-							),
-						],
-					),
-					factory.createLiteralTypeNode(
-						factory.createNumericLiteral(1),
-					),
+				factory.createTypeReferenceNode(
+					'Parameters',
+					[
+						factory.createTypeReferenceNode(
+							'ValidateFunction',
+						),
+					],
+				),
+				factory.createLiteralTypeNode(
+					factory.createNumericLiteral(1),
+				),
 			),
 			factory.createTypeLiteralNode([
 				factory.createPropertySignature(
@@ -431,7 +431,7 @@ export default class TypeScriptify {
 							undefined,
 							'data',
 							factory.createTypeReferenceNode(
-										specify_types[function_name],
+								specify_types[function_name],
 							),
 						),
 						node.body,
