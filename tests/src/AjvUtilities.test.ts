@@ -1,16 +1,30 @@
 import {
+	readFile,
+} from 'node:fs/promises';
+
+import {
 	describe,
 	it,
 } from 'node:test';
+
 import assert from 'node:assert/strict';
+
 import type {
 	SchemaObject,
 } from 'ajv/dist/2020.js';
 import Ajv from 'ajv/dist/2020.js';
+
+import standaloneCode from 'ajv/dist/standalone/index.js';
+
 import {
 	compile,
 	esmify,
+	typescriptify,
 } from '../../index.ts';
+
+import ConstString from '../fixtures/ConstString.schema.json' with {
+	type: 'json',
+};
 
 void describe('AjvUtilities', () => {
 	void describe('compile', () => {
@@ -114,6 +128,159 @@ void describe('AjvUtilities', () => {
 					);
 				},
 			);
+		}
+	});
+
+	void describe('typescriptify', async () => {
+		const ConstStringCode = await readFile(
+			`${import.meta.dirname}/../fixtures/ConstString.ts`,
+		);
+		const ConstStringCode_with_types = await readFile(
+			`${import.meta.dirname}/../fixtures/ConstString.with-types.ts`,
+		);
+
+		type typescriptify_config = {
+			[key: string]: [string, string],
+		};
+
+		const data_sets: (
+			| [string, string]
+			| [string, string, typescriptify_config]
+		)[] = [
+			['', ''],
+			[
+				'require("ajv/dist/runtime/equal").default',
+
+				// no import because there's no "use strict;" header
+				'fast_deep_equal;\n',
+			],
+			[
+				'"use strict";',
+				'',
+			],
+			[
+				'"use strict";require("ajv/dist/runtime/equal").default',
+				[
+					'import fast_deep_equal from \'fast-deep-equal\';',
+					'fast_deep_equal;',
+					'',
+				].join('\n'),
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: false,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
+							{
+								$id: 'foo',
+							},
+						],
+					}),
+					{
+						foo: 'foo',
+					},
+				),
+				[
+					// oxlint-disable-next-line @stylistic/max-len
+					`import type { SchemaValidateFunction, ValidateFunction } from 'ajv';`,
+					'export const foo = validate20;',
+					'const schema31 = { "$id": "foo" };',
+
+					// oxlint-disable-next-line @stylistic/max-len
+					'function validate20(data: Exclude<Parameters<SchemaValidateFunction>[3], undefined>["rootData"], { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Exclude<Parameters<SchemaValidateFunction>[3], undefined>> = {}) {',
+					'    /*# sourceURL="foo" */ ;',
+					'    (validate20 as ValidateFunction).errors = null;',
+					'    return true;',
+					'}',
+
+					// oxlint-disable-next-line @stylistic/max-len
+					'validate20.evaluated = { "dynamicProps": false, "dynamicItems": false } as ValidateFunction["evaluated"];',
+					'',
+				].join('\n'),
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: false,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
+							ConstString,
+						],
+					}),
+					{
+						// oxlint-disable-next-line @stylistic/max-len
+						foo: ConstString.$id,
+					},
+				),
+				ConstStringCode.toString(),
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: false,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
+							ConstString,
+						],
+					}),
+					{
+						// oxlint-disable-next-line @stylistic/max-len
+						foo: ConstString.$id,
+					},
+				),
+				ConstStringCode_with_types.toString(),
+				{
+					'docs.json.ts--lib--PropertySchemaToRegex--ConstString': [
+						'Foo',
+						'@satisfactory-dev/docs.json.ts',
+					],
+				},
+			],
+		];
+
+		let i = 0;
+		for (const data_set of data_sets) {
+			const [input, expectation, config] = data_set;
+
+			void it(
+				`typescriptify(data_sets[${
+					i
+				}][0], data_sets[${
+					i
+				}][2]) returns data_sets[${
+					i
+				}][1]`,
+				() => {
+					assert.equal(
+						typescriptify(input, config),
+						expectation,
+					);
+				},
+			);
+
+			++i;
 		}
 	});
 });

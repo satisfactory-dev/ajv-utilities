@@ -28,5 +28,6 @@
 		{
 			"files": ["./**/*.ts"]
 		}
-	]
+	],
+	"ignorePatterns": ["**/tests/fixtures/**/*.ts"]
 }

@@ -4,6 +4,11 @@ import type {
 } from 'ajv/dist/2020.js';
 import type Ajv from 'ajv/dist/2020.js';
 
+import type {
+	Config,
+} from './TypeScriptify.ts';
+import TypeScriptify from './TypeScriptify.ts';
+
 const cache = new WeakMap<SchemaObject, ValidateFunction>();
 
 const duplicate_compile_check: {[key: string]: ValidateFunction} = {};
@@ -89,4 +94,11 @@ export function esmify(code: string): string {
 	}
 
 	return code;
+}
+
+export function typescriptify(
+	code: string,
+	config?: Config,
+): string {
+	return (new TypeScriptify()).ify(code, config || {});
 }
