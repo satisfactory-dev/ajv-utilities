@@ -1,5 +1,6 @@
 import type { ErrorObject, ValidateFunction } from 'ajv';
 import type { const_string, enum_string } from './types.ts';
+function ajv_utilities__is_probably_object(maybe: unknown): maybe is Record<string, unknown> { return !!maybe && typeof maybe === "object" && !Array.isArray(maybe); }
 import ucs2length from 'ajv/dist/runtime/ucs2length.js';
 export const validate_as_ConstString = validate20;
 const schema31 = { "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "docs.json.ts--lib--PropertySchemaToRegex--ConstString", "type": "object", "additionalProperties": false, "required": ["type", "const"], "properties": { "type": { "type": "string", "const": "string" }, "const": { "type": "string" } } };
@@ -16,7 +17,7 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
     if (evaluated0?.dynamicItems) {
         evaluated0.items = undefined;
     }
-    if (data && typeof data == "object" && !Array.isArray(data)) {
+    if (ajv_utilities__is_probably_object(data)) {
         if (data.type === undefined) {
             const err0: ErrorObject = { instancePath, schemaPath: "#/required", keyword: "required", params: { missingProperty: "type" }, message: "must have required property '" + "type" + "'" };
             if (vErrors === null) {
@@ -115,7 +116,7 @@ function validate21(data: unknown, { instancePath = "", parentData, parentDataPr
     if (evaluated0?.dynamicItems) {
         evaluated0.items = undefined;
     }
-    if (data && typeof data == "object" && !Array.isArray(data)) {
+    if (ajv_utilities__is_probably_object(data)) {
         if (data.type === undefined) {
             const err0: ErrorObject = { instancePath, schemaPath: "#/required", keyword: "required", params: { missingProperty: "type" }, message: "must have required property '" + "type" + "'" };
             if (vErrors === null) {

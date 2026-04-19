@@ -3,10 +3,12 @@ import {
 } from './AjvUtilities.ts';
 import type {
 	EmptyStatement,
+	Expression,
 	FunctionDeclaration,
 	ImportDeclaration,
 	Node,
 	SourceFile,
+	Statement,
 	TransformationContext,
 	Visitor,
 } from 'typescript';
@@ -22,7 +24,10 @@ import {
 	isIdentifier,
 	isIfStatement,
 	isObjectLiteralExpression,
+	isPrefixUnaryExpression,
 	isPropertyAccessExpression,
+	isStringLiteral,
+	isTypeOfExpression,
 	isVariableDeclaration,
 	ScriptTarget,
 	SyntaxKind,
@@ -169,6 +174,98 @@ export default class TypeScriptify {
 		);
 	}
 
+	#replace_is_object(
+		name: Expression,
+		then: Statement,
+		else_statement?: Statement,
+	) {
+		return factory.createIfStatement(
+			factory.createCallExpression(
+				factory.createIdentifier('ajv_utilities__is_probably_object'),
+				undefined,
+				[name],
+			),
+			then,
+			else_statement,
+		);
+	}
+
+	#patch_is_object() {
+		return factory.createFunctionDeclaration(
+			undefined,
+			undefined,
+			'ajv_utilities__is_probably_object',
+			undefined,
+			[
+				factory.createParameterDeclaration(
+					undefined,
+					undefined,
+					'maybe',
+					undefined,
+					factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
+				),
+			],
+			factory.createTypePredicateNode(
+				undefined,
+				'maybe',
+				factory.createTypeReferenceNode(
+					'Record',
+					[
+						factory.createKeywordTypeNode(
+							SyntaxKind.StringKeyword,
+						),
+						factory.createKeywordTypeNode(
+							SyntaxKind.UnknownKeyword,
+						),
+					],
+				),
+			),
+			factory.createBlock([
+				factory.createReturnStatement(
+					factory.createBinaryExpression(
+						factory.createBinaryExpression(
+							factory.createPrefixUnaryExpression(
+								SyntaxKind.ExclamationToken,
+								factory.createPrefixUnaryExpression(
+									SyntaxKind.ExclamationToken,
+									factory.createIdentifier('maybe'),
+								),
+							),
+							factory.createToken(
+								SyntaxKind.AmpersandAmpersandToken,
+							),
+							factory.createBinaryExpression(
+								factory.createTypeOfExpression(
+									factory.createIdentifier('maybe'),
+								),
+								factory.createToken(
+									SyntaxKind.EqualsEqualsEqualsToken,
+								),
+								factory.createStringLiteral('object'),
+							),
+						),
+						factory.createToken(
+							SyntaxKind.AmpersandAmpersandToken,
+						),
+						factory.createPrefixUnaryExpression(
+							SyntaxKind.ExclamationToken,
+							factory.createCallExpression(
+								factory.createPropertyAccessExpression(
+									factory.createIdentifier('Array'),
+									factory.createIdentifier('isArray'),
+								),
+								undefined,
+								[
+									factory.createIdentifier('maybe'),
+								],
+							),
+						),
+					),
+				),
+			]),
+		);
+	}
+
 	#first_pass(
 		context: TransformationContext,
 		config: Config,
@@ -182,6 +279,8 @@ export default class TypeScriptify {
 		} = {
 			ajv: new Set<string>(),
 		};
+
+		let patch_with_is_object = false;
 
 		const visitor: Visitor = (node: Node) => {
 			if (
@@ -349,6 +448,70 @@ export default class TypeScriptify {
 				&& 'default' === node.name.getText()
 			) {
 				return factory.createIdentifier('ucs2length');
+			} else if (
+				isIfStatement(node)
+				&& isBinaryExpression(node.expression)
+				&& isBinaryExpression(node.expression.left)
+				&& isIdentifier(node.expression.left.left)
+
+				// oxlint-disable-next-line @stylistic/max-len
+				&& SyntaxKind.AmpersandAmpersandToken === node.expression.left.operatorToken.kind
+
+				&& isBinaryExpression(node.expression.left.right)
+				&& isTypeOfExpression(node.expression.left.right.left)
+				&& isIdentifier(node.expression.left.right.left.expression)
+
+				// oxlint-disable-next-line @stylistic/max-len
+				&& node.expression.left.left.getText() === node.expression.left.right.left.expression.getText()
+
+				// oxlint-disable-next-line @stylistic/max-len
+				&& SyntaxKind.EqualsEqualsToken === node.expression.left.right.operatorToken.kind
+				&& isStringLiteral(node.expression.left.right.right)
+				&& 'object' === node.expression.left.right.right.text
+
+				// oxlint-disable-next-line @stylistic/max-len
+				&& SyntaxKind.AmpersandAmpersandToken === node.expression.operatorToken.kind
+				&& isPrefixUnaryExpression(node.expression.right)
+
+				// oxlint-disable-next-line @stylistic/max-len
+				&& SyntaxKind.ExclamationToken === node.expression.right.operator
+				&& isCallExpression(node.expression.right.operand)
+				&& isPropertyAccessExpression(
+					node.expression.right.operand.expression,
+				)
+				&& isIdentifier(
+					node.expression.right.operand.expression.expression,
+				)
+				&& isIdentifier(
+					node.expression.right.operand.expression.name,
+				)
+				&& 'Array.isArray' === `${
+
+					// oxlint-disable-next-line @stylistic/max-len
+					node.expression.right.operand.expression.expression.getText()
+				}.${
+					node.expression.right.operand.expression.name.getText()
+				}`
+				&& 1 === node.expression.right.operand.arguments.length
+				&& isIdentifier(
+					node.expression.right.operand.arguments[0],
+				)
+				&& (
+					node.expression.left.left.getText(
+					) === node.expression.right.operand.arguments[0].getText()
+				)
+			) {
+				patch_with_is_object = true;
+
+				return visitEachChild(
+					this.#replace_is_object(
+						node.expression.left.left,
+						node.thenStatement,
+						node.elseStatement,
+					),
+					visitor,
+					context,
+				);
 			}
 
 			return visitEachChild(node, visitor, context);
@@ -385,13 +548,26 @@ export default class TypeScriptify {
 				));
 			}
 
+			let modified: Statement[] | undefined = undefined;
+
+			if (patch_with_is_object) {
+				modified = [
+					this.#patch_is_object(),
+					...(modified || result.statements),
+				];
+			}
+
 			if (imports.length > 0) {
+				modified = [
+					...imports,
+					...(modified || result.statements),
+				];
+			}
+
+			if (modified) {
 				return factory.updateSourceFile(
 					source,
-					[
-						...imports,
-						...result.statements,
-					],
+					modified,
 				);
 			}
 
@@ -416,6 +592,7 @@ export default class TypeScriptify {
 				isFunctionDeclaration(node)
 				&& node.name
 				&& isIdentifier(node.name)
+				&& !node.name.text.startsWith('ajv_utilities__')
 			) {
 				const function_name = node.name.getText();
 
