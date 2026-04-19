@@ -339,6 +339,13 @@ export default class TypeScriptify {
 					factory.createToken(SyntaxKind.QuestionDotToken),
 					node.name,
 				);
+			} else if(
+				isPropertyAccessExpression(node)
+				&& isIdentifier(node.expression)
+				&& 'ucs2length' === node.expression.getText()
+				&& 'default' === node.name.getText()
+			) {
+				return factory.createIdentifier('ucs2length');
 			}
 
 			return visitEachChild(node, visitor, context);

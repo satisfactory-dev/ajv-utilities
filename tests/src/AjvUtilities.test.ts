@@ -26,6 +26,10 @@ import ConstString from '../fixtures/ConstString.schema.json' with {
 	type: 'json',
 };
 
+import EnumString from '../fixtures/EnumString.schema.json' with {
+	type: 'json',
+};
+
 void describe('AjvUtilities', () => {
 	void describe('compile', () => {
 		const ajv = new Ajv();
@@ -137,6 +141,12 @@ void describe('AjvUtilities', () => {
 		);
 		const ConstStringCode_with_types = await readFile(
 			`${import.meta.dirname}/../fixtures/ConstString.with-types.ts`,
+		);
+		const EnumStringCode = await readFile(
+			`${import.meta.dirname}/../fixtures/EnumString.ts`,
+		);
+		const EnumStringCode_with_types = await readFile(
+			`${import.meta.dirname}/../fixtures/EnumString.with-types.ts`,
 		);
 
 		type typescriptify_config = {
@@ -252,7 +262,59 @@ void describe('AjvUtilities', () => {
 				),
 				ConstStringCode_with_types.toString(),
 				{
-					'docs.json.ts--lib--PropertySchemaToRegex--ConstString': [
+					[ConstString.$id]: [
+						'Foo',
+						'@satisfactory-dev/docs.json.ts',
+					],
+				},
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: false,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
+							EnumString,
+						],
+					}),
+					{
+						// oxlint-disable-next-line @stylistic/max-len
+						foo: EnumString.$id,
+					},
+				),
+				EnumStringCode.toString(),
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: false,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
+							EnumString,
+						],
+					}),
+					{
+						// oxlint-disable-next-line @stylistic/max-len
+						foo: EnumString.$id,
+					},
+				),
+				EnumStringCode_with_types.toString(),
+				{
+					[EnumString.$id]: [
 						'Foo',
 						'@satisfactory-dev/docs.json.ts',
 					],
