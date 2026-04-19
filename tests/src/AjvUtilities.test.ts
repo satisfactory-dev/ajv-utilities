@@ -148,6 +148,9 @@ void describe('AjvUtilities', () => {
 		const EnumStringCode_with_types = await readFile(
 			`${import.meta.dirname}/../fixtures/EnumString.with-types.ts`,
 		);
+		const both = await readFile(
+			`${import.meta.dirname}/../fixtures/both.ts`,
+		);
 
 		type typescriptify_config = {
 			[key: string]: [string, string],
@@ -316,6 +319,40 @@ void describe('AjvUtilities', () => {
 				{
 					[EnumString.$id]: [
 						'Foo',
+						'@satisfactory-dev/docs.json.ts',
+					],
+				},
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: false,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
+							ConstString,
+							EnumString,
+						],
+					}),
+					{
+						validate_as_ConstString: ConstString.$id,
+						validate_as_EnumString: EnumString.$id,
+					},
+				),
+				both.toString(),
+				{
+					[ConstString.$id]: [
+						'Foo',
+						'@satisfactory-dev/docs.json.ts',
+					],
+					[EnumString.$id]: [
+						'Bar',
 						'@satisfactory-dev/docs.json.ts',
 					],
 				},
