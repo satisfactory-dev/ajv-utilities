@@ -451,7 +451,7 @@ export default class TypeScriptify {
 			[],
 			[
 				new SpecifyTypePredicate(specify_types),
-			]
+			],
 		);
 
 		return (
@@ -528,7 +528,10 @@ class SpecifyTypes extends ConditionalPreprocessor<
 				)
 			),
 			(node, config) => {
-				const maybe = this.#configEntry(config?.specify_types || {}, node);
+				const maybe = this.#configEntry(
+					config?.specify_types || {},
+					node,
+				);
 
 				if (maybe) {
 					specify_types[
@@ -556,7 +559,7 @@ type RemoveSchemaDeclarationCandiate = (
 			& {
 				length: Exclude<number, 0>,
 			}
-		)
+		),
 	}
 );
 
@@ -603,7 +606,7 @@ class RemoveSchemaDeclaration extends ConditionalModification<
 				}
 
 				return false;
-			}
+			},
 		);
 	}
 }
@@ -1011,7 +1014,7 @@ type QuestionableConditionCandidate = (
 				),
 			}
 		),
-		questionDotToken: undefined
+		questionDotToken: undefined,
 	}
 );
 
@@ -1029,9 +1032,9 @@ class QuestionableCondition extends ConditionalModification<
 				&& !node.questionDotToken
 			),
 			(node) => factory.createPropertyAccessChain(
-					node.expression,
-					factory.createToken(SyntaxKind.QuestionDotToken),
-					node.name,
+				node.expression,
+				factory.createToken(SyntaxKind.QuestionDotToken),
+				node.name,
 			),
 		);
 	}
@@ -1067,7 +1070,7 @@ class Ucs2LengthCorrection extends ConditionalModification<
 				&& isIdentifier(node.name)
 				&& 'default' === node.name.getText()
 			),
-			() => factory.createIdentifier('ucs2length')
+			() => factory.createIdentifier('ucs2length'),
 		);
 	}
 }
@@ -1106,7 +1109,7 @@ type PatchIsObjectCandidate<
 											& {
 												getText(): IdentifierText,
 											}
-										)
+										),
 									}
 								),
 								operatorToken: (
@@ -1170,7 +1173,7 @@ type PatchIsObjectCandidate<
 							}
 						),
 					}
-				)
+				),
 			}
 		),
 	}
@@ -1254,11 +1257,11 @@ class PatchIsObject extends ConditionalModification<
 				patch_needed();
 
 				return this.#replace_is_object(
-						node.expression.left.left,
-						node.thenStatement,
-						node.elseStatement,
+					node.expression.left.left,
+					node.thenStatement,
+					node.elseStatement,
 				);
-			}
+			},
 		);
 	}
 }
@@ -1329,7 +1332,7 @@ class PatchIsArray extends ConditionalModification<
 						node.elseStatement,
 					)
 				);
-			}
+			},
 		);
 	}
 }
