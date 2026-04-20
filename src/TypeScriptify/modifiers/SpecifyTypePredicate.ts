@@ -44,7 +44,7 @@ export default class SpecifyTypePredicate extends ConditionalModification<
 				&& !node.name.text.startsWith('ajv_utilities__')
 			),
 			(node) => {
-				const function_name = node.name.getText();
+				const function_name = node.name.text;
 
 				if (function_name in specify_types) {
 					return factory.updateFunctionDeclaration(
