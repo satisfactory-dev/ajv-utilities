@@ -5,6 +5,7 @@ import type {
 import {
 	esmify,
 } from './AjvUtilities.ts';
+
 import type {
 	BinaryExpression,
 	BinaryOperatorToken,
