@@ -287,12 +287,39 @@ export default class TypeScriptify {
 		);
 	}
 
+	#sanity_check_preprocess(
+		maybe: unknown[],
+	): asserts maybe is ConditionalPreprocessor<Node>[] {
+		if(!maybe.every((
+			value,
+		) => value instanceof ConditionalPreprocessor)) {
+			throw new TypeError(`Array should consist entirely of ${
+				ConditionalPreprocessor.name
+			} instances`);
+		}
+	}
+
+	#sanity_check_modifiers(
+		maybe: unknown[],
+	): asserts maybe is ConditionalModification<Node>[] {
+		if(!maybe.every((
+			value,
+		) => value instanceof ConditionalModification)) {
+			throw new TypeError(`Array should consist entirely of ${
+				ConditionalModification.name
+			} instances`);
+		}
+	}
+
 	#generate_visitor(
 		context: TransformationContext,
 		config: Partial<Config> | undefined,
-		preprocess: ConditionalPreprocessor<any>[],
-		modifiers: ConditionalModification<any>[],
+		preprocess: unknown[],
+		modifiers: unknown[],
 	) {
+		this.#sanity_check_preprocess(preprocess);
+		this.#sanity_check_modifiers(modifiers);
+
 		const visitor: Visitor = (node: Node) => {
 			for (const non_modifier of preprocess) {
 				if (non_modifier.passes(node, config)) {
@@ -338,11 +365,13 @@ export default class TypeScriptify {
 		let patch_with_is_array = false;
 		let patch_with_is_object = false;
 
-		const preprocess: ConditionalPreprocessor<any>[] = [
+		const visitor = this.#generate_visitor(
+			context,
+			config,
+			[
 			new SpecifyTypes(prepend_with_imports, specify_types),
-		];
-
-		const modifiers: ConditionalModification<any>[] = [
+			],
+			[
 			new RemoveSchemaDeclaration(),
 			new ModifyValidate(prepend_with_imports),
 			new ModifyVErrors(prepend_with_imports),
@@ -358,13 +387,7 @@ export default class TypeScriptify {
 			new PatchIsArray(() => {
 				patch_with_is_array = true;
 			}),
-		];
-
-		const visitor = this.#generate_visitor(
-			context,
-			config,
-			preprocess,
-			modifiers,
+			],
 		);
 
 		const transformer = (
