@@ -99,38 +99,14 @@ export default class TypeScriptify {
 		return code.replace('"use strict";\n', '');
 	}
 
-	#sanity_check_preprocess(
-		maybe: unknown[],
-	): asserts maybe is ConditionalPreprocessor<Node>[] {
-		if(!maybe.every((
-			value,
-		) => value instanceof ConditionalPreprocessor)) {
-			throw new TypeError(`Array should consist entirely of ${
-				ConditionalPreprocessor.name
-			} instances`);
-		}
-	}
-
-	#sanity_check_modifiers(
-		maybe: unknown[],
-	): asserts maybe is ConditionalModification<Node>[] {
-		if(!maybe.every((
-			value,
-		) => value instanceof ConditionalModification)) {
-			throw new TypeError(`Array should consist entirely of ${
-				ConditionalModification.name
-			} instances`);
-		}
-	}
-
 	#generate_visitor(
 		context: TransformationContext,
 		config: Partial<Config> | undefined,
 		preprocess: unknown[],
 		modifiers: unknown[],
 	) {
-		this.#sanity_check_preprocess(preprocess);
-		this.#sanity_check_modifiers(modifiers);
+		ConditionalPreprocessor.check(preprocess);
+		ConditionalModification.check(modifiers);
 
 		const visitor: Visitor = (node: Node) => {
 			for (const non_modifier of preprocess) {

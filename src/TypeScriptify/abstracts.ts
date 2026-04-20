@@ -41,11 +41,33 @@ abstract class ConditionalVisitor<
 abstract class ConditionalPreprocessor<
 	T extends Node,
 > extends ConditionalVisitor<T, void> {
+	static check(
+		maybe: unknown[],
+	): asserts maybe is ConditionalPreprocessor<Node>[] {
+		if(!maybe.every((
+			value,
+		) => value instanceof ConditionalPreprocessor)) {
+			throw new TypeError(`Array should consist entirely of ${
+				ConditionalPreprocessor.name
+			} instances`);
+		}
+	}
 }
 
 abstract class ConditionalModification<
 	T extends Node,
 > extends ConditionalVisitor<T, (Node | false | undefined)> {
+	static check(
+		maybe: unknown[],
+	): asserts maybe is ConditionalModification<Node>[] {
+		if(!maybe.every((
+			value,
+		) => value instanceof ConditionalModification)) {
+			throw new TypeError(`Array should consist entirely of ${
+				ConditionalModification.name
+			} instances`);
+		}
+	}
 }
 
 export {
