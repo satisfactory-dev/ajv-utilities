@@ -6,7 +6,8 @@ import type Ajv from 'ajv/dist/2020.js';
 
 import type {
 	Config,
-} from './TypeScriptify.ts';
+} from './TypeScriptify/types.ts';
+
 import TypeScriptify from './TypeScriptify.ts';
 
 const cache = new WeakMap<SchemaObject, ValidateFunction>();

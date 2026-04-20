@@ -1,6 +1,6 @@
 import type {
 	Config as TypeScriptifyConfig,
-} from './src/TypeScriptify.ts';
+} from './src/TypeScriptify/types.ts';
 
 export * from './src/AjvUtilities.ts';
 
