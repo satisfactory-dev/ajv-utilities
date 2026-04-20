@@ -43,4 +43,53 @@ await writeFile(
 
 ## `typescriptify`
 
-Please refer to [the usage in tests for now](https://github.com/satisfactory-dev/ajv-utilities/blob/1ec5d2182aa7a44b76c1c77dc7398073d0f15438/tests/src/AjvUtilities.test.ts#L277).
+```ts
+import {writeFile} from 'node:fs/promises';
+
+import {typescriptify} from '@satisfactory-dev/ajv-utilities';
+
+import Ajv2020 from 'ajv/dist/2020.js';
+
+import standaloneCode from 'ajv/dist/standalone/index.js';
+
+// oxlint-disable-next-line @stylistic/max-len
+import ConstString from './schema/lib/PropertySchemaToRegex/ConstString.schema.json' with {type: 'json'};
+
+// oxlint-disable-next-line @stylistic/max-len
+import EnumString from './schema/lib/PropertySchemaToRegex/EnumString.schema.json' with {type: 'json'};
+
+// oxlint-disable-next-line @stylistic/max-len
+import NamedList from './schema/lib/PropertySchemaToRegex/NamedList.schema.json' with {type: 'json'};
+
+const ajv = new Ajv2020({
+	verbose: false,
+	logger: false,
+	allErrors: true,
+	code: {
+		source: true,
+		esm: true,
+		lines: true,
+		optimize: 2,
+	},
+	schemas: [ConstString, EnumString, NamedList],
+});
+
+const code = `// oxlint-disable @stylistic/max-len${'\n'}${typescriptify(
+	standaloneCode(ajv, {
+		PropertySchemaToRegex_ConstString: ConstString.$id,
+		PropertySchemaToRegex_EnumString: EnumString.$id,
+		PropertySchemaToRegex_NamedList: NamedList.$id,
+	}),
+	{
+		remove_schema: true,
+		remove_dataCtxKeys: [
+			'parentData',
+			'parentDataProperty',
+			'rootData',
+			'dynamicAnchors',
+		],
+	}
+)}`;
+
+await writeFile(`${import.meta.dirname}/generated-types/lib.ts`, code);
+```
