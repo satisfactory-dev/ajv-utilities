@@ -319,6 +319,61 @@ void describe('AjvUtilities', () => {
 						foo: ConstString.$id,
 					},
 				),
+				ConstStringCode.toString(),
+				{
+					specify_types: {
+						// empty on purpose for branch coverage
+					},
+				},
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: false,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
+							ConstString,
+						],
+					}),
+					{
+						// oxlint-disable-next-line @stylistic/max-len
+						foo: ConstString.$id,
+					},
+				),
+				ConstStringCode.toString(),
+				{
+					// doesn't include specify_types for branch coverage
+					remove_schema: false,
+				},
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: false,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
+							ConstString,
+						],
+					}),
+					{
+						// oxlint-disable-next-line @stylistic/max-len
+						foo: ConstString.$id,
+					},
+				),
 				ConstStringCode_with_types.toString(),
 				{
 					specify_types: {
