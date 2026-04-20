@@ -64,6 +64,9 @@ import PatchIsArray from './TypeScriptify/patchers/PatchIsArray.ts';
 // oxlint-disable-next-line @stylistic/max-len
 import SpecifyTypePredicate from './TypeScriptify/modifiers/SpecifyTypePredicate.ts';
 
+// oxlint-disable-next-line @stylistic/max-len
+import SpecifyIndicesType from './TypeScriptify/modifiers/SpecifyIndicesType.ts';
+
 export default class TypeScript {
 	ify(code: string, config: Partial<Config>): string {
 		code = esmify(code);
@@ -175,6 +178,7 @@ export default class TypeScript {
 				new PatchIsArray(() => {
 					patch_with_is_array = true;
 				}),
+				new SpecifyIndicesType(),
 			],
 		);
 

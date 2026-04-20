@@ -116,7 +116,9 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
                 let i1 = data1.length;
                 let j0;
                 if (i1 > 1) {
-                    const indices0 = {};
+                    const indices0: {
+                        [key: string]: number;
+                    } = {};
                     for (; i1--;) {
                         let item0 = data1[i1];
                         if (typeof item0 !== "string") {
