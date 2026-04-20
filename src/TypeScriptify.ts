@@ -104,7 +104,7 @@ export default class TypeScript {
 
 	#generate_visitor(
 		context: TransformationContext,
-		config: Partial<Config> | undefined,
+		config: Partial<Config>,
 		preprocess: unknown[],
 		modifiers: unknown[],
 	) {

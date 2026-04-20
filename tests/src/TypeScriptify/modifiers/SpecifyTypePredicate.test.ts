@@ -26,7 +26,7 @@ void describe(SpecifyTypePredicate.name, () => {
 			undefined,
 		);
 
-		assert.ok(false === instance.passes(func));
+		assert.ok(false === instance.passes(func, {}));
 	});
 
 	void it(
@@ -44,10 +44,10 @@ void describe(SpecifyTypePredicate.name, () => {
 				undefined,
 			);
 
-			assert.ok(instance.passes(func));
+			assert.ok(instance.passes(func, {}));
 
 			void t.test('does nothing when function not specified', () => {
-				assert.ok(false === instance.visit(func));
+				assert.ok(false === instance.visit(func, {}));
 			});
 		},
 	);

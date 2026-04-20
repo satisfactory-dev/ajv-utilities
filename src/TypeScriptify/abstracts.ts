@@ -21,12 +21,12 @@ abstract class ConditionalVisitor<
 
 	readonly visit: ((
 		node: TNode,
-		config?: Partial<Config>,
+		config: Partial<Config>,
 	) => TReturn);
 
 	readonly passes: ((
 		maybe: Node,
-		config?: Partial<Config>,
+		config: Partial<Config>,
 	) => maybe is TNode);
 
 	constructor(

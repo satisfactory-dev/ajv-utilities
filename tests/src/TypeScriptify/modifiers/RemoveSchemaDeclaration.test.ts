@@ -27,7 +27,7 @@ void describe(`${RemoveSchemaDeclaration.name}::visit()`, () => {
 
 		assert.ok(instance.passes(declaration, {remove_schema: true}));
 		assert.equal(
-			instance.visit(declaration),
+			instance.visit(declaration, {}),
 			false,
 		);
 	});
@@ -44,7 +44,7 @@ void describe(`${RemoveSchemaDeclaration.name}::visit()`, () => {
 
 		assert.ok(instance.passes(declaration, {remove_schema: true}));
 		assert.equal(
-			instance.visit(declaration),
+			instance.visit(declaration, {}),
 			undefined,
 		);
 	});
@@ -71,7 +71,7 @@ void describe(`${RemoveSchemaDeclaration.name}::visit()`, () => {
 			'foo',
 		);
 
-		const result = instance.visit(declaration);
+		const result = instance.visit(declaration, {});
 
 		assert.ok(result && isVariableStatement(result));
 		assert.equal(result.declarationList.declarations.length, 1);
