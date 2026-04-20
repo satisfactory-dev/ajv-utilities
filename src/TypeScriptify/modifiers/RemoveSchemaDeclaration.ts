@@ -46,7 +46,7 @@ export default class RemoveSchemaDeclaration extends ConditionalModification<
 					) => {
 						return (
 							!isIdentifier(maybe.name)
-							|| !/^schema\d+$/.test(maybe.name.getText())
+							|| !/^schema\d+$/.test(maybe.name.text)
 						);
 					});
 
