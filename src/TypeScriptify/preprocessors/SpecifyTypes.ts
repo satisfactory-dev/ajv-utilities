@@ -85,10 +85,12 @@ export default class SpecifyTypes extends ConditionalPreprocessor<
 				)
 			),
 			(node, config) => {
-				const maybe = this.#configEntry(
-					config?.specify_types || {},
-					node,
-				);
+				const maybe = config?.specify_types
+					? this.#configEntry(
+						config.specify_types,
+						node,
+					)
+					: undefined;
 
 				if (maybe) {
 					specify_types[
