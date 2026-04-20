@@ -99,123 +99,6 @@ export default class TypeScriptify {
 		return code.replace('"use strict";\n', '');
 	}
 
-	#patch_is_array() {
-		return factory.createFunctionDeclaration(
-			undefined,
-			undefined,
-			'ajv_utilities__is_probably_array',
-			undefined,
-			[
-				factory.createParameterDeclaration(
-					undefined,
-					undefined,
-					'maybe',
-					undefined,
-					factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
-				),
-			],
-			factory.createTypePredicateNode(
-				undefined,
-				'maybe',
-				factory.createArrayTypeNode(
-					factory.createKeywordTypeNode(
-						SyntaxKind.UnknownKeyword,
-					),
-				),
-			),
-			factory.createBlock([
-				factory.createReturnStatement(
-					factory.createCallExpression(
-						factory.createPropertyAccessExpression(
-							factory.createIdentifier('Array'),
-							factory.createIdentifier('isArray'),
-						),
-						undefined,
-						[
-							factory.createIdentifier('maybe'),
-						],
-					),
-				),
-			]),
-		);
-	}
-
-	#patch_is_object() {
-		return factory.createFunctionDeclaration(
-			undefined,
-			undefined,
-			'ajv_utilities__is_probably_object',
-			undefined,
-			[
-				factory.createParameterDeclaration(
-					undefined,
-					undefined,
-					'maybe',
-					undefined,
-					factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
-				),
-			],
-			factory.createTypePredicateNode(
-				undefined,
-				'maybe',
-				factory.createTypeReferenceNode(
-					'Record',
-					[
-						factory.createKeywordTypeNode(
-							SyntaxKind.StringKeyword,
-						),
-						factory.createKeywordTypeNode(
-							SyntaxKind.UnknownKeyword,
-						),
-					],
-				),
-			),
-			factory.createBlock([
-				factory.createReturnStatement(
-					factory.createBinaryExpression(
-						factory.createBinaryExpression(
-							factory.createPrefixUnaryExpression(
-								SyntaxKind.ExclamationToken,
-								factory.createPrefixUnaryExpression(
-									SyntaxKind.ExclamationToken,
-									factory.createIdentifier('maybe'),
-								),
-							),
-							factory.createToken(
-								SyntaxKind.AmpersandAmpersandToken,
-							),
-							factory.createBinaryExpression(
-								factory.createTypeOfExpression(
-									factory.createIdentifier('maybe'),
-								),
-								factory.createToken(
-									SyntaxKind.EqualsEqualsEqualsToken,
-								),
-								factory.createStringLiteral('object'),
-							),
-						),
-						factory.createToken(
-							SyntaxKind.AmpersandAmpersandToken,
-						),
-						factory.createPrefixUnaryExpression(
-							SyntaxKind.ExclamationToken,
-							factory.createCallExpression(
-								factory.createPropertyAccessExpression(
-									factory.createIdentifier('Array'),
-									factory.createIdentifier('isArray'),
-								),
-								undefined,
-								[
-									factory.createIdentifier('maybe'),
-								],
-							),
-						),
-					),
-				),
-			]),
-		);
-	}
-
 	#sanity_check_preprocess(
 		maybe: unknown[],
 	): asserts maybe is ConditionalPreprocessor<Node>[] {
@@ -354,14 +237,14 @@ export default class TypeScriptify {
 
 			if (patch_with_is_array) {
 				modified = [
-					this.#patch_is_array(),
+					PatchIsArray.patch(),
 					...(modified || result.statements),
 				];
 			}
 
 			if (patch_with_is_object) {
 				modified = [
-					this.#patch_is_object(),
+					PatchIsObject.patch(),
 					...(modified || result.statements),
 				];
 			}

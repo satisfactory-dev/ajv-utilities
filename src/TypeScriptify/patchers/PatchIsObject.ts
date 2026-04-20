@@ -218,4 +218,80 @@ export default class PatchIsObject extends ConditionalModification<
 			},
 		);
 	}
+
+	static patch() {
+		return factory.createFunctionDeclaration(
+			undefined,
+			undefined,
+			'ajv_utilities__is_probably_object',
+			undefined,
+			[
+				factory.createParameterDeclaration(
+					undefined,
+					undefined,
+					'maybe',
+					undefined,
+					factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
+				),
+			],
+			factory.createTypePredicateNode(
+				undefined,
+				'maybe',
+				factory.createTypeReferenceNode(
+					'Record',
+					[
+						factory.createKeywordTypeNode(
+							SyntaxKind.StringKeyword,
+						),
+						factory.createKeywordTypeNode(
+							SyntaxKind.UnknownKeyword,
+						),
+					],
+				),
+			),
+			factory.createBlock([
+				factory.createReturnStatement(
+					factory.createBinaryExpression(
+						factory.createBinaryExpression(
+							factory.createPrefixUnaryExpression(
+								SyntaxKind.ExclamationToken,
+								factory.createPrefixUnaryExpression(
+									SyntaxKind.ExclamationToken,
+									factory.createIdentifier('maybe'),
+								),
+							),
+							factory.createToken(
+								SyntaxKind.AmpersandAmpersandToken,
+							),
+							factory.createBinaryExpression(
+								factory.createTypeOfExpression(
+									factory.createIdentifier('maybe'),
+								),
+								factory.createToken(
+									SyntaxKind.EqualsEqualsEqualsToken,
+								),
+								factory.createStringLiteral('object'),
+							),
+						),
+						factory.createToken(
+							SyntaxKind.AmpersandAmpersandToken,
+						),
+						factory.createPrefixUnaryExpression(
+							SyntaxKind.ExclamationToken,
+							factory.createCallExpression(
+								factory.createPropertyAccessExpression(
+									factory.createIdentifier('Array'),
+									factory.createIdentifier('isArray'),
+								),
+								undefined,
+								[
+									factory.createIdentifier('maybe'),
+								],
+							),
+						),
+					),
+				),
+			]),
+		);
+	}
 }

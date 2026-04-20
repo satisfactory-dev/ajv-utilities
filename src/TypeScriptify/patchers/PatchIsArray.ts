@@ -12,6 +12,7 @@ import {
 	isIdentifier,
 	isIfStatement,
 	isPropertyAccessExpression,
+	SyntaxKind,
 } from 'typescript';
 
 import {
@@ -85,6 +86,47 @@ export default class PatchIsArray extends ConditionalModification<
 					)
 				);
 			},
+		);
+	}
+
+	static patch() {
+		return factory.createFunctionDeclaration(
+			undefined,
+			undefined,
+			'ajv_utilities__is_probably_array',
+			undefined,
+			[
+				factory.createParameterDeclaration(
+					undefined,
+					undefined,
+					'maybe',
+					undefined,
+					factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
+				),
+			],
+			factory.createTypePredicateNode(
+				undefined,
+				'maybe',
+				factory.createArrayTypeNode(
+					factory.createKeywordTypeNode(
+						SyntaxKind.UnknownKeyword,
+					),
+				),
+			),
+			factory.createBlock([
+				factory.createReturnStatement(
+					factory.createCallExpression(
+						factory.createPropertyAccessExpression(
+							factory.createIdentifier('Array'),
+							factory.createIdentifier('isArray'),
+						),
+						undefined,
+						[
+							factory.createIdentifier('maybe'),
+						],
+					),
+				),
+			]),
 		);
 	}
 }
