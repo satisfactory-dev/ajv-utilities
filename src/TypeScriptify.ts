@@ -64,7 +64,7 @@ import PatchIsArray from './TypeScriptify/patchers/PatchIsArray.ts';
 // oxlint-disable-next-line @stylistic/max-len
 import SpecifyTypePredicate from './TypeScriptify/modifiers/SpecifyTypePredicate.ts';
 
-export default class TypeScriptify {
+export default class TypeScript {
 	ify(code: string, config: Partial<Config>): string {
 		code = esmify(code);
 		const source = createSourceFile(

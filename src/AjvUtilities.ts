@@ -8,7 +8,7 @@ import type {
 	Config,
 } from './TypeScriptify/types.ts';
 
-import TypeScriptify from './TypeScriptify.ts';
+import TypeScript from './TypeScriptify.ts';
 
 const cache = new WeakMap<SchemaObject, ValidateFunction>();
 
@@ -101,5 +101,5 @@ export function typescriptify(
 	code: string,
 	config?: Partial<Config>,
 ): string {
-	return (new TypeScriptify()).ify(code, config || {});
+	return (new TypeScript()).ify(code, config || {});
 }
