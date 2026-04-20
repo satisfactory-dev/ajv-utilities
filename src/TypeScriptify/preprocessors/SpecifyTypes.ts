@@ -39,11 +39,17 @@ type SpecifyTypesCandidate = (
 	}
 );
 
+type config = (
+	& Omit<Partial<Config>, 'specify_types'>
+	& Pick<Config, 'specify_types'>
+);
+
 export default class SpecifyTypes extends ConditionalPreprocessor<
-	SpecifyTypesCandidate
+	SpecifyTypesCandidate,
+	config
 > {
 	#configEntry(
-		config: Config['specify_types'],
+		config: config['specify_types'],
 		node: EmptyStatement,
 	): Config['specify_types'][string] | undefined {
 		const keys = Object.keys(config);
@@ -85,12 +91,10 @@ export default class SpecifyTypes extends ConditionalPreprocessor<
 				)
 			),
 			(node, config) => {
-				const maybe = config?.specify_types
-					? this.#configEntry(
+				const maybe = this.#configEntry(
 						config.specify_types,
 						node,
-					)
-					: undefined;
+				);
 
 				if (maybe) {
 					specify_types[

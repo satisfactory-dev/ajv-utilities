@@ -16,12 +16,13 @@ abstract class ConditionalVisitor<
 			| undefined // remove the node
 		)
 	),
+	TVisitConfig extends Partial<Config> = Partial<Config>,
 > {
 	protected validate_function_name = /^validate\d+$/;
 
 	readonly visit: ((
 		node: TNode,
-		config: Partial<Config>,
+		config: TVisitConfig,
 	) => TReturn);
 
 	readonly passes: ((
@@ -31,7 +32,7 @@ abstract class ConditionalVisitor<
 
 	constructor(
 		passes: ConditionalVisitor<TNode, TReturn>['passes'],
-		visit: ConditionalVisitor<TNode, TReturn>['visit'],
+		visit: ConditionalVisitor<TNode, TReturn, TVisitConfig>['visit'],
 	) {
 		this.passes = passes;
 		this.visit = visit;
@@ -40,7 +41,8 @@ abstract class ConditionalVisitor<
 
 abstract class ConditionalPreprocessor<
 	T extends Node,
-> extends ConditionalVisitor<T, void> {
+	TVisitConfig extends Partial<Config> = Partial<Config>,
+> extends ConditionalVisitor<T, void, TVisitConfig> {
 	static check(
 		maybe: unknown[],
 	): asserts maybe is ConditionalPreprocessor<Node>[] {
