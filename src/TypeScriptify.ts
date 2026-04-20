@@ -65,7 +65,7 @@ import PatchIsArray from './TypeScriptify/patchers/PatchIsArray.ts';
 import SpecifyTypePredicate from './TypeScriptify/modifiers/SpecifyTypePredicate.ts';
 
 export default class TypeScriptify {
-	ify(code: string, config?: Partial<Config>): string {
+	ify(code: string, config: Partial<Config>): string {
 		code = esmify(code);
 		const source = createSourceFile(
 			'ify.js',
@@ -81,7 +81,7 @@ export default class TypeScriptify {
 		let result = transform(source, [
 			(context) => this.#first_pass(
 				context,
-				config || {},
+				config,
 				specify_types,
 			),
 		]);
@@ -89,7 +89,7 @@ export default class TypeScriptify {
 		result = transform(result.transformed[0], [
 			(context) => this.#second_pass(
 				context,
-				config || {},
+				config,
 				Object.freeze(specify_types),
 			),
 		]);
