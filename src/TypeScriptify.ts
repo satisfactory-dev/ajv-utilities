@@ -369,24 +369,24 @@ export default class TypeScriptify {
 			context,
 			config,
 			[
-			new SpecifyTypes(prepend_with_imports, specify_types),
+				new SpecifyTypes(prepend_with_imports, specify_types),
 			],
 			[
-			new RemoveSchemaDeclaration(),
-			new ModifyValidate(prepend_with_imports),
-			new ModifyVErrors(prepend_with_imports),
-			new TypecastEvalulated(prepend_with_imports),
-			new TypecastSetErrors(prepend_with_imports),
-			new AddErrorObjectType(prepend_with_imports),
-			new TypecastVErrorsPush(prepend_with_imports),
-			new QuestionableCondition(),
-			new Ucs2LengthCorrection(),
-			new PatchIsObject(() => {
-				patch_with_is_object = true;
-			}),
-			new PatchIsArray(() => {
-				patch_with_is_array = true;
-			}),
+				new RemoveSchemaDeclaration(),
+				new ModifyValidate(prepend_with_imports),
+				new ModifyVErrors(prepend_with_imports),
+				new TypecastEvalulated(prepend_with_imports),
+				new TypecastSetErrors(prepend_with_imports),
+				new AddErrorObjectType(prepend_with_imports),
+				new TypecastVErrorsPush(prepend_with_imports),
+				new QuestionableCondition(),
+				new Ucs2LengthCorrection(),
+				new PatchIsObject(() => {
+					patch_with_is_object = true;
+				}),
+				new PatchIsArray(() => {
+					patch_with_is_array = true;
+				}),
 			],
 		);
 
