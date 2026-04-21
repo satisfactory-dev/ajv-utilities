@@ -21,8 +21,6 @@ export type prepend_with_imports = {
 };
 
 interface HasOutput {
-	toImportSpecifier(): ImportSpecifier;
-
 	toTypeReferenceNode(): TypeReferenceNode;
 
 	toString(): string;
@@ -58,6 +56,8 @@ abstract class Type {
 	}
 
 	protected abstract toId(): string;
+
+	abstract toImportSpecifier(): ImportSpecifier;
 
 	abstract withArgs(args: [string, ...string[]]): WithArgs;
 }
@@ -137,26 +137,6 @@ class WithArgs implements HasOutput {
 		this.name = name;
 		this.args = args;
 		this.as = as;
-	}
-
-	protected toId(): string {
-		return `${
-			this.as
-				? `${this.name} as ${this.as}`
-				: this.name
-		}`;
-	}
-
-	toImportSpecifier(): ImportSpecifier {
-		return factory.createImportSpecifier(
-			false,
-			(
-				this.as
-					? factory.createIdentifier(this.name)
-					: undefined
-			),
-			factory.createIdentifier(this.as || this.name),
-		);
 	}
 
 	toTypeReferenceNode(): TypeReferenceNode {
