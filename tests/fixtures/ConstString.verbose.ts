@@ -3,7 +3,7 @@ import type { Is } from '@satisfactory-dev/ajv-utilities';
 import type { const_string } from './types.ts';
 function ajv_utilities__is_probably_object(maybe: unknown): maybe is Record<string, unknown> { return !!maybe && typeof maybe === "object" && !Array.isArray(maybe); }
 export const foo = validate20;
-const schema31 = { "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "docs.json.ts--lib--PropertySchemaToRegex--ConstString", "type": "object", "additionalProperties": false, "required": ["type", "const"], "properties": { "type": { "type": "string", "const": "string" }, "const": { "type": "string" } } };
+const schema31 = { "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "docs.json.ts--lib--PropertySchemaToRegex--ConstString", "type": "object", "additionalProperties": false, "required": ["type", "const"] as const, "properties": { "type": { "type": "string", "const": "string" }, "const": { "type": "string" } } };
 function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Parameters<ValidateFunction>[1] & {
     rootData: unknown;
 }> = {}): data is const_string {
@@ -53,7 +53,7 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
         if (data.type !== undefined) {
             let data0 = data.type;
             if (typeof data0 !== "string") {
-                const err3: ErrorObject = { instancePath: instancePath + "/type", schemaPath: "#/properties/type/type", keyword: "type", params: { type: "string" }, message: "must be string", schema: (schema31.properties?.type).type, parentSchema: schema31.properties?.type, data: data0 };
+                const err3: ErrorObject = { instancePath: instancePath + "/type", schemaPath: "#/properties/type/type", keyword: "type", params: { type: "string" }, message: "must be string", schema: schema31.properties.type.type, parentSchema: schema31.properties.type, data: data0 };
                 if (vErrors === null) {
                     vErrors = [err3];
                 }
@@ -63,7 +63,7 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
                 errors++;
             }
             if ("string" !== data0) {
-                const err4: ErrorObject = { instancePath: instancePath + "/type", schemaPath: "#/properties/type/const", keyword: "const", params: { allowedValue: "string" }, message: "must be equal to constant", schema: "string", parentSchema: schema31.properties?.type, data: data0 };
+                const err4: ErrorObject = { instancePath: instancePath + "/type", schemaPath: "#/properties/type/const", keyword: "const", params: { allowedValue: "string" }, message: "must be equal to constant", schema: "string", parentSchema: schema31.properties.type, data: data0 };
                 if (vErrors === null) {
                     vErrors = [err4];
                 }
@@ -76,7 +76,7 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
         if (data.const !== undefined) {
             let data1 = data.const;
             if (typeof data1 !== "string") {
-                const err5: ErrorObject = { instancePath: instancePath + "/const", schemaPath: "#/properties/const/type", keyword: "type", params: { type: "string" }, message: "must be string", schema: (schema31.properties?.const).type, parentSchema: schema31.properties?.const, data: data1 };
+                const err5: ErrorObject = { instancePath: instancePath + "/const", schemaPath: "#/properties/const/type", keyword: "type", params: { type: "string" }, message: "must be string", schema: schema31.properties.const.type, parentSchema: schema31.properties.const, data: data1 };
                 if (vErrors === null) {
                     vErrors = [err5];
                 }

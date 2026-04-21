@@ -74,12 +74,6 @@ import SpecifyTypePredicate from './TypeScriptify/modifiers/SpecifyTypePredicate
 // oxlint-disable-next-line @stylistic/max-len
 import SpecifyIndicesType from './TypeScriptify/modifiers/SpecifyIndicesType.ts';
 
-// oxlint-disable-next-line @stylistic/max-len
-import QuestionableSchemaPropertyAccessExpression from './TypeScriptify/modifiers/QuestionableSchemaPropertyAccessExpression.ts';
-
-// oxlint-disable-next-line @stylistic/max-len
-import TypecastElementAccessExpressionAsSchemaObjectArray from './TypeScriptify/modifiers/TypecastElementAccessExpressionAsSchemaObjectArray.ts';
-
 import type {
 	hoist_candidates,
 } from './TypeScriptify/modifiers/HoistDeclarationAsUndefined.ts';
@@ -87,6 +81,9 @@ import {
 	FindHoistCandidate,
 	HoistDeclarationsHere,
 } from './TypeScriptify/modifiers/HoistDeclarationAsUndefined.ts';
+
+// oxlint-disable-next-line @stylistic/max-len
+import TypecastArrayAsConst from './TypeScriptify/modifiers/TypecastArrayAsConst.ts';
 
 export default class TypeScript {
 	ify(code: string, config: Partial<Config>): string {
@@ -198,10 +195,7 @@ export default class TypeScript {
 				}),
 				new SpecifyIndicesType(),
 				new FindHoistCandidate(hoist_candidates),
-				new QuestionableSchemaPropertyAccessExpression(),
-				new TypecastElementAccessExpressionAsSchemaObjectArray(
-					prepend_with_imports,
-				),
+				new TypecastArrayAsConst(),
 			],
 		);
 
