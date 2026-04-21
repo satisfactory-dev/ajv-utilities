@@ -42,9 +42,7 @@ type ValidateFunctionDeclaration = (
 	}
 );
 
-export default
-
-class ModifyValidate extends ConditionalModification<
+export default class ModifyValidate extends ConditionalModification<
 	ValidateFunctionDeclaration
 > {
 	#prepend_with_imports: prepend_with_imports;
