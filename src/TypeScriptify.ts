@@ -150,11 +150,7 @@ export default class TypeScript {
 						return undefined;
 					}
 
-					return visitEachChild(
-						action,
-						visitor,
-						context,
-					);
+					node = action;
 				}
 			}
 
