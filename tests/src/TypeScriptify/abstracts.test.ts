@@ -16,12 +16,17 @@ import SpecifyTypes from '../../../src/TypeScriptify/preprocessors/SpecifyTypes.
 // oxlint-disable-next-line @stylistic/max-len
 import Ucs2LengthCorrection from '../../../src/TypeScriptify/modifiers/Ucs2LengthCorrection.ts';
 
+import {
+	Types,
+} from '../../../src/TypeScriptify/TypeReferences.ts';
+
 void describe(`${ConditionalPreprocessor.name}::check()`, () => {
 	void it('passes', () => {
 		assert.doesNotThrow(() => ConditionalPreprocessor.check([]));
 		assert.doesNotThrow(() => ConditionalPreprocessor.check([
 			new SpecifyTypes({
-				ajv: new Set(),
+				ajv: new Types(),
+				'@satisfactory-dev/ajv-utilities': new Types(),
 			}, {}),
 		]));
 	});
@@ -30,7 +35,8 @@ void describe(`${ConditionalPreprocessor.name}::check()`, () => {
 		assert.throws(() => ConditionalPreprocessor.check([1]));
 		assert.throws(() => ConditionalPreprocessor.check([
 			new SpecifyTypes({
-				ajv: new Set(),
+				ajv: new Types(),
+				'@satisfactory-dev/ajv-utilities': new Types(),
 			}, {}),
 			new Ucs2LengthCorrection(),
 		]));
@@ -49,7 +55,8 @@ void describe(`${ConditionalModification.name}::check()`, () => {
 		assert.throws(() => ConditionalModification.check([1]));
 		assert.throws(() => ConditionalModification.check([
 			new SpecifyTypes({
-				ajv: new Set(),
+				ajv: new Types(),
+				'@satisfactory-dev/ajv-utilities': new Types(),
 			}, {}),
 			new Ucs2LengthCorrection(),
 		]));
