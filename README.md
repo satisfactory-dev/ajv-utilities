@@ -63,7 +63,7 @@ import NamedList from './schema/lib/PropertySchemaToRegex/NamedList.schema.json'
 import {
 	FlexibleArray_generate_schema_definition__items,
 	FlexibleArray_generate_schema_definition__prefixItems,
-} from './src/version-specific/0.3.7.7/TypedString/FlexibleArray';
+} from './src/version-specific/0.3.7.7/TypedString/FlexibleArray.ts';
 
 const FlexibleArray__items = {
 	$id: 'docs.json.ts--lib--PropertySchemaToRegex--FlexibleArray--items',
