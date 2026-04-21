@@ -17,8 +17,10 @@ import type {
 } from '../types.ts';
 
 import type {
+	Aliased,
+	NameOnly,
 	prepend_with_imports,
-	Type,
+	WithArgs,
 } from '../TypeReferences.ts';
 import {
 	Types,
@@ -83,7 +85,11 @@ export default class SpecifyTypes extends ConditionalPreprocessor<
 	constructor(
 		prepend_with_imports: prepend_with_imports,
 		specify_types: {
-			[key: string]: Type,
+			[key: string]: (
+				| NameOnly
+				| Aliased
+				| WithArgs
+			),
 		},
 	) {
 		super(

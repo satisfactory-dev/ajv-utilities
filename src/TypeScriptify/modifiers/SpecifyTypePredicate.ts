@@ -13,7 +13,9 @@ import {
 } from '../abstracts.ts';
 
 import type {
-	Type,
+	Aliased,
+	NameOnly,
+	WithArgs,
 } from '../TypeReferences.ts';
 
 type SpecifyTypePredicateCandidate = (
@@ -33,7 +35,11 @@ export default class SpecifyTypePredicate extends ConditionalModification<
 > {
 	constructor(
 		specify_types: Readonly<{
-			[key: string]: Type,
+			[key: string]: (
+				| NameOnly
+				| Aliased
+				| WithArgs
+			),
 		}>,
 	) {
 		super(

@@ -20,6 +20,26 @@ export type prepend_with_imports = {
 	'@satisfactory-dev/ajv-utilities': Types,
 };
 
+interface HasOutput {
+	toImportSpecifier(): ImportSpecifier;
+
+	toTypeReferenceNode(): TypeReferenceNode;
+
+	toString(): string;
+}
+
+function to_string(instance: HasOutput) {
+	const printer = createPrinter({
+		omitTrailingSemicolon: true,
+	});
+
+	return printer.printNode(
+		EmitHint.Unspecified,
+		instance.toTypeReferenceNode(),
+		createSourceFile('foo.ts', '', ScriptTarget.ESNext),
+	);
+}
+
 abstract class Type {
 	readonly name: Exclude<string, ''>;
 
@@ -39,24 +59,10 @@ abstract class Type {
 
 	protected abstract toId(): string;
 
-	abstract toImportSpecifier(): ImportSpecifier;
-
-	abstract toTypeReferenceNode(): TypeReferenceNode;
-
-	toString() {
-		const printer = createPrinter({
-			omitTrailingSemicolon: true,
-		});
-
-		return printer.printNode(
-			EmitHint.Unspecified,
-			this.toTypeReferenceNode(),
-			createSourceFile('foo.ts', '', ScriptTarget.ESNext),
-		);
-	}
+	abstract withArgs(args: [string, ...string[]]): WithArgs;
 }
 
-class NameOnly extends Type {
+export class NameOnly extends Type implements HasOutput {
 	protected toId(): string {
 		return this.name;
 	}
@@ -72,9 +78,17 @@ class NameOnly extends Type {
 	toTypeReferenceNode(): TypeReferenceNode {
 		return factory.createTypeReferenceNode(this.name);
 	}
+
+	withArgs(args: [string, ...string[]]): WithArgs {
+		return new WithArgs(this.name, args);
+	}
+
+	toString() {
+		return to_string(this);
+	}
 }
 
-class Aliased extends Type {
+export class Aliased extends Type {
 	readonly as: Exclude<string, ''>;
 
 	constructor(name: Aliased['name'], as: Aliased['as']) {
@@ -98,9 +112,19 @@ class Aliased extends Type {
 	toTypeReferenceNode(): TypeReferenceNode {
 		return factory.createTypeReferenceNode(this.as);
 	}
+
+	withArgs(args: [string, ...string[]]): WithArgs {
+		return new WithArgs(this.name, args, this.as);
+	}
+
+	toString() {
+		return to_string(this);
+	}
 }
 
-class WithArgs extends Type {
+class WithArgs implements HasOutput {
+	readonly name: Exclude<string, ''>;
+
 	readonly as: Exclude<string, ''> | undefined;
 
 	readonly args: [string, ...string[]];
@@ -110,8 +134,7 @@ class WithArgs extends Type {
 		args: WithArgs['args'],
 		as?: Exclude<WithArgs['as'], undefined>,
 	) {
-		super(name);
-
+		this.name = name;
 		this.args = args;
 		this.as = as;
 	}
@@ -144,26 +167,44 @@ class WithArgs extends Type {
 			)),
 		);
 	}
+
+	toString() {
+		return to_string(this);
+	}
 }
 
 export class Types {
 	list_of_types: [
-		Type,
-		...Type[],
+		(
+			| NameOnly
+			| Aliased
+		),
+		...(
+			| NameOnly
+			| Aliased
+		)[],
 	] | undefined = undefined;
 
 	get size() {
 		return this.list_of_types ? this.list_of_types.length : 0;
 	}
 
-	add(type: specify_types_type): Type {
-		let as_object: Type = (
-			'string' === typeof type
+	#is_object_type(
+		type: specify_types_type,
+	): type is Exclude<specify_types_type, string> {
+		return 'string' !== typeof type;
+	}
+
+	add<T extends specify_types_type>(type: T) {
+		const is_object = this.#is_object_type(type);
+
+		let as_object = (
+			!is_object
 				? new NameOnly(type)
 				: (
-					'args' in type
-						? new WithArgs(type.name, type.args, type?.as)
-						: new Aliased(type.name, type.as)
+					'as' in type && type.as
+						? new Aliased(type.name, type.as)
+						: new NameOnly(type.name)
 				)
 		);
 
@@ -181,7 +222,9 @@ export class Types {
 			}
 		}
 
-		return as_object;
+		return is_object && 'args' in type
+			? as_object.withArgs(type.args)
+			: as_object;
 	}
 
 	* [Symbol.iterator]() {
@@ -196,5 +239,5 @@ export class Types {
 }
 
 export type {
-	Type,
+	WithArgs,
 };

@@ -175,6 +175,9 @@ void describe('AjvUtilities', () => {
 		const EnumStringCode_with_generics = await readFile(
 			`${import.meta.dirname}/../fixtures/EnumString.with-generics.ts`,
 		);
+		const EnumStringCode_with_multiple_generics = await readFile(
+			`${import.meta.dirname}/../fixtures/EnumString.with-multiple-generics.ts`,
+		);
 		const both = await readFile(
 			`${import.meta.dirname}/../fixtures/both.ts`,
 		);
@@ -655,6 +658,52 @@ void describe('AjvUtilities', () => {
 							{
 								name: 'enum_string',
 								args: ['foo', 'bar'],
+							},
+							'./types.ts',
+						],
+					},
+				},
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: false,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
+							EnumString,
+							{
+								...EnumString,
+								$id: `${EnumString.$id}_foo`,
+							},
+						],
+					}),
+					{
+						// oxlint-disable-next-line @stylistic/max-len
+						foo: EnumString.$id,
+						bar: `${EnumString.$id}_foo`,
+					},
+				),
+				EnumStringCode_with_multiple_generics.toString(),
+				{
+					specify_types: {
+						[EnumString.$id]: [
+							{
+								name: 'enum_string',
+								args: ['foo', 'bar'],
+							},
+							'./types.ts',
+						],
+						[`${EnumString.$id}_foo`]: [
+							{
+								name: 'enum_string',
+								args: ['bar', 'foo'],
 							},
 							'./types.ts',
 						],
