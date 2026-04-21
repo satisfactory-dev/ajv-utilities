@@ -89,10 +89,22 @@ const code = `// oxlint-disable @stylistic/max-len${'\n'}${typescriptify(
 		],
 		specify_types: {
 			[ConstString.$id]: [
-				'ConstStringType',
+				'ConstString',
 
 				// oxlint-disable-next-line @stylistic/max-len
 				'../src/version-specific/0.3.7.7/TypedString/PropertySchemaToRegex/ConstString.ts',
+			],
+			[EnumString.$id]: [
+				'EnumString',
+
+				// oxlint-disable-next-line @stylistic/max-len
+				'../src/version-specific/0.3.7.7/TypedString/PropertySchemaToRegex/EnumString.ts',
+			],
+			[NamedList.$id]: [
+				'NamedList_type',
+
+				// oxlint-disable-next-line @stylistic/max-len
+				'../src/version-specific/0.3.7.7/NamedList.ts',
 			],
 		},
 	}
