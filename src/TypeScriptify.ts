@@ -28,11 +28,11 @@ import {
 
 import type {
 	Config,
+	specify_types_instance,
 } from './TypeScriptify/types.ts';
 
 import type{
 	prepend_with_imports,
-	Type,
 } from './TypeScriptify/TypeReferences.ts';
 import {
 	Types,
@@ -84,9 +84,7 @@ export default class TypeScript {
 			true,
 		);
 
-		const specify_types: {
-			[key: string]: Type,
-		} = {};
+		const specify_types: specify_types_instance = {};
 
 		let result = transform(source, [
 			(context) => this.#first_pass(
@@ -152,9 +150,7 @@ export default class TypeScript {
 	#first_pass(
 		context: TransformationContext,
 		config: Partial<Config>,
-		specify_types: {
-			[key: string]: Type,
-		},
+		specify_types: specify_types_instance,
 	) {
 		const prepend_with_imports: prepend_with_imports = {
 			ajv: new Types(),
@@ -256,9 +252,7 @@ export default class TypeScript {
 	#second_pass(
 		context: TransformationContext,
 		config: Partial<Config>,
-		specify_types: Readonly<{
-			[key: string]: Type,
-		}>,
+		specify_types: Readonly<specify_types_instance>,
 	) {
 		if (Object.keys(specify_types).length < 1) {
 			return (source: SourceFile) => source;

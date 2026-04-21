@@ -13,10 +13,8 @@ import {
 } from '../abstracts.ts';
 
 import type {
-	Aliased,
-	NameOnly,
-	WithArgs,
-} from '../TypeReferences.ts';
+	specify_types_instance,
+} from '../types.ts';
 
 type SpecifyTypePredicateCandidate = (
 	& FunctionDeclaration
@@ -34,13 +32,7 @@ export default class SpecifyTypePredicate extends ConditionalModification<
 	SpecifyTypePredicateCandidate
 > {
 	constructor(
-		specify_types: Readonly<{
-			[key: string]: (
-				| NameOnly
-				| Aliased
-				| WithArgs
-			),
-		}>,
+		specify_types: Readonly<specify_types_instance>,
 	) {
 		super(
 			(node): node is SpecifyTypePredicateCandidate => (

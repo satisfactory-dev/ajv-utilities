@@ -14,13 +14,11 @@ import {
 
 import type {
 	Config,
+	specify_types_instance,
 } from '../types.ts';
 
 import type {
-	Aliased,
-	NameOnly,
 	prepend_with_imports,
-	WithArgs,
 } from '../TypeReferences.ts';
 import {
 	Types,
@@ -84,13 +82,7 @@ export default class SpecifyTypes extends ConditionalPreprocessor<
 
 	constructor(
 		prepend_with_imports: prepend_with_imports,
-		specify_types: {
-			[key: string]: (
-				| NameOnly
-				| Aliased
-				| WithArgs
-			),
-		},
+		specify_types: specify_types_instance,
 	) {
 		super(
 			(node, config): node is SpecifyTypesCandidate => (

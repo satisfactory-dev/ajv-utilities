@@ -2,6 +2,12 @@ import type {
 	ValidateFunction,
 } from 'ajv';
 
+import type {
+	Aliased,
+	NameOnly,
+	WithArgs,
+} from './TypeReferences.ts';
+
 export type Is<T = unknown> = (
 	| ValidateFunction<T>
 	| Pick<ValidateFunction<T>, (
@@ -10,7 +16,7 @@ export type Is<T = unknown> = (
 	)>
 );
 
-export type specify_types_type = (
+export type specify_types_config = (
 	| Exclude<string, ''>
 	| {
 		name: Exclude<string, ''>,
@@ -23,6 +29,14 @@ export type specify_types_type = (
 	}
 );
 
+export type specify_types_instance = {
+	[key: string]: (
+		| NameOnly
+		| Aliased
+		| WithArgs
+	),
+};
+
 export type Config = {
 	remove_schema: boolean,
 	remove_dataCtxKeys: [
@@ -33,6 +47,6 @@ export type Config = {
 		>)[],
 	],
 	specify_types: {
-		[key: string]: [specify_types_type, string],
+		[key: string]: [specify_types_config, string],
 	},
 };

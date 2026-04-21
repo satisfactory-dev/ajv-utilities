@@ -11,7 +11,7 @@ import {
 } from 'typescript';
 
 import type {
-	specify_types_type,
+	specify_types_config,
 } from './types.ts';
 
 export type prepend_with_imports = {
@@ -190,12 +190,12 @@ export class Types {
 	}
 
 	#is_object_type(
-		type: specify_types_type,
-	): type is Exclude<specify_types_type, string> {
+		type: specify_types_config,
+	): type is Exclude<specify_types_config, string> {
 		return 'string' !== typeof type;
 	}
 
-	add<T extends specify_types_type>(type: T) {
+	add<T extends specify_types_config>(type: T) {
 		const is_object = this.#is_object_type(type);
 
 		let as_object = (

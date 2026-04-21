@@ -176,7 +176,9 @@ void describe('AjvUtilities', () => {
 			`${import.meta.dirname}/../fixtures/EnumString.with-generics.ts`,
 		);
 		const EnumStringCode_with_multiple_generics = await readFile(
-			`${import.meta.dirname}/../fixtures/EnumString.with-multiple-generics.ts`,
+			`${
+				import.meta.dirname
+			}/../fixtures/EnumString.with-multiple-generics.ts`,
 		);
 		const both = await readFile(
 			`${import.meta.dirname}/../fixtures/both.ts`,

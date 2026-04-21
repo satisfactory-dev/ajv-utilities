@@ -10,14 +10,14 @@ import {
 } from '../../../src/TypeScriptify/TypeReferences.ts';
 
 import type {
-	specify_types_type,
+	specify_types_config,
 } from '../../../src/TypeScriptify/types.ts';
 
 void describe(Types.name, () => {
 	void describe('::add()', () => {
 		const first_added_instance_dataset: [
-			specify_types_type,
-			specify_types_type,
+			specify_types_config,
+			specify_types_config,
 			string,
 			string,
 		][] = [
