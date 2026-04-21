@@ -214,6 +214,9 @@ void describe('AjvUtilities', () => {
 				[
 					// oxlint-disable-next-line @stylistic/max-len
 					`import type { ValidateFunction } from 'ajv';`,
+
+					// oxlint-disable-next-line @stylistic/max-len
+					`import type { Is } from '@satisfactory-dev/ajv-utilities';`,
 					'export const foo = validate20;',
 					'const schema31 = { "$id": "foo" };',
 
@@ -222,12 +225,12 @@ void describe('AjvUtilities', () => {
 					'    rootData: unknown;',
 					'}> = {}) {',
 					'    /*# sourceURL="foo" */ ;',
-					'    (validate20 as ValidateFunction).errors = null;',
+					'    (validate20 as Is).errors = null;',
 					'    return true;',
 					'}',
 
 					// oxlint-disable-next-line @stylistic/max-len
-					'validate20.evaluated = { "dynamicProps": false, "dynamicItems": false } as ValidateFunction["evaluated"];',
+					'validate20.evaluated = { "dynamicProps": false, "dynamicItems": false } as Is["evaluated"];',
 					'',
 				].join('\n'),
 			],
@@ -256,6 +259,9 @@ void describe('AjvUtilities', () => {
 				[
 					// oxlint-disable-next-line @stylistic/max-len
 					`import type { ValidateFunction } from 'ajv';`,
+
+					// oxlint-disable-next-line @stylistic/max-len
+					`import type { Is } from '@satisfactory-dev/ajv-utilities';`,
 					'export const foo = validate20;',
 
 					// oxlint-disable-next-line @stylistic/max-len
@@ -263,12 +269,12 @@ void describe('AjvUtilities', () => {
 					'    rootData: unknown;',
 					'}> = {}) {',
 					'    /*# sourceURL="foo" */ ;',
-					'    (validate20 as ValidateFunction).errors = null;',
+					'    (validate20 as Is).errors = null;',
 					'    return true;',
 					'}',
 
 					// oxlint-disable-next-line @stylistic/max-len
-					'validate20.evaluated = { "dynamicProps": false, "dynamicItems": false } as ValidateFunction["evaluated"];',
+					'validate20.evaluated = { "dynamicProps": false, "dynamicItems": false } as Is["evaluated"];',
 					'',
 				].join('\n'),
 				{

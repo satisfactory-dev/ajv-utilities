@@ -1,4 +1,5 @@
 import type { ErrorObject, ValidateFunction } from 'ajv';
+import type { Is } from '@satisfactory-dev/ajv-utilities';
 import type { const_string, enum_string } from './types.ts';
 function ajv_utilities__is_probably_object(maybe: unknown): maybe is Record<string, unknown> { return !!maybe && typeof maybe === "object" && !Array.isArray(maybe); }
 function ajv_utilities__is_probably_array(maybe: unknown): maybe is unknown[] { return Array.isArray(maybe); }
@@ -97,10 +98,10 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
         }
         errors++;
     }
-    (validate20 as ValidateFunction).errors = vErrors;
+    (validate20 as Is).errors = vErrors;
     return errors === 0;
 }
-validate20.evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false } as ValidateFunction["evaluated"];
+validate20.evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false } as Is["evaluated"];
 export const validate_as_EnumString = validate21;
 const schema32 = { "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "docs.json.ts--lib--PropertySchemaToRegex--EnumString", "type": "object", "additionalProperties": false, "required": ["type", "enum"], "properties": { "type": { "type": "string", "const": "string" }, "enum": { "type": "array", "minItems": 2, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } } } };
 const func1 = ucs2length;
@@ -261,7 +262,7 @@ function validate21(data: unknown, { instancePath = "", parentData, parentDataPr
         }
         errors++;
     }
-    (validate21 as ValidateFunction).errors = vErrors;
+    (validate21 as Is).errors = vErrors;
     return errors === 0;
 }
-validate21.evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false } as ValidateFunction["evaluated"];
+validate21.evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false } as Is["evaluated"];

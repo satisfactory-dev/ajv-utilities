@@ -54,7 +54,9 @@ export default class TypecastEvalulated extends ConditionalModification<
 				&& isObjectLiteralExpression(node.right)
 			),
 			(node) => {
-				prepend_with_imports.ajv.add('ValidateFunction');
+				prepend_with_imports[
+					'@satisfactory-dev/ajv-utilities'
+				].add('Is');
 
 				return factory.updateBinaryExpression(
 					node,
@@ -64,7 +66,7 @@ export default class TypecastEvalulated extends ConditionalModification<
 						node.right,
 						factory.createIndexedAccessTypeNode(
 							factory.createTypeReferenceNode(
-								'ValidateFunction',
+								'Is',
 							),
 							factory.createLiteralTypeNode(
 								factory.createStringLiteral('evaluated'),

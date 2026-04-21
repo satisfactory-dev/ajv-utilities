@@ -18,6 +18,8 @@ import type {
 	prepend_with_imports,
 } from '../types.ts';
 
+import KnownImports from '../known_imports.ts';
+
 type TypecastSetErrorsCandidate = (
 	& BinaryExpression
 	& {
@@ -57,7 +59,7 @@ export default class TypecastSetErrors extends ConditionalModification<
 				&& 'errors' === node.left.name.getText()
 			),
 			(node) => {
-				prepend_with_imports.ajv.add('ValidateFunction');
+				KnownImports.Is(prepend_with_imports);
 
 				return factory.updateBinaryExpression(
 					node,
@@ -66,7 +68,7 @@ export default class TypecastSetErrors extends ConditionalModification<
 						factory.createAsExpression(
 							node.left.expression,
 							factory.createTypeReferenceNode(
-								'ValidateFunction',
+								'Is',
 							),
 						),
 						node.left.name,

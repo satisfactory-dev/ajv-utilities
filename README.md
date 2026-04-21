@@ -62,7 +62,7 @@ import EnumString from './schema/lib/PropertySchemaToRegex/EnumString.schema.jso
 import NamedList from './schema/lib/PropertySchemaToRegex/NamedList.schema.json' with {type: 'json'};
 
 const ajv = new Ajv2020({
-	verbose: false,
+	verbose: true,
 	logger: false,
 	allErrors: true,
 	code: {
@@ -81,13 +81,20 @@ const code = `// oxlint-disable @stylistic/max-len${'\n'}${typescriptify(
 		PropertySchemaToRegex_NamedList: NamedList.$id,
 	}),
 	{
-		remove_schema: true,
 		remove_dataCtxKeys: [
 			'parentData',
 			'parentDataProperty',
 			'rootData',
 			'dynamicAnchors',
 		],
+		specify_types: {
+			[ConstString.$id]: [
+				'ConstStringType',
+
+				// oxlint-disable-next-line @stylistic/max-len
+				'../src/version-specific/0.3.7.7/TypedString/PropertySchemaToRegex/ConstString.ts',
+			],
+		},
 	}
 )}`;
 

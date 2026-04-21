@@ -97,7 +97,6 @@ export default class SpecifyTypes extends ConditionalPreprocessor<
 					specify_types[
 						node.parent.parent.name.getText()
 					] = maybe[0];
-					prepend_with_imports.ajv.add('ValidateFunction');
 
 					if (!(maybe[1] in prepend_with_imports)) {
 						prepend_with_imports[maybe[1]] = new Set([maybe[0]]);

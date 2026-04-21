@@ -21,6 +21,8 @@ import type {
 	prepend_with_imports,
 } from '../types.ts';
 
+import KnownImports from '../known_imports.ts';
+
 type ValidateFunctionDeclaration = (
 	& FunctionDeclaration
 	& {
@@ -61,7 +63,7 @@ class ModifyValidate extends ConditionalModification<
 	}
 
 	#shim_DataValidationCxt() {
-		this.#prepend_with_imports.ajv.add('ValidateFunction');
+		KnownImports.ValidateFunction(this.#prepend_with_imports);
 
 		return factory.createIntersectionTypeNode([
 			factory.createIndexedAccessTypeNode(

@@ -151,6 +151,7 @@ export default class TypeScript {
 	) {
 		const prepend_with_imports: prepend_with_imports = {
 			ajv: new Set(),
+			'@satisfactory-dev/ajv-utilities': new Set(),
 		};
 
 		let patch_with_is_array = false;
