@@ -74,6 +74,8 @@ import SpecifyTypePredicate from './TypeScriptify/modifiers/SpecifyTypePredicate
 // oxlint-disable-next-line @stylistic/max-len
 import SpecifyIndicesType from './TypeScriptify/modifiers/SpecifyIndicesType.ts';
 
+import SpecifyPropsType from './TypeScriptify/modifiers/SpecifyPropsType.ts';
+
 export default class TypeScript {
 	ify(code: string, config: Partial<Config>): string {
 		code = esmify(code);
@@ -183,6 +185,7 @@ export default class TypeScript {
 					patch_with_is_array = true;
 				}),
 				new SpecifyIndicesType(),
+				new SpecifyPropsType(),
 			],
 		);
 

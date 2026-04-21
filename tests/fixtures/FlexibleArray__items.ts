@@ -238,7 +238,9 @@ function validate20(data: unknown, { instancePath = "" }: Partial<Parameters<Val
                     if (_valid0) {
                         valid2 = true;
                         passing0 = 0;
-                        var props0 = {};
+                        var props0: (true | {
+                            type?: true;
+                        }) = {};
                         props0.type = true;
                     }
                     const _errs19 = errors;
@@ -336,7 +338,9 @@ function validate20(data: unknown, { instancePath = "" }: Partial<Parameters<Val
                                     if (_valid1) {
                                         valid7 = true;
                                         passing1 = 0;
-                                        var props1 = {};
+                                        var props1: (true | {
+                                            type?: true;
+                                        }) = {};
                                         props1.type = true;
                                     }
                                     const _errs30 = errors;
@@ -566,7 +570,9 @@ function validate20(data: unknown, { instancePath = "" }: Partial<Parameters<Val
                                         if (_valid2) {
                                             valid13 = true;
                                             passing2 = 0;
-                                            var props2 = {};
+                                            var props2: (true | {
+                                                type?: true;
+                                            }) = {};
                                             props2.type = true;
                                         }
                                         const _errs46 = errors;
