@@ -1,5 +1,4 @@
 import type {
-	ErrorObject,
 	ValidateFunction,
 } from 'ajv';
 
@@ -11,11 +10,10 @@ export type prepend_with_imports = {
 
 export type Is<T = unknown> = (
 	| ValidateFunction<T>
-	| {
-		(maybe: unknown): maybe is T,
-		errors: ErrorObject|null,
-		evaluated: ValidateFunction['evaluated'],
-	}
+	| Pick<ValidateFunction<T>, (
+		| 'errors'
+		| 'evaluated'
+	)>
 );
 
 export type Config = {
