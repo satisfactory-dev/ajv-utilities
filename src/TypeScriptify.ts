@@ -150,7 +150,7 @@ export default class TypeScript {
 		},
 	) {
 		const prepend_with_imports: prepend_with_imports = {
-			ajv: new Set<string>(),
+			ajv: new Set(),
 		};
 
 		let patch_with_is_array = false;
