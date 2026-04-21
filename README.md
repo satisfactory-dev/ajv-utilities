@@ -85,7 +85,13 @@ const ajv = new Ajv2020({
 		lines: true,
 		optimize: 2,
 	},
-	schemas: [ConstString, EnumString, NamedList],
+	schemas: [
+		ConstString,
+		EnumString,
+		NamedList,
+		FlexibleArray__items,
+		FlexibleArray__prefixItems,
+	],
 });
 
 const code = `// oxlint-disable @stylistic/max-len${'\n'}${typescriptify(
