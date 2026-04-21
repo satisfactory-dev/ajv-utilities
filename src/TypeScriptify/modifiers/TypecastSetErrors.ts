@@ -16,7 +16,7 @@ import {
 
 import type {
 	prepend_with_imports,
-} from '../types.ts';
+} from '../TypeReferences.ts';
 
 import KnownImports from '../known_imports.ts';
 

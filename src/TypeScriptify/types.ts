@@ -2,18 +2,25 @@ import type {
 	ValidateFunction,
 } from 'ajv';
 
-export type prepend_with_imports = {
-	[key: string]: Set<string>,
-	ajv: Set<string>,
-	'@satisfactory-dev/ajv-utilities': Set<string>,
-};
-
 export type Is<T = unknown> = (
 	| ValidateFunction<T>
 	| Pick<ValidateFunction<T>, (
 		| 'errors'
 		| 'evaluated'
 	)>
+);
+
+export type specify_types_type = (
+	| Exclude<string, ''>
+	| {
+		name: Exclude<string, ''>,
+		as: Exclude<string, ''>,
+	}
+	| {
+		name: Exclude<string, ''>,
+		as?: Exclude<string, ''>,
+		args: [string, ...string[]],
+	}
 );
 
 export type Config = {
@@ -26,6 +33,6 @@ export type Config = {
 		>)[],
 	],
 	specify_types: {
-		[key: string]: [string, string],
+		[key: string]: [specify_types_type, string],
 	},
 };

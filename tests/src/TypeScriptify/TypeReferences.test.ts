@@ -1,0 +1,102 @@
+import {
+	describe,
+	it,
+} from 'node:test';
+
+import assert from 'node:assert/strict';
+
+import {
+	Types,
+} from '../../../src/TypeScriptify/TypeReferences.ts';
+
+import type {
+	specify_types_type,
+} from '../../../src/TypeScriptify/types.ts';
+
+void describe(Types.name, () => {
+	void describe('::add()', () => {
+		const first_added_instance_dataset: [
+			specify_types_type,
+			specify_types_type,
+			string,
+			string,
+			string,
+			string,
+		][] = [
+			['foo', 'foo', 'foo', 'foo', 'foo', 'foo'],
+			[
+				{name: 'foo', as: 'bar'},
+				'foo',
+				'foo as bar',
+				'foo',
+				'bar',
+				'foo',
+			],
+			[
+				'foo',
+				{name: 'foo', as: 'bar'},
+				'foo',
+				'foo as bar',
+				'foo',
+				'bar',
+			],
+			[
+				{name: 'foo', as: 'bar'},
+				{name: 'foo', as: 'bar', args: ['baz', 'bat', 'bag']},
+				'foo as bar',
+				'foo as bar',
+				'bar',
+				'bar',
+			],
+			[
+				{name: 'foo', as: 'bar', args: ['baz', 'bat', 'bag']},
+				{name: 'foo', as: 'bar'},
+				'foo as bar',
+				'foo as bar',
+				'bar<"baz", "bat", "bag">',
+				'bar<"baz", "bat", "bag">',
+			],
+			[
+				'foo',
+				{name: 'foo', args: ['baz', 'bat', 'bag']},
+				'foo',
+				'foo',
+				'foo',
+				'foo',
+			],
+			[
+				{name: 'foo', args: ['baz', 'bat', 'bag']},
+				'foo',
+				'foo',
+				'foo',
+				'foo<"baz", "bat", "bag">',
+				'foo<"baz", "bat", "bag">',
+			],
+		];
+
+		for (let i = 0; i < first_added_instance_dataset.length; ++i) {
+			const [
+				a,
+				b,
+				expected_first_id,
+				expected_second_id,
+				expected_first_as_string,
+				expected_second_as_string,
+			] = first_added_instance_dataset[i];
+
+			void it(`behaves with first_added_instance_dataset[${
+				i
+			}]`, () => {
+				const instance = new Types();
+
+				const first = instance.add(a);
+				const second = instance.add(b);
+
+				assert.equal(first.id, expected_first_id);
+				assert.equal(second.id, expected_second_id);
+				assert.equal(first.toString(), expected_first_as_string);
+				assert.equal(second.toString(), expected_second_as_string);
+			});
+		}
+	});
+});

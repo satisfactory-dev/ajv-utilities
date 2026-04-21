@@ -18,8 +18,11 @@ import {
 
 import type {
 	Config,
-	prepend_with_imports,
 } from '../types.ts';
+
+import type {
+	prepend_with_imports,
+} from '../TypeReferences.ts';
 
 import KnownImports from '../known_imports.ts';
 

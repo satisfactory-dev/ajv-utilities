@@ -145,6 +145,11 @@ void describe('AjvUtilities', () => {
 		const ConstStringCode_with_types = await readFile(
 			`${import.meta.dirname}/../fixtures/ConstString.with-types.ts`,
 		);
+		const ConstStringCode_with_aliased_types = await readFile(
+			`${
+				import.meta.dirname
+			}/../fixtures/ConstString.with-aliased-types.ts`,
+		);
 		const ConstStringCode_without_schema = await readFile(
 			`${import.meta.dirname}/../fixtures/ConstString.without-schema.ts`,
 		);
@@ -162,8 +167,19 @@ void describe('AjvUtilities', () => {
 		const EnumStringCode_with_types = await readFile(
 			`${import.meta.dirname}/../fixtures/EnumString.with-types.ts`,
 		);
+		const EnumStringCode_with_alias_and_generics = await readFile(
+			`${
+				import.meta.dirname
+			}/../fixtures/EnumString.with-alias-and-generics.ts`,
+		);
+		const EnumStringCode_with_generics = await readFile(
+			`${import.meta.dirname}/../fixtures/EnumString.with-generics.ts`,
+		);
 		const both = await readFile(
 			`${import.meta.dirname}/../fixtures/both.ts`,
+		);
+		const both_with_generics = await readFile(
+			`${import.meta.dirname}/../fixtures/both-with-generics.ts`,
 		);
 
 		const data_sets: (
@@ -411,6 +427,37 @@ void describe('AjvUtilities', () => {
 						foo: ConstString.$id,
 					},
 				),
+				ConstStringCode_with_aliased_types.toString(),
+				{
+					specify_types: {
+						[ConstString.$id]: [
+							{name: 'const_string', as: 'bar'},
+							'./types.ts',
+						],
+					},
+				},
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: false,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
+							ConstString,
+						],
+					}),
+					{
+						// oxlint-disable-next-line @stylistic/max-len
+						foo: ConstString.$id,
+					},
+				),
 				ConstStringCode_without_schema.toString(),
 				{
 					remove_schema: true,
@@ -558,6 +605,75 @@ void describe('AjvUtilities', () => {
 							optimize: 2,
 						},
 						schemas: [
+							EnumString,
+						],
+					}),
+					{
+						// oxlint-disable-next-line @stylistic/max-len
+						foo: EnumString.$id,
+					},
+				),
+				EnumStringCode_with_alias_and_generics.toString(),
+				{
+					specify_types: {
+						[EnumString.$id]: [
+							{
+								name: 'enum_string',
+								as: 'bar',
+								args: ['foo', 'bar'],
+							},
+							'./types.ts',
+						],
+					},
+				},
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: false,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
+							EnumString,
+						],
+					}),
+					{
+						// oxlint-disable-next-line @stylistic/max-len
+						foo: EnumString.$id,
+					},
+				),
+				EnumStringCode_with_generics.toString(),
+				{
+					specify_types: {
+						[EnumString.$id]: [
+							{
+								name: 'enum_string',
+								args: ['foo', 'bar'],
+							},
+							'./types.ts',
+						],
+					},
+				},
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: false,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
 							ConstString,
 							EnumString,
 						],
@@ -576,6 +692,49 @@ void describe('AjvUtilities', () => {
 						],
 						[EnumString.$id]: [
 							'enum_string',
+							'./types.ts',
+						],
+					},
+				},
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: false,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
+							ConstString,
+							EnumString,
+						],
+					}),
+					{
+						validate_as_ConstString: ConstString.$id,
+						validate_as_EnumString: EnumString.$id,
+					},
+				),
+				both_with_generics.toString(),
+				{
+					specify_types: {
+						[ConstString.$id]: [
+							{
+								name: 'const_string',
+								as: 'bar',
+							},
+							'./types.ts',
+						],
+						[EnumString.$id]: [
+							{
+								name: 'enum_string',
+								as: 'baz',
+								args: ['foo', 'bar'],
+							},
 							'./types.ts',
 						],
 					},

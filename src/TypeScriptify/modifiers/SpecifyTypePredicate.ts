@@ -13,8 +13,8 @@ import {
 } from '../abstracts.ts';
 
 import type {
-	Config,
-} from '../types.ts';
+	Type,
+} from '../TypeReferences.ts';
 
 type SpecifyTypePredicateCandidate = (
 	& FunctionDeclaration
@@ -33,7 +33,7 @@ export default class SpecifyTypePredicate extends ConditionalModification<
 > {
 	constructor(
 		specify_types: Readonly<{
-			[key: string]: Config['specify_types'][string][0],
+			[key: string]: Type,
 		}>,
 	) {
 		super(
@@ -57,9 +57,7 @@ export default class SpecifyTypePredicate extends ConditionalModification<
 						factory.createTypePredicateNode(
 							undefined,
 							'data',
-							factory.createTypeReferenceNode(
-								specify_types[function_name],
-							),
+							specify_types[function_name].toTypeReferenceNode(),
 						),
 						node.body,
 					);

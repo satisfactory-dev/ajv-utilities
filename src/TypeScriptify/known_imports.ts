@@ -1,6 +1,6 @@
 import type {
 	prepend_with_imports,
-} from './types.ts';
+} from './TypeReferences.ts';
 
 export default class KnownImports {
 	static ValidateFunction(prepend_with_imports: prepend_with_imports) {

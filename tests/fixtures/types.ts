@@ -1,8 +1,11 @@
 type const_string = {type: 'string', const: string};
 
-type enum_string = {
+type enum_string<
+    T0 extends string = string,
+    T1 extends string = string,
+> = {
 	type: 'string',
-	enum: [string, string, ...string[]],
+	enum: [T0, T1, ...string[]],
 };
 
 export type {

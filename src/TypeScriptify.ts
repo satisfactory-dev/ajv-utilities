@@ -28,8 +28,15 @@ import {
 
 import type {
 	Config,
-	prepend_with_imports,
 } from './TypeScriptify/types.ts';
+
+import type{
+	prepend_with_imports,
+	Type,
+} from './TypeScriptify/TypeReferences.ts';
+import {
+	Types,
+} from './TypeScriptify/TypeReferences.ts';
 
 import SpecifyTypes from './TypeScriptify/preprocessors/SpecifyTypes.ts';
 
@@ -78,7 +85,7 @@ export default class TypeScript {
 		);
 
 		const specify_types: {
-			[key: string]: Config['specify_types'][string][0],
+			[key: string]: Type,
 		} = {};
 
 		let result = transform(source, [
@@ -146,12 +153,12 @@ export default class TypeScript {
 		context: TransformationContext,
 		config: Partial<Config>,
 		specify_types: {
-			[key: string]: Config['specify_types'][string][0],
+			[key: string]: Type,
 		},
 	) {
 		const prepend_with_imports: prepend_with_imports = {
-			ajv: new Set(),
-			'@satisfactory-dev/ajv-utilities': new Set(),
+			ajv: new Types(),
+			'@satisfactory-dev/ajv-utilities': new Types(),
 		};
 
 		let patch_with_is_array = false;
@@ -202,13 +209,9 @@ export default class TypeScript {
 						undefined,
 						factory.createNamedImports([
 							...types,
-						].sort((a, b) => a.localeCompare(b)).map((
+						].sort((a, b) => a.id.localeCompare(b.id)).map((
 							identifier,
-						) => factory.createImportSpecifier(
-							false,
-							undefined,
-							factory.createIdentifier(identifier),
-						))),
+						) => identifier.toImportSpecifier())),
 					),
 					factory.createStringLiteral(from, true),
 				));
@@ -254,7 +257,7 @@ export default class TypeScript {
 		context: TransformationContext,
 		config: Partial<Config>,
 		specify_types: Readonly<{
-			[key: string]: Config['specify_types'][string][0],
+			[key: string]: Type,
 		}>,
 	) {
 		if (Object.keys(specify_types).length < 1) {

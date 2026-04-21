@@ -16,7 +16,8 @@ import {
 
 import type {
 	prepend_with_imports,
-} from '../types.ts';
+} from '../TypeReferences.ts';
+
 type TypecastVErrorsPushCandidate = (
 	& CallExpression
 	& {

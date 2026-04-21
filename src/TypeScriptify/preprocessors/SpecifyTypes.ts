@@ -14,8 +14,15 @@ import {
 
 import type {
 	Config,
-	prepend_with_imports,
 } from '../types.ts';
+
+import type {
+	prepend_with_imports,
+	Type,
+} from '../TypeReferences.ts';
+import {
+	Types,
+} from '../TypeReferences.ts';
 
 type SpecifyTypesCandidate = (
 	& EmptyStatement
@@ -76,7 +83,7 @@ export default class SpecifyTypes extends ConditionalPreprocessor<
 	constructor(
 		prepend_with_imports: prepend_with_imports,
 		specify_types: {
-			[key: string]: Config['specify_types'][string][0],
+			[key: string]: Type,
 		},
 	) {
 		super(
@@ -94,15 +101,13 @@ export default class SpecifyTypes extends ConditionalPreprocessor<
 				const maybe = this.#configEntry(config.specify_types, node);
 
 				if (maybe) {
+					if (!(maybe[1] in prepend_with_imports)) {
+						prepend_with_imports[maybe[1]] = new Types();
+					}
+
 					specify_types[
 						node.parent.parent.name.getText()
-					] = maybe[0];
-
-					if (!(maybe[1] in prepend_with_imports)) {
-						prepend_with_imports[maybe[1]] = new Set([maybe[0]]);
-					} else {
-						prepend_with_imports[maybe[1]].add(maybe[0]);
-					}
+					] = prepend_with_imports[maybe[1]].add(maybe[0]);
 				}
 			},
 		);
