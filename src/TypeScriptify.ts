@@ -74,13 +74,19 @@ import SpecifyTypePredicate from './TypeScriptify/modifiers/SpecifyTypePredicate
 // oxlint-disable-next-line @stylistic/max-len
 import SpecifyIndicesType from './TypeScriptify/modifiers/SpecifyIndicesType.ts';
 
-import SpecifyPropsType from './TypeScriptify/modifiers/SpecifyPropsType.ts';
-
 // oxlint-disable-next-line @stylistic/max-len
 import QuestionableSchemaPropertyAccessExpression from './TypeScriptify/modifiers/QuestionableSchemaPropertyAccessExpression.ts';
 
 // oxlint-disable-next-line @stylistic/max-len
 import TypecastElementAccessExpressionAsSchemaObjectArray from './TypeScriptify/modifiers/TypecastElementAccessExpressionAsSchemaObjectArray.ts';
+
+import type {
+	hoist_candidates,
+} from './TypeScriptify/modifiers/HoistDeclarationAsUndefined.ts';
+import {
+	FindHoistCandidate,
+	HoistDeclarationsHere,
+} from './TypeScriptify/modifiers/HoistDeclarationAsUndefined.ts';
 
 export default class TypeScript {
 	ify(code: string, config: Partial<Config>): string {
@@ -93,12 +99,14 @@ export default class TypeScript {
 		);
 
 		const specify_types: specify_types_instance = {};
+		const hoist_candidates: hoist_candidates = {};
 
 		let result = transform(source, [
 			(context) => this.#first_pass(
 				context,
 				config,
 				specify_types,
+				hoist_candidates,
 			),
 		]);
 
@@ -107,6 +115,7 @@ export default class TypeScript {
 				context,
 				config,
 				Object.freeze(specify_types),
+				Object.freeze(hoist_candidates),
 			),
 		]);
 
@@ -159,6 +168,7 @@ export default class TypeScript {
 		context: TransformationContext,
 		config: Partial<Config>,
 		specify_types: specify_types_instance,
+		hoist_candidates: hoist_candidates,
 	) {
 		const prepend_with_imports: prepend_with_imports = {
 			ajv: new Types(),
@@ -191,7 +201,7 @@ export default class TypeScript {
 					patch_with_is_array = true;
 				}),
 				new SpecifyIndicesType(),
-				new SpecifyPropsType(),
+				new FindHoistCandidate(hoist_candidates),
 				new QuestionableSchemaPropertyAccessExpression(),
 				new TypecastElementAccessExpressionAsSchemaObjectArray(
 					prepend_with_imports,
@@ -266,6 +276,7 @@ export default class TypeScript {
 		context: TransformationContext,
 		config: Partial<Config>,
 		specify_types: Readonly<specify_types_instance>,
+		hoist_candidates: Readonly<hoist_candidates>,
 	) {
 		if (Object.keys(specify_types).length < 1) {
 			return (source: SourceFile) => source;
@@ -277,6 +288,7 @@ export default class TypeScript {
 			[],
 			[
 				new SpecifyTypePredicate(specify_types),
+				new HoistDeclarationsHere(hoist_candidates),
 			],
 		);
 

@@ -11,6 +11,13 @@ const pattern4 = new RegExp("^(.+)?#\\/\\$defs\\/(.+)$", "u");
 function validate20(data: unknown, { instancePath = "" }: Partial<Parameters<ValidateFunction>[1] & {
     rootData: unknown;
 }> = {}): data is FlexibleArray_type<"items"> {
+    let props0: (true | {
+        type?: true;
+    } | undefined) = undefined, props1: (true | {
+        type?: true;
+    } | undefined) = undefined, props2: (true | {
+        type?: true;
+    } | undefined) = undefined;
     /*# sourceURL="docs.json.ts--lib--PropertySchemaToRegex--FlexibleArray--items" */ ;
     let vErrors: ErrorObject[] | null = null;
     let errors = 0;
@@ -238,9 +245,7 @@ function validate20(data: unknown, { instancePath = "" }: Partial<Parameters<Val
                     if (_valid0) {
                         valid2 = true;
                         passing0 = 0;
-                        var props0: (true | {
-                            type?: true;
-                        }) = {};
+                        props0 = {};
                         props0.type = true;
                     }
                     const _errs19 = errors;
@@ -338,9 +343,7 @@ function validate20(data: unknown, { instancePath = "" }: Partial<Parameters<Val
                                     if (_valid1) {
                                         valid7 = true;
                                         passing1 = 0;
-                                        var props1: (true | {
-                                            type?: true;
-                                        }) = {};
+                                        props1 = {};
                                         props1.type = true;
                                     }
                                     const _errs30 = errors;
@@ -570,9 +573,7 @@ function validate20(data: unknown, { instancePath = "" }: Partial<Parameters<Val
                                         if (_valid2) {
                                             valid13 = true;
                                             passing2 = 0;
-                                            var props2: (true | {
-                                                type?: true;
-                                            }) = {};
+                                            props2 = {};
                                             props2.type = true;
                                         }
                                         const _errs46 = errors;
