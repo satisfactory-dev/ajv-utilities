@@ -53,7 +53,7 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
         if (data.type !== undefined) {
             let data0 = data.type;
             if (typeof data0 !== "string") {
-                const err3: ErrorObject = { instancePath: instancePath + "/type", schemaPath: "#/properties/type/type", keyword: "type", params: { type: "string" }, message: "must be string", schema: schema31.properties.type?.type, parentSchema: schema31.properties?.type, data: data0 };
+                const err3: ErrorObject = { instancePath: instancePath + "/type", schemaPath: "#/properties/type/type", keyword: "type", params: { type: "string" }, message: "must be string", schema: (schema31.properties?.type).type, parentSchema: schema31.properties?.type, data: data0 };
                 if (vErrors === null) {
                     vErrors = [err3];
                 }
@@ -76,7 +76,7 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
         if (data.const !== undefined) {
             let data1 = data.const;
             if (typeof data1 !== "string") {
-                const err5: ErrorObject = { instancePath: instancePath + "/const", schemaPath: "#/properties/const/type", keyword: "type", params: { type: "string" }, message: "must be string", schema: schema31.properties.const?.type, parentSchema: schema31.properties.const, data: data1 };
+                const err5: ErrorObject = { instancePath: instancePath + "/const", schemaPath: "#/properties/const/type", keyword: "type", params: { type: "string" }, message: "must be string", schema: (schema31.properties?.const).type, parentSchema: schema31.properties?.const, data: data1 };
                 if (vErrors === null) {
                     vErrors = [err5];
                 }

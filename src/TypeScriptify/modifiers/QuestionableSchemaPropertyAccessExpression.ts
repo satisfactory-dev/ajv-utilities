@@ -18,30 +18,46 @@ import {
 type Candidate = (
 	& PropertyAccessExpression
 	& {
-		parent: PropertyAssignment,
-		expression: PropertyAccessExpression,
-		name: (
-			& Identifier
+		parent: (
+			| PropertyAssignment
+			| PropertyAccessExpression
+		),
+		expression: (
+			& PropertyAccessExpression
 			& {
-				getText(): 'type',
+				name: (
+					& Identifier
+					& {
+						getText(): (
+							| 'properties'
+							| 'allOf'
+						),
+					}
+				),
 			}
 		),
 	}
 );
 
 // oxlint-disable-next-line @stylistic/max-len
-export default class QuestionableSchemaPropertyType extends ConditionalModification<
+export default class QuestionableSchemaPropertyAccessExpression extends ConditionalModification<
 	Candidate
 > {
 	constructor() {
 		super(
 			(maybe): maybe is Candidate => (
-				isPropertyAccessExpression(maybe)
-				&& !!maybe.parent
-				&& isPropertyAssignment(maybe.parent)
+				!!maybe.parent
+				&& (
+					isPropertyAssignment(maybe.parent)
+					|| isPropertyAccessExpression(maybe.parent)
+				)
+				&& isPropertyAccessExpression(maybe)
 				&& isPropertyAccessExpression(maybe.expression)
-				&& isIdentifier(maybe.name)
-				&& 'type' === maybe.name.getText()
+				&& isIdentifier(maybe.expression.name)
+				&& [
+					'properties',
+					'allOf',
+				].includes(maybe.expression.name.getText())
 			),
 			(node) => factory.createPropertyAccessChain(
 				node.expression,

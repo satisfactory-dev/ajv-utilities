@@ -77,7 +77,7 @@ import SpecifyIndicesType from './TypeScriptify/modifiers/SpecifyIndicesType.ts'
 import SpecifyPropsType from './TypeScriptify/modifiers/SpecifyPropsType.ts';
 
 // oxlint-disable-next-line @stylistic/max-len
-import QuestionableSchemaPropertyType from './TypeScriptify/modifiers/QuestionableSchemaPropertyType.ts';
+import QuestionableSchemaPropertyAccessExpression from './TypeScriptify/modifiers/QuestionableSchemaPropertyAccessExpression.ts';
 
 export default class TypeScript {
 	ify(code: string, config: Partial<Config>): string {
@@ -189,7 +189,7 @@ export default class TypeScript {
 				}),
 				new SpecifyIndicesType(),
 				new SpecifyPropsType(),
-				new QuestionableSchemaPropertyType(),
+				new QuestionableSchemaPropertyAccessExpression(),
 			],
 		);
 
