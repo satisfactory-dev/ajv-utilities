@@ -99,4 +99,11 @@ void describe(Types.name, () => {
 			});
 		}
 	});
+
+	void it('iterates to an empty array if nothing added', () => {
+		assert.deepEqual(
+			[...new Types()],
+			[],
+		);
+	});
 });
