@@ -60,6 +60,20 @@ import EnumString from './schema/lib/PropertySchemaToRegex/EnumString.schema.jso
 
 // oxlint-disable-next-line @stylistic/max-len
 import NamedList from './schema/lib/PropertySchemaToRegex/NamedList.schema.json' with {type: 'json'};
+import {
+	FlexibleArray_generate_schema_definition__items,
+	FlexibleArray_generate_schema_definition__prefixItems,
+} from './src/version-specific/0.3.7.7/TypedString/FlexibleArray';
+
+const FlexibleArray__items = {
+	$id: 'docs.json.ts--lib--PropertySchemaToRegex--FlexibleArray--items',
+	...FlexibleArray_generate_schema_definition__items(),
+};
+
+const FlexibleArray__prefixItems = {
+	$id: 'docs.json.ts--lib--PropertySchemaToRegex--FlexibleArray--prefixItems',
+	...FlexibleArray_generate_schema_definition__prefixItems(),
+};
 
 const ajv = new Ajv2020({
 	verbose: true,
@@ -79,6 +93,8 @@ const code = `// oxlint-disable @stylistic/max-len${'\n'}${typescriptify(
 		PropertySchemaToRegex_ConstString: ConstString.$id,
 		PropertySchemaToRegex_EnumString: EnumString.$id,
 		PropertySchemaToRegex_NamedList: NamedList.$id,
+		FlexibleArray__items: FlexibleArray__items.$id,
+		FlexibleArray__prefixItems: FlexibleArray__prefixItems.$id,
 	}),
 	{
 		remove_dataCtxKeys: [
@@ -105,6 +121,12 @@ const code = `// oxlint-disable @stylistic/max-len${'\n'}${typescriptify(
 
 				// oxlint-disable-next-line @stylistic/max-len
 				'../src/version-specific/0.3.7.7/NamedList.ts',
+			],
+			[FlexibleArray__items.$id]: [
+				{name: 'FlexibleArray_type', args: ['items']},
+			],
+			[FlexibleArray__prefixItems.$id]: [
+				{name: 'FlexibleArray_type', args: ['prefixItems']},
 			],
 		},
 	}
