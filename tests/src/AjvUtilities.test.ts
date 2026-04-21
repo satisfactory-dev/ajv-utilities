@@ -33,6 +33,11 @@ import EnumString from '../fixtures/EnumString.schema.json' with {
 	type: 'json',
 };
 
+// oxlint-disable-next-line @stylistic/max-len
+import FlexibleArray__items from '../fixtures/FlexibleArray__items.schema.json' with {
+	type: 'json',
+};
+
 void describe('AjvUtilities', () => {
 	void describe('compile', () => {
 		const ajv = new Ajv();
@@ -185,6 +190,9 @@ void describe('AjvUtilities', () => {
 		);
 		const both_with_generics = await readFile(
 			`${import.meta.dirname}/../fixtures/both-with-generics.ts`,
+		);
+		const FlexibleArray__items_expectation = await readFile(
+			`${import.meta.dirname}/../fixtures/FlexibleArray__items.ts`,
 		);
 
 		const data_sets: (
@@ -790,6 +798,47 @@ void describe('AjvUtilities', () => {
 						],
 					},
 				},
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: true,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
+							FlexibleArray__items,
+						],
+					}),
+					{
+						// oxlint-disable-next-line @stylistic/max-len
+						FlexibleArray__items: FlexibleArray__items.$id,
+					},
+				),
+				FlexibleArray__items_expectation.toString(),
+				{
+					remove_dataCtxKeys: [
+						'parentData',
+						'parentDataProperty',
+						'rootData',
+						'dynamicAnchors',
+					],
+					specify_types: {
+						[FlexibleArray__items.$id]: [
+							{
+								name: 'FlexibleArray_type',
+								args: ['items'],
+							},
+							'./types.ts',
+						],
+					},
+				},
+
 			],
 		];
 

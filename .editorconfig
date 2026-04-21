@@ -17,3 +17,6 @@ indent_size = 2
 
 [tests/fixtures/*.ts]
 indent_style = space
+
+[tests/fixtures/types.ts]
+indent_style = tab
