@@ -79,6 +79,9 @@ import SpecifyPropsType from './TypeScriptify/modifiers/SpecifyPropsType.ts';
 // oxlint-disable-next-line @stylistic/max-len
 import QuestionableSchemaPropertyAccessExpression from './TypeScriptify/modifiers/QuestionableSchemaPropertyAccessExpression.ts';
 
+// oxlint-disable-next-line @stylistic/max-len
+import TypecastElementAccessExpressionAsSchemaObjectArray from './TypeScriptify/modifiers/TypecastElementAccessExpressionAsSchemaObjectArray.ts';
+
 export default class TypeScript {
 	ify(code: string, config: Partial<Config>): string {
 		code = esmify(code);
@@ -190,6 +193,9 @@ export default class TypeScript {
 				new SpecifyIndicesType(),
 				new SpecifyPropsType(),
 				new QuestionableSchemaPropertyAccessExpression(),
+				new TypecastElementAccessExpressionAsSchemaObjectArray(
+					prepend_with_imports,
+				),
 			],
 		);
 

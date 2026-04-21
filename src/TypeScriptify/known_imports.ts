@@ -3,6 +3,10 @@ import type {
 } from './TypeReferences.ts';
 
 export default class KnownImports {
+	static SchemaObject(prepend_with_imports: prepend_with_imports) {
+		prepend_with_imports.ajv.add('SchemaObject');
+	}
+
 	static ValidateFunction(prepend_with_imports: prepend_with_imports) {
 		prepend_with_imports.ajv.add('ValidateFunction');
 	}
