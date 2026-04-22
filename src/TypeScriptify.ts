@@ -45,7 +45,10 @@ import RemoveSchemaDeclaration from './TypeScriptify/modifiers/RemoveSchemaDecla
 
 import ModifyValidate from './TypeScriptify/modifiers/ModifyValidate.ts';
 
-import ModifyVErrors from './TypeScriptify/modifiers/ModifyVErrors.ts';
+import {
+	ModifyVErrors,
+	ReplaceVErrorsIfElse,
+} from './TypeScriptify/modifiers/ModifyVErrors.ts';
 
 // oxlint-disable-next-line @stylistic/max-len
 import TypecastEvalulated from './TypeScriptify/modifiers/TypecastEvalulated.ts';
@@ -54,9 +57,6 @@ import TypecastSetErrors from './TypeScriptify/modifiers/TypecastSetErrors.ts';
 
 // oxlint-disable-next-line @stylistic/max-len
 import AddErrorObjectType from './TypeScriptify/modifiers/AddErrorObjectType.ts';
-
-// oxlint-disable-next-line @stylistic/max-len
-import TypecastVErrorsPush from './TypeScriptify/modifiers/TypecastVErrorsPush.ts';
 
 // oxlint-disable-next-line @stylistic/max-len
 import QuestionableCondition from './TypeScriptify/modifiers/QuestionableCondition.ts';
@@ -181,10 +181,10 @@ export default class TypeScript {
 				new RemoveSchemaDeclaration(),
 				new ModifyValidate(prepend_with_imports),
 				new ModifyVErrors(prepend_with_imports),
+				new ReplaceVErrorsIfElse(),
 				new TypecastEvalulated(prepend_with_imports),
 				new TypecastSetErrors(prepend_with_imports),
 				new AddErrorObjectType(prepend_with_imports),
-				new TypecastVErrorsPush(prepend_with_imports),
 				new QuestionableCondition(),
 				new Ucs2LengthCorrection(),
 				new PatchIsObject(() => {

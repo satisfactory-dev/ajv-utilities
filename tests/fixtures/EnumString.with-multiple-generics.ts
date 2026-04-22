@@ -11,7 +11,7 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
     rootData: unknown;
 }> = {}): data is enum_string<"foo", "bar"> {
     /*# sourceURL="docs.json.ts--lib--PropertySchemaToRegex--EnumString" */ ;
-    let vErrors: ErrorObject[] | null = null;
+    let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = validate20.evaluated;
     if (evaluated0?.dynamicProps) {
@@ -23,33 +23,18 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
     if (ajv_utilities__is_probably_object(data)) {
         if (data.type === undefined) {
             const err0: ErrorObject = { instancePath, schemaPath: "#/required", keyword: "required", params: { missingProperty: "type" }, message: "must have required property '" + "type" + "'" };
-            if (vErrors === null) {
-                vErrors = [err0];
-            }
-            else {
-                (vErrors as ErrorObject[]).push(err0);
-            }
+            vErrors.push(err0)
             errors++;
         }
         if (data.enum === undefined) {
             const err1: ErrorObject = { instancePath, schemaPath: "#/required", keyword: "required", params: { missingProperty: "enum" }, message: "must have required property '" + "enum" + "'" };
-            if (vErrors === null) {
-                vErrors = [err1];
-            }
-            else {
-                (vErrors as ErrorObject[]).push(err1);
-            }
+            vErrors.push(err1)
             errors++;
         }
         for (const key0 in data) {
             if (!((key0 === "type") || (key0 === "enum"))) {
                 const err2: ErrorObject = { instancePath, schemaPath: "#/additionalProperties", keyword: "additionalProperties", params: { additionalProperty: key0 }, message: "must NOT have additional properties" };
-                if (vErrors === null) {
-                    vErrors = [err2];
-                }
-                else {
-                    (vErrors as ErrorObject[]).push(err2);
-                }
+                vErrors.push(err2)
                 errors++;
             }
         }
@@ -57,22 +42,12 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
             let data0 = data.type;
             if (typeof data0 !== "string") {
                 const err3: ErrorObject = { instancePath: instancePath + "/type", schemaPath: "#/properties/type/type", keyword: "type", params: { type: "string" }, message: "must be string" };
-                if (vErrors === null) {
-                    vErrors = [err3];
-                }
-                else {
-                    (vErrors as ErrorObject[]).push(err3);
-                }
+                vErrors.push(err3)
                 errors++;
             }
             if ("string" !== data0) {
                 const err4: ErrorObject = { instancePath: instancePath + "/type", schemaPath: "#/properties/type/const", keyword: "const", params: { allowedValue: "string" }, message: "must be equal to constant" };
-                if (vErrors === null) {
-                    vErrors = [err4];
-                }
-                else {
-                    (vErrors as ErrorObject[]).push(err4);
-                }
+                vErrors.push(err4)
                 errors++;
             }
         }
@@ -81,12 +56,7 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
             if (ajv_utilities__is_probably_array(data1)) {
                 if (data1.length < 2) {
                     const err5: ErrorObject = { instancePath: instancePath + "/enum", schemaPath: "#/properties/enum/minItems", keyword: "minItems", params: { limit: 2 }, message: "must NOT have fewer than 2 items" };
-                    if (vErrors === null) {
-                        vErrors = [err5];
-                    }
-                    else {
-                        (vErrors as ErrorObject[]).push(err5);
-                    }
+                    vErrors.push(err5)
                     errors++;
                 }
                 const len0 = data1.length;
@@ -95,23 +65,13 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
                     if (typeof data2 === "string") {
                         if (func1(data2) < 1) {
                             const err6: ErrorObject = { instancePath: instancePath + "/enum/" + i0, schemaPath: "#/properties/enum/items/minLength", keyword: "minLength", params: { limit: 1 }, message: "must NOT have fewer than 1 characters" };
-                            if (vErrors === null) {
-                                vErrors = [err6];
-                            }
-                            else {
-                                (vErrors as ErrorObject[]).push(err6);
-                            }
+                            vErrors.push(err6)
                             errors++;
                         }
                     }
                     else {
                         const err7: ErrorObject = { instancePath: instancePath + "/enum/" + i0, schemaPath: "#/properties/enum/items/type", keyword: "type", params: { type: "string" }, message: "must be string" };
-                        if (vErrors === null) {
-                            vErrors = [err7];
-                        }
-                        else {
-                            (vErrors as ErrorObject[]).push(err7);
-                        }
+                        vErrors.push(err7)
                         errors++;
                     }
                 }
@@ -129,12 +89,7 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
                         if (typeof indices0[item0] == "number") {
                             j0 = indices0[item0];
                             const err8: ErrorObject = { instancePath: instancePath + "/enum", schemaPath: "#/properties/enum/uniqueItems", keyword: "uniqueItems", params: { i: i1, j: j0 }, message: "must NOT have duplicate items (items ## " + j0 + " and " + i1 + " are identical)" };
-                            if (vErrors === null) {
-                                vErrors = [err8];
-                            }
-                            else {
-                                (vErrors as ErrorObject[]).push(err8);
-                            }
+                            vErrors.push(err8)
                             errors++;
                             break;
                         }
@@ -144,27 +99,17 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
             }
             else {
                 const err9: ErrorObject = { instancePath: instancePath + "/enum", schemaPath: "#/properties/enum/type", keyword: "type", params: { type: "array" }, message: "must be array" };
-                if (vErrors === null) {
-                    vErrors = [err9];
-                }
-                else {
-                    (vErrors as ErrorObject[]).push(err9);
-                }
+                vErrors.push(err9)
                 errors++;
             }
         }
     }
     else {
         const err10: ErrorObject = { instancePath, schemaPath: "#/type", keyword: "type", params: { type: "object" }, message: "must be object" };
-        if (vErrors === null) {
-            vErrors = [err10];
-        }
-        else {
-            (vErrors as ErrorObject[]).push(err10);
-        }
+        vErrors.push(err10)
         errors++;
     }
-    (validate20 as Is).errors = vErrors;
+    (validate20 as Is).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
 validate20.evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false } as Is["evaluated"];
@@ -174,7 +119,7 @@ function validate21(data: unknown, { instancePath = "", parentData, parentDataPr
     rootData: unknown;
 }> = {}): data is enum_string<"bar", "foo"> {
     /*# sourceURL="docs.json.ts--lib--PropertySchemaToRegex--EnumString_foo" */ ;
-    let vErrors: ErrorObject[] | null = null;
+    let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = validate21.evaluated;
     if (evaluated0?.dynamicProps) {
@@ -186,33 +131,18 @@ function validate21(data: unknown, { instancePath = "", parentData, parentDataPr
     if (ajv_utilities__is_probably_object(data)) {
         if (data.type === undefined) {
             const err0: ErrorObject = { instancePath, schemaPath: "#/required", keyword: "required", params: { missingProperty: "type" }, message: "must have required property '" + "type" + "'" };
-            if (vErrors === null) {
-                vErrors = [err0];
-            }
-            else {
-                (vErrors as ErrorObject[]).push(err0);
-            }
+            vErrors.push(err0)
             errors++;
         }
         if (data.enum === undefined) {
             const err1: ErrorObject = { instancePath, schemaPath: "#/required", keyword: "required", params: { missingProperty: "enum" }, message: "must have required property '" + "enum" + "'" };
-            if (vErrors === null) {
-                vErrors = [err1];
-            }
-            else {
-                (vErrors as ErrorObject[]).push(err1);
-            }
+            vErrors.push(err1)
             errors++;
         }
         for (const key0 in data) {
             if (!((key0 === "type") || (key0 === "enum"))) {
                 const err2: ErrorObject = { instancePath, schemaPath: "#/additionalProperties", keyword: "additionalProperties", params: { additionalProperty: key0 }, message: "must NOT have additional properties" };
-                if (vErrors === null) {
-                    vErrors = [err2];
-                }
-                else {
-                    (vErrors as ErrorObject[]).push(err2);
-                }
+                vErrors.push(err2)
                 errors++;
             }
         }
@@ -220,22 +150,12 @@ function validate21(data: unknown, { instancePath = "", parentData, parentDataPr
             let data0 = data.type;
             if (typeof data0 !== "string") {
                 const err3: ErrorObject = { instancePath: instancePath + "/type", schemaPath: "#/properties/type/type", keyword: "type", params: { type: "string" }, message: "must be string" };
-                if (vErrors === null) {
-                    vErrors = [err3];
-                }
-                else {
-                    (vErrors as ErrorObject[]).push(err3);
-                }
+                vErrors.push(err3)
                 errors++;
             }
             if ("string" !== data0) {
                 const err4: ErrorObject = { instancePath: instancePath + "/type", schemaPath: "#/properties/type/const", keyword: "const", params: { allowedValue: "string" }, message: "must be equal to constant" };
-                if (vErrors === null) {
-                    vErrors = [err4];
-                }
-                else {
-                    (vErrors as ErrorObject[]).push(err4);
-                }
+                vErrors.push(err4)
                 errors++;
             }
         }
@@ -244,12 +164,7 @@ function validate21(data: unknown, { instancePath = "", parentData, parentDataPr
             if (ajv_utilities__is_probably_array(data1)) {
                 if (data1.length < 2) {
                     const err5: ErrorObject = { instancePath: instancePath + "/enum", schemaPath: "#/properties/enum/minItems", keyword: "minItems", params: { limit: 2 }, message: "must NOT have fewer than 2 items" };
-                    if (vErrors === null) {
-                        vErrors = [err5];
-                    }
-                    else {
-                        (vErrors as ErrorObject[]).push(err5);
-                    }
+                    vErrors.push(err5)
                     errors++;
                 }
                 const len0 = data1.length;
@@ -258,23 +173,13 @@ function validate21(data: unknown, { instancePath = "", parentData, parentDataPr
                     if (typeof data2 === "string") {
                         if (func1(data2) < 1) {
                             const err6: ErrorObject = { instancePath: instancePath + "/enum/" + i0, schemaPath: "#/properties/enum/items/minLength", keyword: "minLength", params: { limit: 1 }, message: "must NOT have fewer than 1 characters" };
-                            if (vErrors === null) {
-                                vErrors = [err6];
-                            }
-                            else {
-                                (vErrors as ErrorObject[]).push(err6);
-                            }
+                            vErrors.push(err6)
                             errors++;
                         }
                     }
                     else {
                         const err7: ErrorObject = { instancePath: instancePath + "/enum/" + i0, schemaPath: "#/properties/enum/items/type", keyword: "type", params: { type: "string" }, message: "must be string" };
-                        if (vErrors === null) {
-                            vErrors = [err7];
-                        }
-                        else {
-                            (vErrors as ErrorObject[]).push(err7);
-                        }
+                        vErrors.push(err7)
                         errors++;
                     }
                 }
@@ -292,12 +197,7 @@ function validate21(data: unknown, { instancePath = "", parentData, parentDataPr
                         if (typeof indices0[item0] == "number") {
                             j0 = indices0[item0];
                             const err8: ErrorObject = { instancePath: instancePath + "/enum", schemaPath: "#/properties/enum/uniqueItems", keyword: "uniqueItems", params: { i: i1, j: j0 }, message: "must NOT have duplicate items (items ## " + j0 + " and " + i1 + " are identical)" };
-                            if (vErrors === null) {
-                                vErrors = [err8];
-                            }
-                            else {
-                                (vErrors as ErrorObject[]).push(err8);
-                            }
+                            vErrors.push(err8)
                             errors++;
                             break;
                         }
@@ -307,27 +207,17 @@ function validate21(data: unknown, { instancePath = "", parentData, parentDataPr
             }
             else {
                 const err9: ErrorObject = { instancePath: instancePath + "/enum", schemaPath: "#/properties/enum/type", keyword: "type", params: { type: "array" }, message: "must be array" };
-                if (vErrors === null) {
-                    vErrors = [err9];
-                }
-                else {
-                    (vErrors as ErrorObject[]).push(err9);
-                }
+                vErrors.push(err9)
                 errors++;
             }
         }
     }
     else {
         const err10: ErrorObject = { instancePath, schemaPath: "#/type", keyword: "type", params: { type: "object" }, message: "must be object" };
-        if (vErrors === null) {
-            vErrors = [err10];
-        }
-        else {
-            (vErrors as ErrorObject[]).push(err10);
-        }
+        vErrors.push(err10)
         errors++;
     }
-    (validate21 as Is).errors = vErrors;
+    (validate21 as Is).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
 validate21.evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false } as Is["evaluated"];

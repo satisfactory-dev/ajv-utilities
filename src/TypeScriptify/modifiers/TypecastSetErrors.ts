@@ -8,6 +8,7 @@ import {
 	isBinaryExpression,
 	isIdentifier,
 	isPropertyAccessExpression,
+	SyntaxKind,
 } from 'typescript';
 
 import {
@@ -40,6 +41,17 @@ type TypecastSetErrorsCandidate = (
 				),
 			}
 		),
+		right: (
+			| (
+				& Identifier
+				& {
+					getText(): 'vErrors',
+				}
+			)
+			| {
+				kind: SyntaxKind.NullKeyword,
+			}
+		),
 	}
 );
 
@@ -57,6 +69,13 @@ export default class TypecastSetErrors extends ConditionalModification<
 				)
 				&& isIdentifier(node.left.name)
 				&& 'errors' === node.left.name.getText()
+				&& (
+					(
+						isIdentifier(node.right)
+						&& 'vErrors' === node.right.getText()
+					)
+					|| SyntaxKind.NullKeyword === node.right.kind
+				)
 			),
 			(node) => {
 				KnownImports.Is(prepend_with_imports);
@@ -73,8 +92,19 @@ export default class TypecastSetErrors extends ConditionalModification<
 						),
 						node.left.name,
 					),
-					node.operatorToken,
-					node.right,
+					factory.createToken(SyntaxKind.EqualsToken),
+					SyntaxKind.NullKeyword === node.right.kind
+						? factory.createNull()
+						: factory.createConditionalExpression(
+							factory.createPropertyAccessExpression(
+								factory.createIdentifier(node.right.getText()),
+								'length',
+							),
+							factory.createToken(SyntaxKind.QuestionToken),
+							node.right,
+							factory.createToken(SyntaxKind.ColonToken),
+							factory.createNull(),
+						),
 				);
 			},
 		);
