@@ -10,9 +10,10 @@ import type {
 
 export type Is<T = unknown> = (
 	| ValidateFunction<T>
-	| Pick<ValidateFunction<T>, (
-		| 'errors'
-		| 'evaluated'
+	| Omit<ValidateFunction<T>, (
+		| 'schema'
+		| 'schemaEnv'
+		| 'source'
 	)>
 );
 
