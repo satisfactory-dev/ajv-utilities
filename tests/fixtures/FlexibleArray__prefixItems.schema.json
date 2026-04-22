@@ -2,17 +2,11 @@
 	"$id": "docs.json.ts--lib--PropertySchemaToRegex--FlexibleArray--prefixItems",
 	"type": "object",
 	"additionalProperties": false,
-	"required": [
-		"type",
-		"items",
-		"prefixItems"
-	],
+	"required": ["type", "items", "prefixItems"],
 	"properties": {
 		"$schema": {
 			"type": "string",
-			"enum": [
-				"https://json-schema.org/draft/2020-12/schema"
-			]
+			"enum": ["https://json-schema.org/draft/2020-12/schema"]
 		},
 		"$id": {
 			"type": "string",
@@ -33,9 +27,7 @@
 				"oneOf": [
 					{
 						"type": "object",
-						"required": [
-							"type"
-						],
+						"required": ["type"],
 						"properties": {
 							"type": {
 								"type": "string",
@@ -46,9 +38,7 @@
 					{
 						"type": "object",
 						"additionalProperties": false,
-						"required": [
-							"allOf"
-						],
+						"required": ["allOf"],
 						"properties": {
 							"allOf": {
 								"type": "array",
@@ -57,9 +47,7 @@
 									"oneOf": [
 										{
 											"type": "object",
-											"required": [
-												"type"
-											],
+											"required": ["type"],
 											"properties": {
 												"type": {
 													"type": "string",
@@ -70,9 +58,7 @@
 										{
 											"type": "object",
 											"additionalProperties": false,
-											"required": [
-												"$ref"
-											],
+											"required": ["$ref"],
 											"properties": {
 												"$ref": {
 													"type": "string",
@@ -88,9 +74,7 @@
 					{
 						"type": "object",
 						"additionalProperties": false,
-						"required": [
-							"oneOf"
-						],
+						"required": ["oneOf"],
 						"properties": {
 							"oneOf": {
 								"type": "array",
@@ -99,9 +83,7 @@
 									"oneOf": [
 										{
 											"type": "object",
-											"required": [
-												"type"
-											],
+											"required": ["type"],
 											"properties": {
 												"type": {
 													"type": "string",
@@ -112,9 +94,7 @@
 										{
 											"type": "object",
 											"additionalProperties": false,
-											"required": [
-												"$ref"
-											],
+											"required": ["$ref"],
 											"properties": {
 												"$ref": {
 													"type": "string",
