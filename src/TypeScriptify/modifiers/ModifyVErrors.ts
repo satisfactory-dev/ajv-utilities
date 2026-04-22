@@ -9,7 +9,6 @@ import type {
 	IfStatement,
 	NodeArray,
 	PropertyAccessExpression,
-	Statement,
 	VariableDeclaration,
 } from 'typescript';
 import {
@@ -109,7 +108,7 @@ type ConditionalCandidate<
 			& Block
 			& {
 				statements: (
-					& NodeArray<Statement>
+					& NodeArray<ExpressionStatement>
 					& {
 						length: 1,
 						0: (
