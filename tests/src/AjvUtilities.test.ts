@@ -39,6 +39,11 @@ import FlexibleArray__items from '../fixtures/FlexibleArray__items.schema.json' 
 	type: 'json',
 };
 
+// oxlint-disable-next-line @stylistic/max-len
+import FlexibleArray__prefixItems from '../fixtures/FlexibleArray__prefixItems.schema.json' with {
+	type: 'json',
+};
+
 void describe('AjvUtilities', () => {
 	void describe('compile', () => {
 		const ajv = new Ajv();
@@ -194,6 +199,9 @@ void describe('AjvUtilities', () => {
 		);
 		const FlexibleArray__items_expectation = await readFile(
 			`${import.meta.dirname}/../fixtures/FlexibleArray__items.ts`,
+		);
+		const FlexibleArray__prefixItems_expectation = await readFile(
+			`${import.meta.dirname}/../fixtures/FlexibleArray__prefixItems.ts`,
 		);
 
 		const data_sets: (
@@ -834,6 +842,47 @@ void describe('AjvUtilities', () => {
 							{
 								name: 'FlexibleArray_type',
 								args: ['items'],
+							},
+							'./types.ts',
+						],
+					},
+				},
+
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: true,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
+							FlexibleArray__prefixItems,
+						],
+					}),
+					{
+						// oxlint-disable-next-line @stylistic/max-len
+						FlexibleArray__prefixItems: FlexibleArray__prefixItems.$id,
+					},
+				),
+				FlexibleArray__prefixItems_expectation.toString(),
+				{
+					remove_dataCtxKeys: [
+						'parentData',
+						'parentDataProperty',
+						'rootData',
+						'dynamicAnchors',
+					],
+					specify_types: {
+						[FlexibleArray__prefixItems.$id]: [
+							{
+								name: 'FlexibleArray_type',
+								args: ['prefixItems'],
 							},
 							'./types.ts',
 						],

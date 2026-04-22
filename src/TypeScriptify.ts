@@ -86,6 +86,9 @@ import {
 // oxlint-disable-next-line @stylistic/max-len
 import TypecastArrayAsConst from './TypeScriptify/modifiers/TypecastArrayAsConst.ts';
 
+// oxlint-disable-next-line @stylistic/max-len
+import UnboundThis_hasOwnProperty from './TypeScriptify/modifiers/UnboundThis.ts';
+
 export default class TypeScript {
 	ify(code: string, config: Partial<Config>): string {
 		code = esmify(code);
@@ -198,6 +201,7 @@ export default class TypeScript {
 				new SpecifyIndicesType(),
 				new FindHoistCandidate(hoist_candidates),
 				new TypecastArrayAsConst(),
+				new UnboundThis_hasOwnProperty(),
 			],
 		);
 

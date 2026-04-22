@@ -1,0 +1,154 @@
+{
+	"$id": "docs.json.ts--lib--PropertySchemaToRegex--FlexibleArray--prefixItems",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"type",
+		"items",
+		"prefixItems"
+	],
+	"properties": {
+		"$schema": {
+			"type": "string",
+			"enum": [
+				"https://json-schema.org/draft/2020-12/schema"
+			]
+		},
+		"$id": {
+			"type": "string",
+			"minLength": 1
+		},
+		"type": {
+			"type": "string",
+			"const": "array"
+		},
+		"uniqueItems": {
+			"type": "boolean",
+			"const": false
+		},
+		"$defs": {
+			"type": "object",
+			"minProperties": 1,
+			"additionalProperties": {
+				"oneOf": [
+					{
+						"type": "object",
+						"required": [
+							"type"
+						],
+						"properties": {
+							"type": {
+								"type": "string",
+								"minLength": 1
+							}
+						}
+					},
+					{
+						"type": "object",
+						"additionalProperties": false,
+						"required": [
+							"allOf"
+						],
+						"properties": {
+							"allOf": {
+								"type": "array",
+								"minItems": 2,
+								"items": {
+									"oneOf": [
+										{
+											"type": "object",
+											"required": [
+												"type"
+											],
+											"properties": {
+												"type": {
+													"type": "string",
+													"minLength": 1
+												}
+											}
+										},
+										{
+											"type": "object",
+											"additionalProperties": false,
+											"required": [
+												"$ref"
+											],
+											"properties": {
+												"$ref": {
+													"type": "string",
+													"pattern": "^(.+)?#\\/\\$defs\\/(.+)$"
+												}
+											}
+										}
+									]
+								}
+							}
+						}
+					},
+					{
+						"type": "object",
+						"additionalProperties": false,
+						"required": [
+							"oneOf"
+						],
+						"properties": {
+							"oneOf": {
+								"type": "array",
+								"minItems": 2,
+								"items": {
+									"oneOf": [
+										{
+											"type": "object",
+											"required": [
+												"type"
+											],
+											"properties": {
+												"type": {
+													"type": "string",
+													"minLength": 1
+												}
+											}
+										},
+										{
+											"type": "object",
+											"additionalProperties": false,
+											"required": [
+												"$ref"
+											],
+											"properties": {
+												"$ref": {
+													"type": "string",
+													"pattern": "^(.+)?#\\/\\$defs\\/(.+)$"
+												}
+											}
+										}
+									]
+								}
+							}
+						}
+					}
+				]
+			}
+		},
+		"minItems": {
+			"type": "integer",
+			"minimum": 0
+		},
+		"maxItems": {
+			"type": "integer",
+			"minimum": 1
+		},
+		"items": {
+			"type": "boolean",
+			"const": false
+		},
+		"prefixItems": {
+			"type": "array",
+			"minItems": 1,
+			"items": {
+				"type": "object",
+				"minProperties": 1
+			}
+		}
+	}
+}
