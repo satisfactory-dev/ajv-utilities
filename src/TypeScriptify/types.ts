@@ -10,11 +10,14 @@ import type {
 
 export type Is<T = unknown> = (
 	| ValidateFunction<T>
-	| Omit<ValidateFunction<T>, (
-		| 'schema'
-		| 'schemaEnv'
-		| 'source'
-	)>
+	| {
+		(
+			data: unknown,
+			dataCxt?: Parameters<ValidateFunction<T>>[1],
+		): data is T,
+		errors?: ValidateFunction<T>['errors'],
+		evaluated?: ValidateFunction<T>['evaluated'],
+	}
 );
 
 export type specify_types_config = (
