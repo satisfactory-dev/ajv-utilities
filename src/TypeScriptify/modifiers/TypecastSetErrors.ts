@@ -30,7 +30,7 @@ type TypecastSetErrorsCandidate = (
 				expression: (
 					& Identifier
 					& {
-						getText(): `validate${number}`,
+						text: `validate${number}`,
 					}
 				),
 				name: (
@@ -65,7 +65,7 @@ export default class TypecastSetErrors extends ConditionalModification<
 				&& isPropertyAccessExpression(node.left)
 				&& isIdentifier(node.left.expression)
 				&& this.validate_function_name.test(
-					node.left.expression.getText(),
+					node.left.expression.text,
 				)
 				&& isIdentifier(node.left.name)
 				&& 'errors' === node.left.name.getText()

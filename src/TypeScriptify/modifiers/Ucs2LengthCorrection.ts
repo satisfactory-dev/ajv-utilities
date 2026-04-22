@@ -18,7 +18,7 @@ type ucs2lengthCorrectionCandidate = (
 		expression: (
 			& Identifier
 			& {
-				getText(): 'ucs2length',
+				text: 'ucs2length',
 			}
 		),
 		name: (
@@ -38,7 +38,7 @@ export default class Ucs2LengthCorrection extends ConditionalModification<
 			(node): node is ucs2lengthCorrectionCandidate => (
 				isPropertyAccessExpression(node)
 				&& isIdentifier(node.expression)
-				&& 'ucs2length' === node.expression.getText()
+				&& 'ucs2length' === node.expression.text
 				&& isIdentifier(node.name)
 				&& 'default' === node.name.getText()
 			),

@@ -29,7 +29,7 @@ type TypecastEvalulatedCandidate = (
 				expression: (
 					& Identifier
 					& {
-						getText(): 'evaluated',
+						text: 'evaluated',
 					}
 				),
 			}
@@ -48,9 +48,9 @@ export default class TypecastEvalulated extends ConditionalModification<
 				&& isPropertyAccessExpression(node.left)
 				&& isIdentifier(node.left.expression)
 				&& !!this.validate_function_name.test(
-					node.left.expression.getText(),
+					node.left.expression.text,
 				)
-				&& 'evaluated' === node.left.name.getText()
+				&& 'evaluated' === node.left.name.text
 				&& isObjectLiteralExpression(node.right)
 			),
 			(node) => {
