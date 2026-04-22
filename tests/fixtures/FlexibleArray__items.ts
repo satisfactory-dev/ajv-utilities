@@ -277,12 +277,12 @@ function validate20(data: unknown, { instancePath = "" }: Partial<Parameters<Val
                                     }
                                     else {
                                         errors = _errs25;
-                                        if (vErrors !== null) {
+                                        if (vErrors.length) {
                                             if (_errs25) {
                                                 vErrors.length = _errs25;
                                             }
                                             else {
-                                                vErrors = null;
+                                                vErrors = [];
                                             }
                                         }
                                     }
@@ -432,12 +432,12 @@ function validate20(data: unknown, { instancePath = "" }: Partial<Parameters<Val
                                         }
                                         else {
                                             errors = _errs41;
-                                            if (vErrors !== null) {
+                                            if (vErrors.length) {
                                                 if (_errs41) {
                                                     vErrors.length = _errs41;
                                                 }
                                                 else {
-                                                    vErrors = null;
+                                                    vErrors = [];
                                                 }
                                             }
                                         }
@@ -477,12 +477,12 @@ function validate20(data: unknown, { instancePath = "" }: Partial<Parameters<Val
                     }
                     else {
                         errors = _errs14;
-                        if (vErrors !== null) {
+                        if (vErrors.length) {
                             if (_errs14) {
                                 vErrors.length = _errs14;
                             }
                             else {
-                                vErrors = null;
+                                vErrors = [];
                             }
                         }
                     }
