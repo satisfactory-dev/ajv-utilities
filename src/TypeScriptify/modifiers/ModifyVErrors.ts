@@ -70,9 +70,9 @@ export class ModifyVErrors extends ConditionalModification<
 					node,
 					node.name,
 					node.exclamationToken,
-						factory.createArrayTypeNode(
-							factory.createTypeReferenceNode('ErrorObject'),
-						),
+					factory.createArrayTypeNode(
+						factory.createTypeReferenceNode('ErrorObject'),
+					),
 					factory.createArrayLiteralExpression(),
 				);
 			},
