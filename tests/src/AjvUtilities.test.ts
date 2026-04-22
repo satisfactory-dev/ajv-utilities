@@ -1,5 +1,6 @@
 import {
 	readFile,
+	writeFile,
 } from 'node:fs/promises';
 
 import {
@@ -845,6 +846,15 @@ void describe('AjvUtilities', () => {
 		let i = 0;
 		for (const data_set of data_sets) {
 			const [input, expectation, config] = data_set;
+
+			if (process.env.DEBUG) {
+				await writeFile(
+					`${
+						import.meta.dirname
+					}/../debugging/typescriptify.${i}.ts`,
+					typescriptify(input, config),
+				);
+			}
 
 			void it(
 				`typescriptify(data_sets[${
