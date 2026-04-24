@@ -7,13 +7,13 @@ import ucs2length from 'ajv/dist/runtime/ucs2length.js';
 export const foo = validate20;
 const schema31 = { "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "docs.json.ts--lib--PropertySchemaToRegex--EnumString", "type": "object", "additionalProperties": false, "required": ["type", "enum"] as const, "properties": { "type": { "type": "string", "const": "string" }, "enum": { "type": "array", "minItems": 2, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } } } };
 const func1 = ucs2length;
-function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Parameters<ValidateFunction>[1] & {
+function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
     rootData: unknown;
 }> = {}): data is enum_string<"foo", "bar"> {
     /*# sourceURL="docs.json.ts--lib--PropertySchemaToRegex--EnumString" */ ;
     let vErrors: ErrorObject[] = [];
     let errors = 0;
-    const evaluated0 = validate20.evaluated;
+    const evaluated0 = (validate20 as Is).evaluated;
     if (evaluated0?.dynamicProps) {
         evaluated0.props = undefined;
     }
@@ -112,4 +112,4 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
     (validate20 as Is).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-validate20.evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false } as Is["evaluated"];
+(validate20 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };

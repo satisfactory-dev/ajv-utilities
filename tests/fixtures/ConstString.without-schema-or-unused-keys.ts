@@ -3,13 +3,13 @@ import type { Is } from '@satisfactory-dev/ajv-utilities';
 import type { const_string } from './types.ts';
 function ajv_utilities__is_probably_object(maybe: unknown): maybe is Record<string, unknown> { return !!maybe && typeof maybe === "object" && !Array.isArray(maybe); }
 export const foo = validate20;
-function validate20(data: unknown, { instancePath = "" }: Partial<Parameters<ValidateFunction>[1] & {
+function validate20(data: unknown, { instancePath = "" }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
     rootData: unknown;
 }> = {}): data is const_string {
     /*# sourceURL="docs.json.ts--lib--PropertySchemaToRegex--ConstString" */ ;
     let vErrors: ErrorObject[] = [];
     let errors = 0;
-    const evaluated0 = validate20.evaluated;
+    const evaluated0 = (validate20 as Is).evaluated;
     if (evaluated0?.dynamicProps) {
         evaluated0.props = undefined;
     }
@@ -63,4 +63,4 @@ function validate20(data: unknown, { instancePath = "" }: Partial<Parameters<Val
     (validate20 as Is).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-validate20.evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false } as Is["evaluated"];
+(validate20 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };

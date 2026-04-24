@@ -49,10 +49,14 @@ import {
 	ConditionalLengthSet,
 	ModifyVErrors,
 	ReplaceVErrorsPushIfElse,
+	TernaryConcat,
 } from './TypeScriptify/modifiers/ModifyVErrors.ts';
 
 // oxlint-disable-next-line @stylistic/max-len
-import TypecastEvalulated from './TypeScriptify/modifiers/TypecastEvalulated.ts';
+import {
+	QuestionableEvaluatedProperty,
+	TypecastEvalulated,
+} from './TypeScriptify/modifiers/TypecastEvalulated.ts';
 
 import TypecastSetErrors from './TypeScriptify/modifiers/TypecastSetErrors.ts';
 
@@ -88,6 +92,9 @@ import TypecastArrayAsConst from './TypeScriptify/modifiers/TypecastArrayAsConst
 
 // oxlint-disable-next-line @stylistic/max-len
 import UnboundThis_hasOwnProperty from './TypeScriptify/modifiers/UnboundThis.ts';
+
+// oxlint-disable-next-line @stylistic/max-len
+import HoistDeclarationAsZero from './TypeScriptify/modifiers/HoistDeclarationAsZero.ts';
 
 export default class TypeScript {
 	ify(code: string, config: Partial<Config>): string {
@@ -187,6 +194,8 @@ export default class TypeScript {
 				new ModifyVErrors(prepend_with_imports),
 				new ReplaceVErrorsPushIfElse(),
 				new ConditionalLengthSet(),
+				new TernaryConcat(prepend_with_imports),
+				new QuestionableEvaluatedProperty(),
 				new TypecastEvalulated(prepend_with_imports),
 				new TypecastSetErrors(prepend_with_imports),
 				new AddErrorObjectType(prepend_with_imports),
@@ -202,6 +211,7 @@ export default class TypeScript {
 				new FindHoistCandidate(hoist_candidates),
 				new TypecastArrayAsConst(),
 				new UnboundThis_hasOwnProperty(),
+				new HoistDeclarationAsZero(),
 			],
 		);
 

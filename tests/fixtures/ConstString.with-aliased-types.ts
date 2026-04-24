@@ -4,13 +4,13 @@ import type { const_string as bar } from './types.ts';
 function ajv_utilities__is_probably_object(maybe: unknown): maybe is Record<string, unknown> { return !!maybe && typeof maybe === "object" && !Array.isArray(maybe); }
 export const foo = validate20;
 const schema31 = { "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "docs.json.ts--lib--PropertySchemaToRegex--ConstString", "type": "object", "additionalProperties": false, "required": ["type", "const"] as const, "properties": { "type": { "type": "string", "const": "string" }, "const": { "type": "string" } } };
-function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Parameters<ValidateFunction>[1] & {
+function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
     rootData: unknown;
 }> = {}): data is bar {
     /*# sourceURL="docs.json.ts--lib--PropertySchemaToRegex--ConstString" */ ;
     let vErrors: ErrorObject[] = [];
     let errors = 0;
-    const evaluated0 = validate20.evaluated;
+    const evaluated0 = (validate20 as Is).evaluated;
     if (evaluated0?.dynamicProps) {
         evaluated0.props = undefined;
     }
@@ -64,4 +64,4 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
     (validate20 as Is).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-validate20.evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false } as Is["evaluated"];
+(validate20 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };

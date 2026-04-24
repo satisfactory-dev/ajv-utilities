@@ -44,6 +44,10 @@ import FlexibleArray__prefixItems from '../fixtures/FlexibleArray__prefixItems.s
 	type: 'json',
 };
 
+import TemplatedString from '../fixtures/TemplatedString.schema.json' with {
+	type: 'json',
+};
+
 void describe('AjvUtilities', () => {
 	void describe('compile', () => {
 		const ajv = new Ajv();
@@ -203,6 +207,9 @@ void describe('AjvUtilities', () => {
 		const FlexibleArray__prefixItems_expectation = await readFile(
 			`${import.meta.dirname}/../fixtures/FlexibleArray__prefixItems.ts`,
 		);
+		const TemplatedString_expectation = await readFile(
+			`${import.meta.dirname}/../fixtures/TemplatedString.ts`,
+		);
 
 		const data_sets: (
 			| [string, string]
@@ -259,7 +266,7 @@ void describe('AjvUtilities', () => {
 					'const schema31 = { "$id": "foo" };',
 
 					// oxlint-disable-next-line @stylistic/max-len
-					'function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Parameters<ValidateFunction>[1] & {',
+					'function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {',
 					'    rootData: unknown;',
 					'}> = {}) {',
 					'    /*# sourceURL="foo" */ ;',
@@ -268,7 +275,7 @@ void describe('AjvUtilities', () => {
 					'}',
 
 					// oxlint-disable-next-line @stylistic/max-len
-					'validate20.evaluated = { "dynamicProps": false, "dynamicItems": false } as Is["evaluated"];',
+					'(validate20 as Is).evaluated = { "dynamicProps": false, "dynamicItems": false };',
 					'',
 				].join('\n'),
 			],
@@ -303,7 +310,7 @@ void describe('AjvUtilities', () => {
 					'export const foo = validate20;',
 
 					// oxlint-disable-next-line @stylistic/max-len
-					'function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Parameters<ValidateFunction>[1] & {',
+					'function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {',
 					'    rootData: unknown;',
 					'}> = {}) {',
 					'    /*# sourceURL="foo" */ ;',
@@ -312,7 +319,7 @@ void describe('AjvUtilities', () => {
 					'}',
 
 					// oxlint-disable-next-line @stylistic/max-len
-					'validate20.evaluated = { "dynamicProps": false, "dynamicItems": false } as Is["evaluated"];',
+					'(validate20 as Is).evaluated = { "dynamicProps": false, "dynamicItems": false };',
 					'',
 				].join('\n'),
 				{
@@ -888,7 +895,37 @@ void describe('AjvUtilities', () => {
 						],
 					},
 				},
-
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: true,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
+							TemplatedString,
+						],
+					}),
+					{
+						// oxlint-disable-next-line @stylistic/max-len
+						PropertySchemaToRegex_TemplatedString: TemplatedString.$id,
+					},
+				),
+				TemplatedString_expectation.toString(),
+				{
+					specify_types: {
+						[TemplatedString.$id]: [
+							'templated_string_type',
+							'@signpostmarv/json-schema-typescript-codegen/ajv',
+						],
+					},
+				},
 			],
 		];
 

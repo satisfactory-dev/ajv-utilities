@@ -5,6 +5,7 @@ import type {
 	BinaryOperatorToken,
 	Block,
 	CallExpression,
+	ConditionalExpression,
 	ExpressionStatement,
 	Identifier,
 	IfStatement,
@@ -18,6 +19,7 @@ import {
 	isBinaryExpression,
 	isBlock,
 	isCallExpression,
+	isConditionalExpression,
 	isExpressionStatement,
 	isIdentifier,
 	isIfStatement,
@@ -34,6 +36,7 @@ import {
 import type {
 	prepend_with_imports,
 } from '../TypeReferences.ts';
+import KnownImports from '../known_imports.ts';
 
 type VErrors = (
 	& VariableDeclaration
@@ -578,6 +581,166 @@ export class ConditionalLengthSet extends ConditionalModification<
 				),
 				undefined,
 			),
+		);
+	}
+}
+
+type TernaryConcatCandidate<
+	T extends `validate${number}` = `validate${number}`,
+> = (
+	& ConditionalExpression
+	& {
+		condition: (
+			& BinaryExpression
+			& {
+				left: (
+					& Identifier
+					& {
+						text: 'vErrors',
+					}
+				),
+				operator: (
+					& BinaryOperatorToken
+					& {
+						kind: SyntaxKind.EqualsEqualsEqualsToken,
+					}
+				),
+				right: {
+					kind: SyntaxKind.NullKeyword,
+				},
+			}
+		),
+		whenTrue: (
+			& PropertyAccessExpression
+			& {
+				expression: (
+					& Identifier
+					& {
+						text: T,
+					}
+				),
+				name: (
+					& Identifier
+					& {
+						text: 'errors',
+					}
+				),
+			}
+		),
+		whenFalse: (
+			& CallExpression
+			& {
+				expression: (
+					& PropertyAccessExpression
+					& {
+						expression: (
+							& Identifier
+							& {
+								text: 'vErrors',
+							}
+						),
+						name: (
+							& Identifier
+							& {
+								text: 'concat',
+							}
+						),
+					}
+				),
+				arguments: (
+					& NodeArray<PropertyAccessExpression>
+					& {
+						length: 1,
+						0: (
+							& PropertyAccessExpression
+							& {
+								expression: (
+									& Identifier
+									& {
+										text: T,
+									}
+								),
+								name: (
+									& Identifier
+									& {
+										text: 'errors',
+									}
+								),
+							}
+						),
+					}
+				),
+			}
+		),
+	}
+);
+
+export class TernaryConcat extends ConditionalModification<
+	TernaryConcatCandidate
+> {
+	constructor(prepend_with_imports: prepend_with_imports) {
+		super(
+			(maybe): maybe is TernaryConcatCandidate => (
+				isConditionalExpression(maybe)
+				&& isBinaryExpression(maybe.condition)
+				&& isIdentifier(maybe.condition.left)
+				&& 'vErrors' === maybe.condition.left.text
+				&& SyntaxKind.EqualsEqualsEqualsToken === maybe.condition.operatorToken.kind
+				&& SyntaxKind.NullKeyword === maybe.condition.right.kind
+				&& isPropertyAccessExpression(maybe.whenTrue)
+				&& isIdentifier(maybe.whenTrue.expression)
+				&& this.validate_function_name.test(
+					maybe.whenTrue.expression.text,
+				)
+				&& isIdentifier(maybe.whenTrue.name)
+				&& 'errors' === maybe.whenTrue.name.text
+				&& isCallExpression(maybe.whenFalse)
+				&& isPropertyAccessExpression(maybe.whenFalse.expression)
+				&& isIdentifier(maybe.whenFalse.expression.expression)
+				&& 'vErrors' === maybe.whenFalse.expression.expression.text
+				&& isIdentifier(maybe.whenFalse.expression.name)
+				&& 'concat' === maybe.whenFalse.expression.name.text
+				&& 1 === maybe.whenFalse.arguments.length
+				&& isPropertyAccessExpression(maybe.whenFalse.arguments[0])
+				&& isIdentifier(maybe.whenFalse.arguments[0].expression)
+				&& this.validate_function_name.test(
+					maybe.whenFalse.arguments[0].expression.text,
+				)
+				&& maybe.whenTrue.expression.text === maybe.whenFalse.arguments[
+					0
+				].expression.text
+				&& isIdentifier(maybe.whenFalse.arguments[0].name)
+				&& 'errors' === maybe.whenFalse.arguments[0].name.text
+			),
+			(node) => {
+				KnownImports.Is(prepend_with_imports);
+
+				return factory.createCallExpression(
+					factory.updatePropertyAccessExpression(
+						node.whenFalse.expression,
+						node.whenFalse.expression.expression,
+						node.whenFalse.expression.name,
+					),
+					undefined,
+					[
+						factory.createBinaryExpression(
+							factory.createPropertyAccessExpression(
+								factory.createParenthesizedExpression(
+									factory.createAsExpression(
+										factory.createIdentifier(
+											node.whenTrue.expression.text,
+										),
+										factory.createTypeReferenceNode('Is'),
+									),
+								),
+								factory.createIdentifier('errors'),
+							),
+							factory.createToken(SyntaxKind.BarBarToken),
+							factory.createArrayLiteralExpression(),
+						),
+					],
+				);
+			},
 		);
 	}
 }

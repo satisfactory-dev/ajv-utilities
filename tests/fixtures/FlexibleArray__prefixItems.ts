@@ -9,7 +9,7 @@ const schema31 = { "$id": "docs.json.ts--lib--PropertySchemaToRegex--FlexibleArr
 const func1 = { call: (instance: object, property: string) => Object.prototype.hasOwnProperty.call(instance, property) };
 const func2 = ucs2length;
 const pattern4 = new RegExp("^(.+)?#\\/\\$defs\\/(.+)$", "u");
-function validate20(data: unknown, { instancePath = "" }: Partial<Parameters<ValidateFunction>[1] & {
+function validate20(data: unknown, { instancePath = "" }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
     rootData: unknown;
 }> = {}): data is FlexibleArray_type<"prefixItems"> {
     let props0: (true | {
@@ -22,7 +22,7 @@ function validate20(data: unknown, { instancePath = "" }: Partial<Parameters<Val
     /*# sourceURL="docs.json.ts--lib--PropertySchemaToRegex--FlexibleArray--prefixItems" */ ;
     let vErrors: ErrorObject[] = [];
     let errors = 0;
-    const evaluated0 = validate20.evaluated;
+    const evaluated0 = (validate20 as Is).evaluated;
     if (evaluated0?.dynamicProps) {
         evaluated0.props = undefined;
     }
@@ -573,4 +573,4 @@ function validate20(data: unknown, { instancePath = "" }: Partial<Parameters<Val
     (validate20 as Is).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-validate20.evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false } as Is["evaluated"];
+(validate20 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };

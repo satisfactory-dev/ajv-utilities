@@ -1,0 +1,67 @@
+{
+	"$id": "docs.json.ts--lib--PropertySchemaToRegex--TemplatedString",
+	"type": "object",
+	"required": [
+		"type",
+		"templated_string"
+	],
+	"additionalProperties": false,
+	"properties": {
+		"$defs": {
+			"type": "object",
+			"additionalProperties": {
+				"type": "object"
+			}
+		},
+		"type": {
+			"type": "string",
+			"const": "string"
+		},
+		"templated_string": {
+			"type": "array",
+			"minItems": 1,
+			"items": {
+				"oneOf": [
+					{
+						"type": "string",
+						"minLength": 1
+					},
+					{
+						"type": "object",
+						"const": {
+							"type": "string"
+						}
+					},
+					{
+						"type": "object",
+						"const": {
+							"type": "string",
+							"minLength": 1
+						}
+					},
+					{
+						"type": "array",
+						"minItems": 2,
+						"items": {
+							"oneOf": [
+								{
+									"type": "string",
+									"minLength": 1
+								},
+								{
+									"type": "object",
+									"const": {
+										"type": "string"
+									}
+								}
+							]
+						}
+					},
+					{
+						"$ref": "#"
+					}
+				]
+			}
+		}
+	}
+}

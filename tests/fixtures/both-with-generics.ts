@@ -6,13 +6,13 @@ function ajv_utilities__is_probably_array(maybe: unknown): maybe is unknown[] { 
 import ucs2length from 'ajv/dist/runtime/ucs2length.js';
 export const validate_as_ConstString = validate20;
 const schema31 = { "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "docs.json.ts--lib--PropertySchemaToRegex--ConstString", "type": "object", "additionalProperties": false, "required": ["type", "const"] as const, "properties": { "type": { "type": "string", "const": "string" }, "const": { "type": "string" } } };
-function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Parameters<ValidateFunction>[1] & {
+function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
     rootData: unknown;
 }> = {}): data is bar {
     /*# sourceURL="docs.json.ts--lib--PropertySchemaToRegex--ConstString" */ ;
     let vErrors: ErrorObject[] = [];
     let errors = 0;
-    const evaluated0 = validate20.evaluated;
+    const evaluated0 = (validate20 as Is).evaluated;
     if (evaluated0?.dynamicProps) {
         evaluated0.props = undefined;
     }
@@ -66,17 +66,17 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
     (validate20 as Is).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-validate20.evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false } as Is["evaluated"];
+(validate20 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
 export const validate_as_EnumString = validate21;
 const schema32 = { "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "docs.json.ts--lib--PropertySchemaToRegex--EnumString", "type": "object", "additionalProperties": false, "required": ["type", "enum"] as const, "properties": { "type": { "type": "string", "const": "string" }, "enum": { "type": "array", "minItems": 2, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } } } };
 const func1 = ucs2length;
-function validate21(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Parameters<ValidateFunction>[1] & {
+function validate21(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
     rootData: unknown;
 }> = {}): data is baz<"foo", "bar"> {
     /*# sourceURL="docs.json.ts--lib--PropertySchemaToRegex--EnumString" */ ;
     let vErrors: ErrorObject[] = [];
     let errors = 0;
-    const evaluated0 = validate21.evaluated;
+    const evaluated0 = (validate21 as Is).evaluated;
     if (evaluated0?.dynamicProps) {
         evaluated0.props = undefined;
     }
@@ -175,4 +175,4 @@ function validate21(data: unknown, { instancePath = "", parentData, parentDataPr
     (validate21 as Is).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-validate21.evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false } as Is["evaluated"];
+(validate21 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };

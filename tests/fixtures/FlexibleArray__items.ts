@@ -8,7 +8,7 @@ export const FlexibleArray__items = validate20;
 const schema31 = { "$id": "docs.json.ts--lib--PropertySchemaToRegex--FlexibleArray--items", "type": "object", "additionalProperties": false, "required": ["type", "items", "minItems", "uniqueItems"] as const, "properties": { "$schema": { "type": "string", "enum": ["https://json-schema.org/draft/2020-12/schema"] as const }, "$id": { "type": "string", "minLength": 1 }, "type": { "type": "string", "const": "array" }, "uniqueItems": { "type": "boolean", "const": true }, "$defs": { "type": "object", "minProperties": 1, "additionalProperties": { "oneOf": [{ "type": "object", "required": ["type"] as const, "properties": { "type": { "type": "string", "minLength": 1 } } }, { "type": "object", "additionalProperties": false, "required": ["allOf"] as const, "properties": { "allOf": { "type": "array", "minItems": 2, "items": { "oneOf": [{ "type": "object", "required": ["type"] as const, "properties": { "type": { "type": "string", "minLength": 1 } } }, { "type": "object", "additionalProperties": false, "required": ["$ref"] as const, "properties": { "$ref": { "type": "string", "pattern": "^(.+)?#\\/\\$defs\\/(.+)$" } } }] as const } } } }, { "type": "object", "additionalProperties": false, "required": ["oneOf"] as const, "properties": { "oneOf": { "type": "array", "minItems": 2, "items": { "oneOf": [{ "type": "object", "required": ["type"] as const, "properties": { "type": { "type": "string", "minLength": 1 } } }, { "type": "object", "additionalProperties": false, "required": ["$ref"] as const, "properties": { "$ref": { "type": "string", "pattern": "^(.+)?#\\/\\$defs\\/(.+)$" } } }] as const } } } }] as const } }, "minItems": { "type": "integer", "minimum": 0 }, "maxItems": { "type": "integer", "minimum": 0 }, "items": {} } };
 const func1 = ucs2length;
 const pattern4 = new RegExp("^(.+)?#\\/\\$defs\\/(.+)$", "u");
-function validate20(data: unknown, { instancePath = "" }: Partial<Parameters<ValidateFunction>[1] & {
+function validate20(data: unknown, { instancePath = "" }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
     rootData: unknown;
 }> = {}): data is FlexibleArray_type<"items"> {
     let props0: (true | {
@@ -21,7 +21,7 @@ function validate20(data: unknown, { instancePath = "" }: Partial<Parameters<Val
     /*# sourceURL="docs.json.ts--lib--PropertySchemaToRegex--FlexibleArray--items" */ ;
     let vErrors: ErrorObject[] = [];
     let errors = 0;
-    const evaluated0 = validate20.evaluated;
+    const evaluated0 = (validate20 as Is).evaluated;
     if (evaluated0?.dynamicProps) {
         evaluated0.props = undefined;
     }
@@ -533,4 +533,4 @@ function validate20(data: unknown, { instancePath = "" }: Partial<Parameters<Val
     (validate20 as Is).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-validate20.evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false } as Is["evaluated"];
+(validate20 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };

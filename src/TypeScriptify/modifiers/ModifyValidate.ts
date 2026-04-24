@@ -67,6 +67,12 @@ export default class ModifyValidate extends ConditionalModification<
 		KnownImports.ValidateFunction(this.#prepend_with_imports);
 
 		return factory.createIntersectionTypeNode([
+			factory.createTypeReferenceNode(
+				'Omit',
+				[
+					factory.createTypeReferenceNode(
+						'Exclude',
+						[
 			factory.createIndexedAccessTypeNode(
 				factory.createTypeReferenceNode(
 					'Parameters',
@@ -79,6 +85,14 @@ export default class ModifyValidate extends ConditionalModification<
 				factory.createLiteralTypeNode(
 					factory.createNumericLiteral(1),
 				),
+			),
+							factory.createToken(SyntaxKind.UndefinedKeyword),
+						],
+					),
+					factory.createLiteralTypeNode(
+						factory.createStringLiteral('rootData'),
+					),
+				],
 			),
 			factory.createTypeLiteralNode([
 				factory.createPropertySignature(
