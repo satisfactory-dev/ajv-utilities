@@ -26,6 +26,10 @@ tests:
 coverage:
 	@node --experimental-test-coverage --test
 
+modify:
+	@node ./modify.ts
+	@./node_modules/.bin/oxlint --fix ./modified/
+
 npm-prep: tests
 	@echo 'building from ./tsconfig.app-npm.json'
 	@NODE_OPTIONS='' ./node_modules/.bin/tsc --project ./tsconfig.app-npm.json

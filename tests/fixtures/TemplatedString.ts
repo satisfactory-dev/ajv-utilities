@@ -4,7 +4,7 @@ import type { templated_string_type } from '@signpostmarv/json-schema-typescript
 function ajv_utilities__is_probably_object(maybe: unknown): maybe is Record<string, unknown> { return !!maybe && typeof maybe === "object" && !Array.isArray(maybe); }
 function ajv_utilities__is_probably_array(maybe: unknown): maybe is unknown[] { return Array.isArray(maybe); }
 import fast_deep_equal from 'fast-deep-equal';
-import ucs2length from 'ajv/dist/runtime/ucs2length.js';
+import { ucs2length } from '@satisfactory-dev/ajv-utilities/ajv';
 export const PropertySchemaToRegex_TemplatedString = validate20;
 const schema31 = { "$id": "docs.json.ts--lib--PropertySchemaToRegex--TemplatedString", "type": "object", "required": ["type", "templated_string"] as const, "additionalProperties": false, "properties": { "$defs": { "type": "object", "additionalProperties": { "type": "object" } }, "type": { "type": "string", "const": "string" }, "templated_string": { "type": "array", "minItems": 1, "items": { "oneOf": [{ "type": "string", "minLength": 1 }, { "type": "object", "const": { "type": "string" } }, { "type": "object", "const": { "type": "string", "minLength": 1 } }, { "type": "array", "minItems": 2, "items": { "oneOf": [{ "type": "string", "minLength": 1 }, { "type": "object", "const": { "type": "string" } }] as const } }, { "$ref": "#" }] as const } } } };
 const func1 = ucs2length;

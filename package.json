@@ -8,8 +8,26 @@
     "url": "git+https://github.com/satisfactory-dev/ajv-utilities.git"
   },
   "funding": "https://github.com/satisfactory-dev/ajv-utilities?sponsor=1",
-  "exports": "./index.js",
-  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "default": "./index.js",
+      "types": "./index.d.ts"
+    },
+    "./ajv": {
+      "default": "./ajv.js",
+      "types": "./ajv.d.ts"
+    }
+  },
+  "files": [
+    "./index.d.ts",
+    "./index.js",
+    "./ajv.d.ts",
+    "./ajv.js",
+    "./modified/**/*.d.ts",
+    "./modified/**/*.js",
+    "./src/**/*.d.ts",
+    "./src/**/*.js"
+  ],
   "devDependencies": {
     "@signpostmarv/json-schema-typescript-codegen": "^0.9.2",
     "@signpostmarv/oxlint-config": "^0.3.1",

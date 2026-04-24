@@ -72,7 +72,7 @@ export function esmify(code: string): string {
 		],
 		'require("ajv/dist/runtime/ucs2length").default': [
 			'ucs2length.default',
-			`import ucs2length from 'ajv/dist/runtime/ucs2length.js';`,
+			`import {ucs2length} from '@satisfactory-dev/ajv-utilities/ajv';`,
 		],
 	};
 

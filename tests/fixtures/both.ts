@@ -3,7 +3,7 @@ import type { Is } from '@satisfactory-dev/ajv-utilities';
 import type { const_string, enum_string } from './types.ts';
 function ajv_utilities__is_probably_object(maybe: unknown): maybe is Record<string, unknown> { return !!maybe && typeof maybe === "object" && !Array.isArray(maybe); }
 function ajv_utilities__is_probably_array(maybe: unknown): maybe is unknown[] { return Array.isArray(maybe); }
-import ucs2length from 'ajv/dist/runtime/ucs2length.js';
+import { ucs2length } from '@satisfactory-dev/ajv-utilities/ajv';
 export const validate_as_ConstString = validate20;
 const schema31 = { "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "docs.json.ts--lib--PropertySchemaToRegex--ConstString", "type": "object", "additionalProperties": false, "required": ["type", "const"] as const, "properties": { "type": { "type": "string", "const": "string" }, "const": { "type": "string" } } };
 function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {

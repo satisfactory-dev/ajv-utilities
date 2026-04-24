@@ -3,7 +3,7 @@ import type { Is } from '@satisfactory-dev/ajv-utilities';
 import type { enum_string as bar } from './types.ts';
 function ajv_utilities__is_probably_object(maybe: unknown): maybe is Record<string, unknown> { return !!maybe && typeof maybe === "object" && !Array.isArray(maybe); }
 function ajv_utilities__is_probably_array(maybe: unknown): maybe is unknown[] { return Array.isArray(maybe); }
-import ucs2length from 'ajv/dist/runtime/ucs2length.js';
+import { ucs2length } from '@satisfactory-dev/ajv-utilities/ajv';
 export const foo = validate20;
 const schema31 = { "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "docs.json.ts--lib--PropertySchemaToRegex--EnumString", "type": "object", "additionalProperties": false, "required": ["type", "enum"] as const, "properties": { "type": { "type": "string", "const": "string" }, "enum": { "type": "array", "minItems": 2, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } } } };
 const func1 = ucs2length;
