@@ -73,19 +73,19 @@ export default class ModifyValidate extends ConditionalModification<
 					factory.createTypeReferenceNode(
 						'Exclude',
 						[
-			factory.createIndexedAccessTypeNode(
-				factory.createTypeReferenceNode(
-					'Parameters',
-					[
-						factory.createTypeReferenceNode(
-							'ValidateFunction',
-						),
-					],
-				),
-				factory.createLiteralTypeNode(
-					factory.createNumericLiteral(1),
-				),
-			),
+							factory.createIndexedAccessTypeNode(
+								factory.createTypeReferenceNode(
+									'Parameters',
+									[
+										factory.createTypeReferenceNode(
+											'ValidateFunction',
+										),
+									],
+								),
+								factory.createLiteralTypeNode(
+									factory.createNumericLiteral(1),
+								),
+							),
 							factory.createToken(SyntaxKind.UndefinedKeyword),
 						],
 					),

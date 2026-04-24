@@ -69,8 +69,8 @@ export class QuestionableEvaluatedProperty extends ConditionalModification<
 }
 
 type TypecastEvalulatedCandidate = (
-			& PropertyAccessExpression
-			& {
+	& PropertyAccessExpression
+	& {
 		expression: (
 			& Identifier
 			& {
@@ -78,11 +78,11 @@ type TypecastEvalulatedCandidate = (
 			}
 		),
 		name: (
-					& Identifier
-					& {
-						text: 'evaluated',
-					}
-				),
+			& Identifier
+			& {
+				text: 'evaluated',
+			}
+		),
 	}
 );
 
