@@ -1,10 +1,7 @@
 {
 	"$id": "docs.json.ts--lib--PropertySchemaToRegex--TemplatedString",
 	"type": "object",
-	"required": [
-		"type",
-		"templated_string"
-	],
+	"required": ["type", "templated_string"],
 	"additionalProperties": false,
 	"properties": {
 		"$defs": {
