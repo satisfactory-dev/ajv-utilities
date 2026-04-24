@@ -36,7 +36,7 @@ type Candidate = (
 								name: (
 									& Identifier
 									& {
-										getText(): `props${number}`,
+										text: `props${number}`,
 									}
 								),
 								initializer: Exclude<
@@ -88,7 +88,7 @@ export class FindHoistCandidate extends ConditionalModification<
 						&& /^props\d+$/.test(
 							maybe.declarationList.declarations[
 								0
-							].name.getText(),
+							].name.text,
 						)
 					)
 				) {

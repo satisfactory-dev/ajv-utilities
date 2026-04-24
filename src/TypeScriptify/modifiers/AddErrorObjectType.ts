@@ -22,7 +22,7 @@ type AddErrorObjectTypeCandidate = (
 		name: (
 			& Identifier
 			& {
-				getText(): `err${number}`,
+				text: `err${number}`,
 			}
 		),
 	}
@@ -36,7 +36,7 @@ export default class AddErrorObjectType extends ConditionalModification<
 			(node): node is AddErrorObjectTypeCandidate => (
 				isVariableDeclaration(node)
 				&& isIdentifier(node.name)
-				&& /^err\d+$/.test(node.name.getText())
+				&& /^err\d+$/.test(node.name.text)
 			),
 			(node) => {
 				prepend_with_imports.ajv.add('ErrorObject');

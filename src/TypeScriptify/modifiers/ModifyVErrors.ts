@@ -41,7 +41,7 @@ type VErrors = (
 		name: (
 			& Identifier
 			& {
-				getText(): 'vErrors',
+				text: 'vErrors',
 			}
 		),
 		initializer: {
@@ -60,7 +60,7 @@ export class ModifyVErrors extends ConditionalModification<
 			(node): node is VErrors => (
 				isVariableDeclaration(node)
 				&& isIdentifier(node.name)
-				&& 'vErrors' === node.name.getText()
+				&& 'vErrors' === node.name.text
 				&& node.initializer?.kind === SyntaxKind.NullKeyword
 			),
 			(node) => {

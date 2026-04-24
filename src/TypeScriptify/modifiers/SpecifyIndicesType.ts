@@ -19,7 +19,7 @@ type Candidate = (
 		name: (
 			& Identifier
 			& {
-				getText(): `indices${number}`,
+				text: `indices${number}`,
 			}
 		),
 	}
@@ -33,7 +33,7 @@ export default class SpecifyIndicesType extends ConditionalModification<
 			(maybe): maybe is Candidate => (
 				isVariableDeclaration(maybe)
 				&& isIdentifier(maybe.name)
-				&& /^indices\d+$/.test(maybe.name.getText())
+				&& /^indices\d+$/.test(maybe.name.text)
 			),
 			(node) => factory.updateVariableDeclaration(
 				node,
