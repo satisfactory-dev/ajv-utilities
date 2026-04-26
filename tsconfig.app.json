@@ -7,5 +7,10 @@
 		"rewriteRelativeImportExtensions": true,
 		"sourceMap": true
 	},
-	"include": ["./index.ts", "./ajv.ts", "./src/**/*.ts", "./modified/**/*.ts"]
+	"include": [
+		"./index.ts",
+		"./ajv.ts",
+		"./src/**/*.ts",
+		"./modified/**/*.ts"
+	]
 }
