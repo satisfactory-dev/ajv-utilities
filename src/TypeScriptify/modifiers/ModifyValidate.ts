@@ -1,7 +1,7 @@
 import type {
-	BindingPattern,
 	FunctionDeclaration,
 	Identifier,
+	ObjectBindingPattern,
 	ParameterDeclaration,
 } from 'typescript';
 import {
@@ -18,6 +18,7 @@ import {
 
 import type {
 	Config,
+	remove_dataCtxKeys,
 } from '../types.ts';
 
 import type {
@@ -25,6 +26,13 @@ import type {
 } from '../TypeReferences.ts';
 
 import KnownImports from '../known_imports.ts';
+
+type options = (
+	ParameterDeclaration
+	& {
+		name: ObjectBindingPattern,
+	}
+);
 
 type ValidateFunctionDeclaration = (
 	& FunctionDeclaration
@@ -37,14 +45,48 @@ type ValidateFunctionDeclaration = (
 		),
 		parameters: [
 			ParameterDeclaration,
-			ParameterDeclaration,
+			options,
 		],
 	}
 );
 
-export class ModifyValidateOptions extends ConditionalModification<
+abstract class ModifyValidate extends ConditionalModification<
 	ValidateFunctionDeclaration
 > {
+	protected maybe_modify_name(
+		options_name: ValidateFunctionDeclaration['parameters'][1]['name'],
+		config?: remove_dataCtxKeys,
+	) {
+		if (
+			Array.isArray(config)
+			&& 'string' !== typeof options_name
+			&& options_name.elements.length > 0
+		) {
+			const elements = options_name.elements.filter((
+				maybe,
+			) => {
+				return (
+					isIdentifier(maybe.name)
+					&& !(
+						config as string[]
+					).includes(maybe.name.getText())
+				);
+			});
+
+			return factory.updateObjectBindingPattern(
+				options_name,
+				elements,
+			);
+		}
+
+		return 'string' === typeof options_name
+			? factory.createIdentifier(options_name)
+			: options_name;
+	}
+}
+
+
+export class ModifyValidateOptions extends ModifyValidate {
 	#prepend_with_imports: prepend_with_imports;
 
 	constructor(prepend_with_imports: prepend_with_imports) {
@@ -56,6 +98,7 @@ export class ModifyValidateOptions extends ConditionalModification<
 					node.name.getText(),
 				)
 				&& 2 === node.parameters.length
+				&& isObjectBindingPattern(node.parameters[1].name)
 			),
 			(node, config) => this.#modify_validate(node, config),
 		);
@@ -108,7 +151,7 @@ export class ModifyValidateOptions extends ConditionalModification<
 	}
 
 	#modify_validate(
-		node: FunctionDeclaration,
+		node: ValidateFunctionDeclaration,
 		config?: Partial<Config>,
 	) {
 		const [
@@ -126,34 +169,12 @@ export class ModifyValidateOptions extends ConditionalModification<
 			data.initializer,
 		);
 
-		let options_name: (
-			| BindingPattern
-			| Identifier
-		) = options.name;
-
-		if (
-			config
-			&& Array.isArray(config.remove_dataCtxKeys)
-			&& options_name
-			&& isObjectBindingPattern(options_name)
-			&& options_name.elements.length > 0
-		) {
-			const elements = options_name.elements.filter((
-				maybe,
-			) => {
-				return (
-					isIdentifier(maybe.name)
-					&& !(
-						config.remove_dataCtxKeys as string[]
-					).includes(maybe.name.getText())
-				);
-			});
-
-			options_name = factory.updateObjectBindingPattern(
-				options_name,
-				elements,
-			);
-		}
+		const options_name = this.maybe_modify_name(
+			options.name,
+			(config && Array.isArray(config.remove_dataCtxKeys))
+				? config.remove_dataCtxKeys
+				: undefined,
+		);
 
 		const new_options = factory.updateParameterDeclaration(
 			options,
