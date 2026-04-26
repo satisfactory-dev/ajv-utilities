@@ -103,6 +103,9 @@ import UnboundThis_hasOwnProperty from './TypeScriptify/modifiers/UnboundThis.ts
 // oxlint-disable-next-line @stylistic/max-len
 import HoistDeclarationAsZero from './TypeScriptify/modifiers/HoistDeclarationAsZero.ts';
 
+// oxlint-disable-next-line @stylistic/max-len
+import PatchDefinitelyHasEvaluated from './TypeScriptify/patchers/PatchDefinitelyHasEvaluated.ts';
+
 export default class TypeScript {
 	ify(code: string, config: Partial<Config>): string {
 		code = esmify(code);
@@ -194,6 +197,7 @@ export default class TypeScript {
 
 		let patch_with_is_array = false;
 		let patch_with_is_object = false;
+		let patch_with_definitely_has_evaluated = false;
 
 		const visitor = this.#generate_visitor(
 			context,
@@ -228,6 +232,12 @@ export default class TypeScript {
 				new TypecastArrayAsConst(),
 				new UnboundThis_hasOwnProperty(),
 				new HoistDeclarationAsZero(),
+				new PatchDefinitelyHasEvaluated(
+					prepend_with_imports,
+					() => {
+						patch_with_definitely_has_evaluated = true;
+					},
+				),
 			],
 		);
 
@@ -270,6 +280,13 @@ export default class TypeScript {
 			if (patch_with_is_object) {
 				modified = [
 					PatchIsObject.patch(),
+					...(modified || result.statements),
+				];
+			}
+
+			if (patch_with_definitely_has_evaluated) {
+				modified = [
+					PatchDefinitelyHasEvaluated.patch(),
 					...(modified || result.statements),
 				];
 			}

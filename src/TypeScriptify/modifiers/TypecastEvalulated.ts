@@ -1,11 +1,13 @@
 import type {
 	Identifier,
 	PropertyAccessExpression,
+	VariableDeclaration,
 } from 'typescript';
 import {
 	factory,
 	isIdentifier,
 	isPropertyAccessExpression,
+	isVariableDeclaration,
 	SyntaxKind,
 } from 'typescript';
 
@@ -83,6 +85,7 @@ type TypecastEvalulatedCandidate = (
 				text: 'evaluated',
 			}
 		),
+		parent: Exclude<Node, VariableDeclaration>,
 	}
 );
 
@@ -98,6 +101,10 @@ export class TypecastEvalulated extends ConditionalModification<
 					node.expression.text,
 				)
 				&& 'evaluated' === node.name.text
+				&& (
+					!node.parent
+					|| !isVariableDeclaration(node.parent)
+				)
 			),
 			(node) => {
 				prepend_with_imports[

@@ -1,6 +1,8 @@
 import type { ErrorObject, ValidateFunction } from 'ajv';
 import type { Is } from '@satisfactory-dev/ajv-utilities';
 import type { templated_string_type } from '@signpostmarv/json-schema-typescript-codegen/ajv';
+function ajv_utiltiies__definitely_evaluated<T>(maybe: Is<T>): Exclude<Is<T>["evaluated"], undefined> { if (undefined === maybe.evaluated)
+    throw new Error(`${maybe.name}.evaluated not set!`); return maybe.evaluated; }
 function ajv_utilities__is_probably_object(maybe: unknown): maybe is Record<string, unknown> { return !!maybe && typeof maybe === "object" && !Array.isArray(maybe); }
 function ajv_utilities__is_probably_array(maybe: unknown): maybe is unknown[] { return Array.isArray(maybe); }
 import fast_deep_equal from 'fast-deep-equal';
@@ -15,7 +17,7 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
     /*# sourceURL="docs.json.ts--lib--PropertySchemaToRegex--TemplatedString" */ ;
     let vErrors: ErrorObject[] = [];
     let errors = 0;
-    const evaluated0 = (validate20 as Is).evaluated;
+    const evaluated0 = ajv_utiltiies__definitely_evaluated(validate20);
     if (evaluated0?.dynamicProps) {
         evaluated0.props = undefined;
     }

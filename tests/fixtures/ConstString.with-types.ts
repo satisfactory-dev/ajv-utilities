@@ -1,6 +1,8 @@
 import type { ErrorObject, ValidateFunction } from 'ajv';
 import type { Is } from '@satisfactory-dev/ajv-utilities';
 import type { const_string } from './types.ts';
+function ajv_utiltiies__definitely_evaluated<T>(maybe: Is<T>): Exclude<Is<T>["evaluated"], undefined> { if (undefined === maybe.evaluated)
+    throw new Error(`${maybe.name}.evaluated not set!`); return maybe.evaluated; }
 function ajv_utilities__is_probably_object(maybe: unknown): maybe is Record<string, unknown> { return !!maybe && typeof maybe === "object" && !Array.isArray(maybe); }
 export const foo = validate20;
 const schema31 = { "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "docs.json.ts--lib--PropertySchemaToRegex--ConstString", "type": "object", "additionalProperties": false, "required": ["type", "const"] as const, "properties": { "type": { "type": "string", "const": "string" }, "const": { "type": "string" } } };
@@ -10,7 +12,7 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
     /*# sourceURL="docs.json.ts--lib--PropertySchemaToRegex--ConstString" */ ;
     let vErrors: ErrorObject[] = [];
     let errors = 0;
-    const evaluated0 = (validate20 as Is).evaluated;
+    const evaluated0 = ajv_utiltiies__definitely_evaluated(validate20);
     if (evaluated0?.dynamicProps) {
         evaluated0.props = undefined;
     }
