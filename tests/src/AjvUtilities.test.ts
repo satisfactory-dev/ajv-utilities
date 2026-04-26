@@ -796,6 +796,14 @@ void describe('AjvUtilities', () => {
 				),
 				both_with_generics.toString(),
 				{
+					remove_dataCtxKeys: {
+						[EnumString.$id]: [
+							'parentData',
+							'parentDataProperty',
+							'rootData',
+							'dynamicAnchors',
+						],
+					},
 					specify_types: {
 						[ConstString.$id]: [
 							{

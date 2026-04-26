@@ -43,8 +43,13 @@ import SpecifyTypes from './TypeScriptify/preprocessors/SpecifyTypes.ts';
 // oxlint-disable-next-line @stylistic/max-len
 import RemoveSchemaDeclaration from './TypeScriptify/modifiers/RemoveSchemaDeclaration.ts';
 
+import type {
+	specify_modify_options_name_config,
+} from './TypeScriptify/modifiers/ModifyValidate.ts';
 import {
 	ModifyValidateOptions,
+	ModifyValidateOptionsByConfig,
+	SpecifyModifyCandidates,
 } from './TypeScriptify/modifiers/ModifyValidate.ts';
 
 import {
@@ -110,12 +115,16 @@ export default class TypeScript {
 
 		const specify_types: specify_types_instance = {};
 		const hoist_candidates: hoist_candidates = {};
+		const specify_modify_options_name_config: (
+			specify_modify_options_name_config
+		) = {};
 
 		let result = transform(source, [
 			(context) => this.#first_pass(
 				context,
 				config,
 				specify_types,
+				specify_modify_options_name_config,
 				hoist_candidates,
 			),
 		]);
@@ -125,6 +134,7 @@ export default class TypeScript {
 				context,
 				config,
 				Object.freeze(specify_types),
+				Object.freeze(specify_modify_options_name_config),
 				Object.freeze(hoist_candidates),
 			),
 		]);
@@ -174,6 +184,7 @@ export default class TypeScript {
 		context: TransformationContext,
 		config: Partial<Config>,
 		specify_types: specify_types_instance,
+		specify_modify_options_name_config: specify_modify_options_name_config,
 		hoist_candidates: hoist_candidates,
 	) {
 		const prepend_with_imports: prepend_with_imports = {
@@ -189,6 +200,9 @@ export default class TypeScript {
 			config,
 			[
 				new SpecifyTypes(prepend_with_imports, specify_types),
+				new SpecifyModifyCandidates(
+					specify_modify_options_name_config,
+				),
 			],
 			[
 				new RemoveSchemaDeclaration(),
@@ -284,6 +298,9 @@ export default class TypeScript {
 		context: TransformationContext,
 		config: Partial<Config>,
 		specify_types: Readonly<specify_types_instance>,
+		specify_modify_options_name_config: Readonly<
+			specify_modify_options_name_config
+		>,
 		hoist_candidates: Readonly<hoist_candidates>,
 	) {
 		if (Object.keys(specify_types).length < 1) {
@@ -297,6 +314,9 @@ export default class TypeScript {
 			[
 				new SpecifyTypePredicate(specify_types),
 				new HoistDeclarationsHere(hoist_candidates),
+				new ModifyValidateOptionsByConfig(
+					specify_modify_options_name_config,
+				),
 			],
 		);
 
