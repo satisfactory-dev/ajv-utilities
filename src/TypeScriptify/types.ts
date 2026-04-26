@@ -42,11 +42,11 @@ export type specify_types_instance = {
 };
 
 export type remove_dataCtxKeys = [
-		keyof Exclude<Parameters<ValidateFunction>[1], undefined>,
-		...(keyof Exclude<
-			Parameters<ValidateFunction>[1],
-			undefined
-		>)[],
+	keyof Exclude<Parameters<ValidateFunction>[1], undefined>,
+	...(keyof Exclude<
+		Parameters<ValidateFunction>[1],
+		undefined
+	>)[],
 ];
 
 export type Config = {
