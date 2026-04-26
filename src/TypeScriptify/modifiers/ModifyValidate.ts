@@ -133,7 +133,7 @@ export class ModifyValidateOptions extends ConditionalModification<
 
 		if (
 			config
-			&& config.remove_dataCtxKeys
+			&& Array.isArray(config.remove_dataCtxKeys)
 			&& options_name
 			&& isObjectBindingPattern(options_name)
 			&& options_name.elements.length > 0

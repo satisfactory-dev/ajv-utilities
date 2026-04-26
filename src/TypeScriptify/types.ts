@@ -51,7 +51,10 @@ export type remove_dataCtxKeys = [
 
 export type Config = {
 	remove_schema: boolean,
-	remove_dataCtxKeys: remove_dataCtxKeys,
+	remove_dataCtxKeys: (
+		| remove_dataCtxKeys
+		| {[key: string]: remove_dataCtxKeys}
+	),
 	specify_types: {
 		[key: string]: [specify_types_config, string],
 	},
