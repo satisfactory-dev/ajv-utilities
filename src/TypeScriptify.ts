@@ -43,7 +43,9 @@ import SpecifyTypes from './TypeScriptify/preprocessors/SpecifyTypes.ts';
 // oxlint-disable-next-line @stylistic/max-len
 import RemoveSchemaDeclaration from './TypeScriptify/modifiers/RemoveSchemaDeclaration.ts';
 
-import ModifyValidate from './TypeScriptify/modifiers/ModifyValidate.ts';
+import {
+	ModifyValidateOptions,
+} from './TypeScriptify/modifiers/ModifyValidate.ts';
 
 import {
 	ConditionalLengthSet,
@@ -190,7 +192,7 @@ export default class TypeScript {
 			],
 			[
 				new RemoveSchemaDeclaration(),
-				new ModifyValidate(prepend_with_imports),
+				new ModifyValidateOptions(prepend_with_imports),
 				new ModifyVErrors(prepend_with_imports),
 				new ReplaceVErrorsPushIfElse(),
 				new ConditionalLengthSet(),
