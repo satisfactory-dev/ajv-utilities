@@ -58,4 +58,7 @@ export type Config = {
 	specify_types: {
 		[key: string]: [specify_types_config, string],
 	},
+	specify_types_by_validate_function_name: {
+		[key: `validate${number}`]: [specify_types_config, string],
+	},
 };

@@ -48,6 +48,16 @@ import TemplatedString from '../fixtures/TemplatedString.schema.json' with {
 	type: 'json',
 };
 
+// oxlint-disable-next-line @stylistic/max-len
+import recipe_selection from '../fixtures/recipe-selection.update8.schema.json' with {
+	type: 'json',
+};
+
+// oxlint-disable-next-line @stylistic/max-len
+import production_request from '../fixtures/production-request.update8.schema.json' with {
+	type: 'json',
+};
+
 void describe('AjvUtilities', () => {
 	void describe('compile', () => {
 		const ajv = new Ajv();
@@ -209,6 +219,9 @@ void describe('AjvUtilities', () => {
 		);
 		const TemplatedString_expectation = await readFile(
 			`${import.meta.dirname}/../fixtures/TemplatedString.ts`,
+		);
+		const production_planner_update8 = await readFile(
+			`${import.meta.dirname}/../fixtures/production-planner.update8.ts`,
 		);
 
 		const data_sets: (
@@ -931,6 +944,68 @@ void describe('AjvUtilities', () => {
 						[TemplatedString.$id]: [
 							'templated_string_type',
 							'@signpostmarv/json-schema-typescript-codegen/ajv',
+						],
+					},
+				},
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: true,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
+							recipe_selection,
+							production_request,
+						],
+					}),
+					{
+						recipe_selection_validator: recipe_selection.$id,
+						production_request_validator: production_request.$id,
+					},
+				),
+				production_planner_update8.toString(),
+				{
+					specify_types: {
+						[recipe_selection.$id]: [
+							'stub_recipe_selection',
+							'./types.ts',
+						],
+						[production_request.$id]: [
+							'stub_production_request',
+							'./types.ts',
+						],
+					},
+					specify_types_by_validate_function_name: {
+						validate22: [
+							'stub_numeric',
+							'./types.ts',
+						],
+						validate23: [
+							'stub_CanConvertJson',
+							'./types.ts',
+						],
+						validate24: [
+							'stub_IntermediaryNumber',
+							'./types.ts',
+						],
+						validate25: [
+							'stub_amount_string_alt1',
+							'./types.ts',
+						],
+						validate28: [
+							'stub_IntermediaryCalculation',
+							'./types.ts',
+						],
+						validate32: [
+							'stub_production_output',
+							'./types.ts',
 						],
 					},
 				},

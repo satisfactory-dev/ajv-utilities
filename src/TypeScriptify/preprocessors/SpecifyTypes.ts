@@ -36,7 +36,7 @@ type SpecifyTypesCandidate = (
 						name: (
 							& Identifier
 							& {
-								getText(): `validate${number}`,
+								text: `validate${number}`,
 							}
 						),
 					}
@@ -51,7 +51,7 @@ type config = (
 	& Pick<Config, 'specify_types'>
 );
 
-export default class SpecifyTypes extends ConditionalPreprocessor<
+export class SpecifyTypesBySourceURL extends ConditionalPreprocessor<
 	SpecifyTypesCandidate,
 	config
 > {
@@ -92,7 +92,7 @@ export default class SpecifyTypes extends ConditionalPreprocessor<
 				&& isFunctionDeclaration(node.parent.parent)
 				&& !!node.parent.parent.name
 				&& this.validate_function_name.test(
-					node.parent.parent.name.getText(),
+					node.parent.parent.name.text,
 				)
 			),
 			(node, config) => {
@@ -104,9 +104,48 @@ export default class SpecifyTypes extends ConditionalPreprocessor<
 					}
 
 					specify_types[
-						node.parent.parent.name.getText()
+						node.parent.parent.name.text
 					] = prepend_with_imports[maybe[1]].add(maybe[0]);
 				}
+			},
+		);
+	}
+}
+
+export class SpecifyTypesByValidateFunction extends ConditionalPreprocessor<
+	SpecifyTypesCandidate['parent']['parent']
+> {
+	constructor(
+		prepend_with_imports: prepend_with_imports,
+		specify_types: specify_types_instance,
+	) {
+		super(
+			(maybe): maybe is SpecifyTypesCandidate['parent']['parent'] => (
+				isFunctionDeclaration(maybe)
+				&& !!maybe.name
+				&& this.validate_function_name.test(
+					maybe.name.text,
+				)
+			),
+			(node, config) => {
+				if (
+					!config.specify_types_by_validate_function_name
+					|| !(node.name.text in config.specify_types_by_validate_function_name)
+				) {
+					return;
+				}
+
+				const type_config = config.specify_types_by_validate_function_name[
+					node.name.text
+				];
+
+				if (!(type_config[1] in prepend_with_imports)) {
+					prepend_with_imports[type_config[1]] = new Types();
+				}
+
+				specify_types[
+					node.name.text
+				] = prepend_with_imports[type_config[1]].add(type_config[0]);
 			},
 		);
 	}

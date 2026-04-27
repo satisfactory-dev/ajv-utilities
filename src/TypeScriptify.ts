@@ -38,7 +38,10 @@ import {
 	Types,
 } from './TypeScriptify/TypeReferences.ts';
 
-import SpecifyTypes from './TypeScriptify/preprocessors/SpecifyTypes.ts';
+import {
+	SpecifyTypesBySourceURL,
+	SpecifyTypesByValidateFunction,
+} from './TypeScriptify/preprocessors/SpecifyTypes.ts';
 
 // oxlint-disable-next-line @stylistic/max-len
 import RemoveSchemaDeclaration from './TypeScriptify/modifiers/RemoveSchemaDeclaration.ts';
@@ -203,7 +206,14 @@ export default class TypeScript {
 			context,
 			config,
 			[
-				new SpecifyTypes(prepend_with_imports, specify_types),
+				new SpecifyTypesBySourceURL(
+					prepend_with_imports,
+					specify_types,
+				),
+				new SpecifyTypesByValidateFunction(
+					prepend_with_imports,
+					specify_types,
+				),
 				new SpecifyModifyCandidates(
 					specify_modify_options_name_config,
 				),
