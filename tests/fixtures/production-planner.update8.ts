@@ -8767,7 +8767,7 @@ function validate23(data: unknown, { instancePath = "", parentData, parentDataPr
     rootData: unknown;
 }> = {}): data is stub_CanConvertJson {
     let props0: (true | {
-        type?: true;
+        [key: string]: true;
     } | undefined) = undefined;
     let vErrors: ErrorObject[] = [];
     let errors = 0;
@@ -8896,7 +8896,7 @@ function validate22(data: unknown, { instancePath = "", parentData, parentDataPr
     rootData: unknown;
 }> = {}): data is stub_numeric {
     let props0: (true | {
-        type?: true;
+        [key: string]: true;
     } | undefined) = undefined;
     let vErrors: ErrorObject[] = [];
     let errors = 0;
@@ -9060,7 +9060,7 @@ function validate21(data: unknown, { instancePath = "", parentData, parentDataPr
     rootData: unknown;
 }> = {}): data is stub_production_request {
     let props0: (true | {
-        type?: true;
+        [key: string]: true;
     } | undefined) = undefined;
     /*# sourceURL="docs.json.ts--production-planner--lib--0.8.3.3--production-request" */ ;
     let vErrors: ErrorObject[] = [];

@@ -14,11 +14,11 @@ function validate20(data: unknown, { instancePath = "" }: Partial<Omit<Exclude<P
     rootData: unknown;
 }> = {}): data is FlexibleArray_type<"items"> {
     let props0: (true | {
-        type?: true;
+        [key: string]: true;
     } | undefined) = undefined, props1: (true | {
-        type?: true;
+        [key: string]: true;
     } | undefined) = undefined, props2: (true | {
-        type?: true;
+        [key: string]: true;
     } | undefined) = undefined;
     /*# sourceURL="docs.json.ts--lib--PropertySchemaToRegex--FlexibleArray--items" */ ;
     let vErrors: ErrorObject[] = [];

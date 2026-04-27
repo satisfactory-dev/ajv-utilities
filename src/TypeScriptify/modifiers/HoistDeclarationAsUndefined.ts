@@ -150,10 +150,19 @@ export class HoistDeclarationsHere extends ConditionalModification<
 		return factory.createParenthesizedType(factory.createUnionTypeNode([
 			factory.createLiteralTypeNode(factory.createTrue()),
 			factory.createTypeLiteralNode([
-				factory.createPropertySignature(
+				factory.createIndexSignature(
 					undefined,
-					'type',
-					factory.createToken(SyntaxKind.QuestionToken),
+					[
+						factory.createParameterDeclaration(
+							undefined,
+							undefined,
+							'key',
+							undefined,
+							factory.createKeywordTypeNode(
+								SyntaxKind.StringKeyword,
+							),
+						),
+					],
 					factory.createLiteralTypeNode(
 						factory.createTrue(),
 					),
