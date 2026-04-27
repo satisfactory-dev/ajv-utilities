@@ -130,11 +130,14 @@ export class SpecifyTypesByValidateFunction extends ConditionalPreprocessor<
 			(node, config) => {
 				if (
 					!config.specify_types_by_validate_function_name
+
+					// oxlint-disable-next-line @stylistic/max-len
 					|| !(node.name.text in config.specify_types_by_validate_function_name)
 				) {
 					return;
 				}
 
+				// oxlint-disable-next-line @stylistic/max-len
 				const type_config = config.specify_types_by_validate_function_name[
 					node.name.text
 				];
