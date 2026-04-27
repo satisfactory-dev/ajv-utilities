@@ -2,9 +2,7 @@
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "docs.json.ts--production-planner--lib--0.8.3.3--production-request",
 	"type": "object",
-	"required": [
-		"pool"
-	] ,
+	"required": ["pool"],
 	"additionalProperties": false,
 	"$defs": {
 		"amount_string": {
@@ -703,10 +701,7 @@
 		},
 		"IntermediaryNumber": {
 			"type": "object",
-			"required": [
-				"type",
-				"value"
-			] ,
+			"required": ["type", "value"],
 			"additionalProperties": false,
 			"properties": {
 				"type": {
@@ -731,12 +726,7 @@
 		},
 		"IntermediaryCalculation": {
 			"type": "object",
-			"required": [
-				"type",
-				"left",
-				"operation",
-				"right"
-			] ,
+			"required": ["type", "left", "operation", "right"],
 			"additionalProperties": false,
 			"properties": {
 				"type": {
@@ -748,14 +738,7 @@
 				},
 				"operation": {
 					"type": "string",
-					"enum": [
-						"+",
-						"-",
-						"*",
-						"x",
-						"/",
-						"%"
-					]
+					"enum": ["+", "-", "*", "x", "/", "%"]
 				},
 				"right": {
 					"$ref": "#/$defs/CanConvertTypeJson"
@@ -764,10 +747,7 @@
 		},
 		"TokenScan": {
 			"type": "object",
-			"required": [
-				"type",
-				"value"
-			] ,
+			"required": ["type", "value"],
 			"additionalProperties": false,
 			"properties": {
 				"type": {
