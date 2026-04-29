@@ -55,7 +55,7 @@ export default class SpecifyTypePredicate extends ConditionalModification<
 						factory.createTypePredicateNode(
 							undefined,
 							'data',
-							specify_types[function_name].toTypeReferenceNode(),
+							specify_types[function_name].toTypeResult(),
 						),
 						node.body,
 					);

@@ -58,6 +58,13 @@ import production_request from '../fixtures/production-request.update8.schema.js
 	type: 'json',
 };
 
+// oxlint-disable-next-line @stylistic/max-len
+import CanConvertTypeJsonDefs from '../fixtures/CanConvertTypeJsonDefs.schema.json' with {
+	type: 'json',
+};
+
+import version_6 from '../fixtures/version_6.schema.json' with {type: 'json'};
+
 void describe('AjvUtilities', () => {
 	void describe('compile', () => {
 		const ajv = new Ajv();
@@ -222,6 +229,9 @@ void describe('AjvUtilities', () => {
 		);
 		const production_planner_update8 = await readFile(
 			`${import.meta.dirname}/../fixtures/production-planner.update8.ts`,
+		);
+		const version_6_expectation = await readFile(
+			`${import.meta.dirname}/../fixtures/version_6.ts`,
 		);
 
 		const data_sets: (
@@ -1005,6 +1015,82 @@ void describe('AjvUtilities', () => {
 						],
 						validate32: [
 							'stub_production_output',
+							'./types.ts',
+						],
+					},
+				},
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: true,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
+							CanConvertTypeJsonDefs,
+							version_6,
+						],
+					}),
+					{
+						version_6_validator: version_6.$id,
+					},
+				),
+				version_6_expectation.toString(),
+				{
+					specify_types: {
+						[version_6.$id]: [
+							'stub_State_Json',
+							'./types.ts',
+						],
+					},
+					specify_types_by_validate_function_name: {
+						validate21: [
+							'stub_Pool',
+							'./types.ts',
+						],
+						validate22: [
+							{
+								name: 'stub_Pool',
+								sub_type_chain: ['production'],
+							},
+							'./types.ts',
+						],
+						validate24: [
+							'stub_CanConvertJson',
+							'./types.ts',
+						],
+						validate25: [
+							'stub_IntermediaryNumber',
+							'./types.ts',
+						],
+						validate26: [
+							'stub_amount_string_flexible',
+							'./types.ts',
+						],
+						validate29: [
+							'stub_IntermediaryCalculation',
+							'./types.ts',
+						],
+						validate34: [
+							'stub_Distributor_json',
+							'./types.ts',
+						],
+						validate38: [
+							{name: 'stub_Collection', as_array: {minimum: 1}},
+							'./types.ts',
+						],
+						validate39: [
+							'stub_Collection',
+							'./types.ts',
+						],
+						validate43: [
+							'stub_Settings',
 							'./types.ts',
 						],
 					},

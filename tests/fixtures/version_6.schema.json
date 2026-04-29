@@ -1,0 +1,205 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "production-planner-save-version-6",
+	"type": "object",
+	"required": ["version", "collections", "groups", "pools", "settings"],
+	"additionalProperties": false,
+	"$defs": {
+		"id": {
+			"type": "integer",
+			"minimum": 1
+		},
+		"name": {
+			"type": "string",
+			"minLength": 1,
+			"pattern": "^(?!\\s+).+(?<!\\s)$"
+		},
+		"pool_reference": {
+			"$ref": "#/$defs/id"
+		},
+		"recipe_selection": {
+			"type": "object",
+			"additionalProperties": false,
+			"minProperties": 1,
+			"patternProperties": {
+				"^(?:Desc|BP|Foundation)_[^.]+_C$": {
+					"type": "string",
+					"pattern": "^(?:Recipe|Build)_.+_C$"
+				}
+			}
+		},
+		"collection": {
+			"type": "object",
+			"required": ["id", "items"],
+			"unevaluatedProperties": false,
+			"additionalProperties": false,
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/id"
+				},
+				"name": {
+					"$ref": "#/$defs/name"
+				},
+				"recipe_selection": {
+					"$ref": "#/$defs/recipe_selection"
+				},
+				"items": {
+					"type": "array",
+					"minItems": 0,
+					"items": {
+						"$ref": "#/$defs/id"
+					}
+				}
+			}
+		},
+		"collection_array": {
+			"type": "array",
+			"minItems": 1,
+			"items": {
+				"$ref": "#/$defs/collection"
+			}
+		},
+		"production_set": {
+			"type": "object",
+			"additionalProperties": false,
+			"patternProperties": {
+				"^(?:Desc|BP|Foundation)_[^.]+_C$": {
+					"$ref": "docs.json.ts--production-planner--lib--CanConvertTypeJsonDefs#/$defs/CanConvertTypeJson"
+				}
+			}
+		},
+		"outputs": {
+			"type": "object",
+			"required": ["instructions"],
+			"additionalProperties": false,
+			"properties": {
+				"instructions": {
+					"type": "object",
+					"minProperties": 1,
+					"additionalProperties": false,
+					"patternProperties": {
+						"^(?:Desc|BP|Foundation)_[^.]+_C$": {
+							"type": "array",
+							"minItems": 1,
+							"items": {
+								"type": "object",
+								"required": ["amount", "destination"],
+								"additionalProperties": false,
+								"properties": {
+									"amount": {
+										"$ref": "docs.json.ts--production-planner--lib--CanConvertTypeJsonDefs#/$defs/CanConvertTypeJson"
+									},
+									"destination": {
+										"type": "object",
+										"required": ["type", "id"],
+										"additionalProperties": false,
+										"properties": {
+											"type": {
+												"type": "string",
+												"enum": ["pool"]
+											},
+											"id": {
+												"$ref": "#/$defs/id"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"pool": {
+			"type": "object",
+			"required": ["id"],
+			"unevaluatedProperties": false,
+			"additionalProperties": false,
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/id"
+				},
+				"name": {
+					"$ref": "#/$defs/name"
+				},
+				"production": {
+					"$ref": "#/$defs/production_set"
+				},
+				"recipe_selection": {
+					"$ref": "#/$defs/recipe_selection"
+				},
+				"manual_input": {
+					"$ref": "#/$defs/production_set"
+				},
+				"outputs": {
+					"$ref": "#/$defs/outputs"
+				}
+			}
+		},
+		"settings": {
+			"type": "object",
+			"required": [
+				"auto_follow_current_pool",
+				"calculator_display_mode",
+				"current_pool_id",
+				"show_full_pool_button_list",
+				"auto_recalculate"
+			],
+			"unevaluatedProperties": false,
+			"additionalProperties": false,
+			"properties": {
+				"auto_follow_current_pool": {
+					"type": "boolean"
+				},
+				"calculator_display_mode": {
+					"type": "boolean"
+				},
+				"current_pool_id": {
+					"$ref": "#/$defs/pool_reference"
+				},
+				"recipe_selection": {
+					"$ref": "#/$defs/recipe_selection"
+				},
+				"show_full_pool_button_list": {
+					"type": "boolean"
+				},
+				"auto_recalculate": {
+					"$ref": "#/$defs/settings_auto_recalculate"
+				}
+			}
+		},
+		"settings_auto_recalculate": {
+			"type": "object",
+			"required": ["recipe_selection_ui_change"],
+			"unevaluatedProperties": false,
+			"additionalProperties": false,
+			"properties": {
+				"recipe_selection_ui_change": {
+					"type": "boolean"
+				}
+			}
+		}
+	},
+	"properties": {
+		"version": {
+			"type": "integer",
+			"const": 6
+		},
+		"pools": {
+			"type": "array",
+			"minItems": 1,
+			"items": {
+				"$ref": "#/$defs/pool"
+			}
+		},
+		"groups": {
+			"$ref": "#/$defs/collection_array"
+		},
+		"collections": {
+			"$ref": "#/$defs/collection_array"
+		},
+		"settings": {
+			"$ref": "#/$defs/settings"
+		}
+	}
+}

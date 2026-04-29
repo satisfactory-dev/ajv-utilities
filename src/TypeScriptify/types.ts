@@ -6,6 +6,8 @@ import type {
 	Aliased,
 	NameOnly,
 	WithArgs,
+	WithArray,
+	WithSubTypeChain,
 } from './TypeReferences.ts';
 
 export type Is<T = unknown> = (
@@ -20,16 +22,36 @@ export type Is<T = unknown> = (
 	}
 );
 
+export type as_array_config = (
+	| true
+	| {
+		minimum: number,
+	}
+);
+
 export type specify_types_config = (
 	| Exclude<string, ''>
 	| {
 		name: Exclude<string, ''>,
 		as: Exclude<string, ''>,
+		sub_type_chain?: [string, ...string[]],
+		as_array?: as_array_config,
+	}
+	| {
+		name: Exclude<string, ''>,
+		as_array: as_array_config,
+	}
+	| {
+		name: Exclude<string, ''>,
+		sub_type_chain: [string, ...string[]],
+		as_array?: as_array_config,
 	}
 	| {
 		name: Exclude<string, ''>,
 		as?: Exclude<string, ''>,
 		args: [string, ...string[]],
+		sub_type_chain?: [string, ...string[]],
+		as_array?: as_array_config,
 	}
 );
 
@@ -38,6 +60,8 @@ export type specify_types_instance = {
 		| NameOnly
 		| Aliased
 		| WithArgs
+		| WithSubTypeChain
+		| WithArray
 	),
 };
 

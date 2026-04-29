@@ -66,6 +66,83 @@ type stub_CanConvertJson = (
 	| stub_TokenScan
 );
 
+type stub_Pool_json_output_amounts = {
+	[key in `${string}_C`]: (
+		| string
+		| stub_CanConvertJson
+	);
+};
+
+type stub_Destination_json_item<
+	Destination extends 'pool'|'sink' = 'pool'|'sink',
+> = {
+	amount: stub_CanConvertJson,
+	destination: {
+		type: Destination,
+		id: number,
+	},
+};
+
+type stub_Distributor_json = {
+	instructions: {
+		[key: `${string}_C`]: [
+			stub_Destination_json_item,
+			...stub_Destination_json_item[],
+		]
+	}
+}
+
+type stub_Pool = (
+	& {
+		id: number,
+	}
+	& Partial<{
+		name: string,
+		production: stub_Pool_json_output_amounts,
+		manual_input: stub_Pool_json_output_amounts,
+		outputs: stub_Distributor_json,
+		recipe_selection: stub_recipe_selection,
+	}>
+);
+
+type stub_Settings = (
+	& {
+		auto_follow_current_pool: boolean,
+		calculator_display_mode: boolean,
+		current_pool_id: number,
+		show_full_pool_button_list: boolean,
+		auto_recalculate: {
+			recipe_selection_ui_change: boolean,
+		}
+	}
+	& Partial<{
+		recipe_selection: stub_recipe_selection,
+	}>
+);
+
+type stub_Collection = (
+	& {
+		id: number,
+	}
+	& Partial<{
+		name: string,
+		items: [number, ...number[]],
+		recipe_selection: stub_recipe_selection,
+	}>
+);
+
+type stub_State_Json = (
+	& {
+		settings: stub_Settings,
+		version: 6,
+	}
+	& Partial<{
+		pools: [stub_Pool, ...stub_Pool[]],
+		groups: [stub_Collection, ...stub_Collection[]],
+		collections: [stub_Collection, ...stub_Collection[]],
+	}>
+);
+
 export type {
 	const_string,
 	enum_string,
@@ -82,4 +159,9 @@ export type {
 	stub_IntermediaryCalculation,
 	stub_TokenScan,
 	stub_CanConvertJson,
+	stub_State_Json,
+	stub_Settings,
+	stub_Collection,
+	stub_Pool,
+	stub_Distributor_json,
 };
