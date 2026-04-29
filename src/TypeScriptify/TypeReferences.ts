@@ -268,6 +268,10 @@ class WithSubTypeChain implements HasOutput<IndexedAccessTypeNode> {
 
 		return access;
 	}
+
+	toString() {
+		return to_string(this);
+	}
 }
 
 class WithArray implements HasOutput<TupleTypeNode | ArrayTypeNode> {
@@ -304,6 +308,10 @@ class WithArray implements HasOutput<TupleTypeNode | ArrayTypeNode> {
 				),
 			],
 		);
+	}
+
+	toString() {
+		return to_string(this);
 	}
 }
 
