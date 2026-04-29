@@ -143,6 +143,26 @@ type stub_State_Json = (
 	}>
 );
 
+type stubs = {
+	recipe_selection: stub_recipe_selection,
+	production_request: stub_production_request,
+	IntermediaryNumber: stub_IntermediaryNumber,
+	amount_string: stub_amount_string,
+	amount_string_alt1: stub_amount_string_alt1,
+	amount_string_alt2: stub_amount_string_alt2,
+	amount_string_flexible: stub_amount_string_flexible,
+	production_output: stub_production_output,
+	numeric: stub_numeric,
+	IntermediaryCalculation: stub_IntermediaryCalculation,
+	TokenScan: stub_TokenScan,
+	CanConvertJson: stub_CanConvertJson,
+	State_Json: stub_State_Json,
+	Settings: stub_Settings,
+	Collection: stub_Collection,
+	Pool: stub_Pool,
+	Distributor_json: stub_Distributor_json,
+};
+
 export type {
 	const_string,
 	enum_string,
@@ -164,4 +184,5 @@ export type {
 	stub_Collection,
 	stub_Pool,
 	stub_Distributor_json,
+	stubs,
 };
