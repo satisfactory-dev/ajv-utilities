@@ -17,6 +17,7 @@ jobs:
                   node-version: 25.x
                   cache: 'npm'
             - run: npm ci
+            - run: make modify
             - run: make lint
     coverage:
         needs: basic-checks
@@ -29,6 +30,7 @@ jobs:
                   node-version: 25.x
                   cache: 'npm'
             - run: npm ci
+            - run: make modify
             - name: Generate coverage
               run: node --experimental-test-coverage --test --test-reporter=lcov --test-reporter-destination=coverage/lcov.info
             - name: Coveralls GitHub Action
