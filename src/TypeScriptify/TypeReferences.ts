@@ -120,8 +120,8 @@ abstract class AbstractNameOnly<
 	withSubTypeChain(
 		sub_type_chain: [string, ...string[]],
 	): WithSubTypeChain {
-		return new WithOnlySubTypeChain(
-			this.name,
+		return new WithSubTypeChain(
+			this,
 			sub_type_chain,
 		);
 	}
@@ -129,8 +129,8 @@ abstract class AbstractNameOnly<
 	withArray(
 		config: as_array_config,
 	): WithArray {
-		return new WithOnlyArray(
-			this.name,
+		return new WithArray(
+			this,
 			config,
 		);
 	}
@@ -185,9 +185,8 @@ abstract class AbstractAliased<
 	withSubTypeChain(
 		sub_type_chain: [string, ...string[]],
 	): WithSubTypeChain {
-		return new WithAliasAndSubTypeChain(
-			this.name,
-			this.as,
+		return new WithSubTypeChain(
+			this,
 			sub_type_chain,
 		);
 	}
@@ -195,9 +194,8 @@ abstract class AbstractAliased<
 	withArray(
 		config: as_array_config,
 	): WithArray {
-		return new WithAliasAndArray(
-			this.name,
-			this.as,
+		return new WithArray(
+			this,
 			config,
 		);
 	}
@@ -256,27 +254,19 @@ abstract class AbstractWithArgs<
 
 	withSubTypeChain(
 		sub_type_chain: [string, ...string[]],
-	): WithArgsAndSubTypeChain {
-		return new WithArgsAndSubTypeChain(
-			this.name,
-			this.args,
+	): WithSubTypeChain {
+		return new WithSubTypeChain(
+			this,
 			sub_type_chain,
-			{
-				as: this.as,
-			},
 		);
 	}
 
 	withArray(
 		config: as_array_config,
 	): WithArray {
-		return new WithArgsAndArray(
-			this.name,
-			this.args,
+		return new WithArray(
+			this,
 			config,
-			{
-				as: this.as,
-			},
 		);
 	}
 
@@ -301,267 +291,82 @@ class WithArgs extends AbstractWithArgs<TypeReferenceNode> {
 	}
 }
 
-interface WithSubTypeChain extends HasOutput<IndexedAccessTypeNode> {
+class WithSubTypeChain implements HasOutput<IndexedAccessTypeNode> {
+	#parent: HasOutput;
+
 	readonly sub_type_chain: [string, ...string[]];
 
-	withArray(config: as_array_config): WithSubTypeChainAndArray;
-}
+	constructor(
+		parent: HasOutput,
+		sub_type_chain: [string, ...string[]],
+	) {
+		this.#parent = parent;
+		this.sub_type_chain = sub_type_chain;
+	}
 
-function augment_type_with_SubTypeChain(
-	type: TypeReferenceNode,
-	sub_type_chain: [string, ...string[]],
-): IndexedAccessTypeNode {
-	const [
-		first,
-		...remaining
-	] = sub_type_chain;
+	withArray(config: as_array_config): WithArray {
+		return new WithArray(this.#parent, config);
+	}
 
-	let access = factory.createIndexedAccessTypeNode(
-		type,
-		factory.createLiteralTypeNode(factory.createStringLiteral(
+	toTypeResult() {
+		const [
 			first,
-		)),
-	);
+			...remaining
+		] = this.sub_type_chain;
 
-	for (const sub_type of remaining) {
-		access = factory.createIndexedAccessTypeNode(
-			access,
+		let access = factory.createIndexedAccessTypeNode(
+			this.#parent.toTypeResult(),
 			factory.createLiteralTypeNode(factory.createStringLiteral(
-				sub_type,
+				first,
 			)),
 		);
-	}
 
-	return access;
+		for (const sub_type of remaining) {
+			access = factory.createIndexedAccessTypeNode(
+				access,
+				factory.createLiteralTypeNode(factory.createStringLiteral(
+					sub_type,
+				)),
+			);
+		}
+
+		return access;
+	}
 }
 
-class WithSubTypeChainAndArray implements WithArray {
-	#with_sub_type_chain: WithSubTypeChain;
+class WithArray implements HasOutput<TupleTypeNode | ArrayTypeNode> {
+	#parent: HasOutput;
 
 	readonly as_array: as_array_config;
 
-	get sub_type_chain() {
-		return this.#with_sub_type_chain.sub_type_chain;
-	}
-
 	constructor(
-		with_sub_type_chain: WithSubTypeChain,
+		parent: HasOutput,
 		as_array: as_array_config,
 	) {
-		this.#with_sub_type_chain = with_sub_type_chain;
-		this.as_array = as_array;
-	}
-
-	withArray(as_array: as_array_config) {
-		return new WithSubTypeChainAndArray(
-			this.#with_sub_type_chain,
-			as_array,
-		);
-	}
-
-	toTypeResult() {
-		return augment_type_with_AsArrayConfig(
-			() => this.#with_sub_type_chain.toTypeResult(),
-			this.as_array,
-		);
-	}
-}
-
-class WithArgsAndSubTypeChain extends AbstractWithArgs<
-	IndexedAccessTypeNode
-> implements WithSubTypeChain {
-	readonly sub_type_chain: [string, ...string[]];
-
-	constructor(
-		name: WithArgs['name'],
-		args: WithArgs['args'],
-		sub_type_chain: WithSubTypeChain['sub_type_chain'],
-		options: {
-			as?: Exclude<WithArgs['as'], undefined>,
-		},
-	) {
-		super(
-			name,
-			args,
-			options?.as,
-		);
-
-		this.sub_type_chain = sub_type_chain;
-	}
-
-	toTypeResult() {
-		return augment_type_with_SubTypeChain(
-			AbstractWithArgs.toTypeResultStatic(this),
-			this.sub_type_chain,
-		);
-	}
-
-	withArray(as_array: as_array_config) {
-		return new WithSubTypeChainAndArray(this, as_array);
-	}
-}
-
-class WithOnlySubTypeChain extends AbstractNameOnly<
-	IndexedAccessTypeNode
-> implements WithSubTypeChain {
-	readonly sub_type_chain: [string, ...string[]];
-
-	constructor(
-		name: NameOnly['name'],
-		sub_type_chain: WithSubTypeChain['sub_type_chain'],
-	) {
-		super(name);
-
-		this.sub_type_chain = sub_type_chain;
-	}
-
-	toTypeResult() {
-		return augment_type_with_SubTypeChain(
-			AbstractNameOnly.toTypeResultStatic(this),
-			this.sub_type_chain,
-		);
-	}
-
-	withArray(as_array: as_array_config) {
-		return new WithSubTypeChainAndArray(this, as_array);
-	}
-}
-
-class WithAliasAndSubTypeChain extends AbstractAliased<
-	IndexedAccessTypeNode
-> implements WithSubTypeChain {
-	readonly sub_type_chain: [string, ...string[]];
-
-	constructor(
-		name: NameOnly['name'],
-		as: Aliased['as'],
-		sub_type_chain: WithSubTypeChain['sub_type_chain'],
-	) {
-		super(name, as);
-
-		this.sub_type_chain = sub_type_chain;
-	}
-
-	toTypeResult(): IndexedAccessTypeNode {
-		return augment_type_with_SubTypeChain(
-			AbstractAliased.toTypeResultStatic(this),
-			this.sub_type_chain,
-		);
-	}
-
-	withArray(as_array: as_array_config) {
-		return new WithSubTypeChainAndArray(this, as_array);
-	}
-}
-
-interface WithArray extends HasOutput<TupleTypeNode | ArrayTypeNode> {
-	readonly as_array: as_array_config;
-}
-
-function augment_type_with_AsArrayConfig<
-	ParentTypeResult extends (
-		| TypeReferenceNode
-		| IndexedAccessTypeNode
-	),
->(
-	type: () => ParentTypeResult,
-	as_array: as_array_config,
-): TupleTypeNode | ArrayTypeNode {
-	if (true === as_array || as_array.minimum < 1) {
-		return factory.createArrayTypeNode(type());
-	}
-
-	const args: ParentTypeResult[] = [];
-
-
-	const minimum = Math.max(1, as_array.minimum);
-
-	for (let i = 0; i < minimum; ++i) {
-		args.push(type());
-	}
-
-	return factory.createTupleTypeNode(
-		[
-			...args,
-			factory.createRestTypeNode(factory.createArrayTypeNode(type())),
-		],
-	);
-}
-
-class WithArgsAndArray extends AbstractWithArgs<(
-	| ArrayTypeNode
-	| TupleTypeNode
-)> implements WithArray {
-	readonly as_array: as_array_config;
-
-	constructor(
-		name: WithArgs['name'],
-		args: WithArgs['args'],
-		as_array: as_array_config,
-		options: {
-			as?: Exclude<WithArgs['as'], undefined>,
-		},
-	) {
-		super(
-			name,
-			args,
-			options?.as,
-		);
-
+		this.#parent = parent;
 		this.as_array = as_array;
 	}
 
 	toTypeResult() {
-		return augment_type_with_AsArrayConfig(
-			() => AbstractWithArgs.toTypeResultStatic(this),
-			this.as_array,
-		);
-	}
-}
+		if (true === this.as_array || this.as_array.minimum < 1) {
+			return factory.createArrayTypeNode(this.#parent.toTypeResult());
+		}
 
-class WithOnlyArray extends AbstractNameOnly<(
-	| ArrayTypeNode
-	| TupleTypeNode
-)> implements WithArray {
-	readonly as_array: as_array_config;
+		const args: ReturnType<HasOutput['toTypeResult']>[] = [];
 
-	constructor(
-		name: WithArgs['name'],
-		as_array: as_array_config,
-	) {
-		super(name);
+		const minimum = Math.max(1, this.as_array.minimum);
 
-		this.as_array = as_array;
-	}
+		for (let i = 0; i < minimum; ++i) {
+			args.push(this.#parent.toTypeResult());
+		}
 
-	toTypeResult() {
-		return augment_type_with_AsArrayConfig(
-			() => AbstractNameOnly.toTypeResultStatic(this),
-			this.as_array,
-		);
-	}
-}
-
-class WithAliasAndArray extends AbstractAliased<(
-	| ArrayTypeNode
-	| TupleTypeNode
-)> implements WithArray {
-	readonly as_array: as_array_config;
-
-	constructor(
-		name: NameOnly['name'],
-		as: Aliased['as'],
-		as_array: as_array_config,
-	) {
-		super(name, as);
-
-		this.as_array = as_array;
-	}
-
-	toTypeResult() {
-		return augment_type_with_AsArrayConfig(
-			() => AbstractAliased.toTypeResultStatic(this),
-			this.as_array,
+		return factory.createTupleTypeNode(
+			[
+				...args,
+				factory.createRestTypeNode(
+					factory.createArrayTypeNode(this.#parent.toTypeResult()),
+				),
+			],
 		);
 	}
 }
