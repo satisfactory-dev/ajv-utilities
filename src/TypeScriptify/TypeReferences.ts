@@ -82,14 +82,7 @@ abstract class Type {
 	abstract withArray(config: as_array_config): WithArray;
 }
 
-abstract class AbstractNameOnly<
-	TypeResult extends (
-		| TypeReferenceNode
-		| IndexedAccessTypeNode
-		| ArrayTypeNode
-		| TupleTypeNode
-	),
-> extends Type implements HasOutput<TypeResult> {
+export class NameOnly extends Type implements HasOutput<TypeReferenceNode> {
 	protected toId(): string {
 		return this.name;
 	}
@@ -102,15 +95,8 @@ abstract class AbstractNameOnly<
 		);
 	}
 
-	abstract toTypeResult(): TypeResult;
-
-	static toTypeResultStatic(from: AbstractNameOnly<(
-		| TypeReferenceNode
-		| IndexedAccessTypeNode
-		| ArrayTypeNode
-		| TupleTypeNode
-	)>): TypeReferenceNode {
-		return factory.createTypeReferenceNode(from.name);
+	toTypeResult(): TypeReferenceNode {
+		return factory.createTypeReferenceNode(this.name);
 	}
 
 	withArgs(args: [string, ...string[]]): WithArgs {
@@ -140,22 +126,7 @@ abstract class AbstractNameOnly<
 	}
 }
 
-export class NameOnly extends AbstractNameOnly<
-	TypeReferenceNode
-> implements HasOutput<TypeReferenceNode> {
-	toTypeResult(): TypeReferenceNode {
-		return AbstractNameOnly.toTypeResultStatic(this);
-	}
-}
-
-abstract class AbstractAliased<
-	TypeResult extends (
-		| TypeReferenceNode
-		| IndexedAccessTypeNode
-		| ArrayTypeNode
-		| TupleTypeNode
-	),
-> extends Type implements HasOutput<TypeResult> {
+export class Aliased extends Type implements HasOutput<TypeReferenceNode> {
 	readonly as: Exclude<string, ''>;
 
 	constructor(name: Aliased['name'], as: Aliased['as']) {
@@ -176,7 +147,9 @@ abstract class AbstractAliased<
 		);
 	}
 
-	abstract toTypeResult(): TypeResult;
+	toTypeResult(): TypeReferenceNode {
+		return factory.createTypeReferenceNode(this.as);
+	}
 
 	withArgs(args: [string, ...string[]]): WithArgs {
 		return new WithArgs(this.name, args, this.as);
@@ -203,33 +176,9 @@ abstract class AbstractAliased<
 	toString() {
 		return to_string(this);
 	}
-
-	static toTypeResultStatic(
-		from: AbstractAliased<(
-			| TypeReferenceNode
-			| IndexedAccessTypeNode
-			| ArrayTypeNode
-			| TupleTypeNode
-		)>,
-	): TypeReferenceNode {
-		return factory.createTypeReferenceNode(from.as);
-	}
 }
 
-export class Aliased extends AbstractAliased<TypeReferenceNode> {
-	toTypeResult(): TypeReferenceNode {
-		return AbstractAliased.toTypeResultStatic(this);
-	}
-}
-
-abstract class AbstractWithArgs<
-	TypeResult extends (
-		| TypeReferenceNode
-		| IndexedAccessTypeNode
-		| ArrayTypeNode
-		| TupleTypeNode
-	),
-> implements HasOutput<TypeResult> {
+class WithArgs implements HasOutput<TypeReferenceNode> {
 	readonly name: Exclude<string, ''>;
 
 	readonly as: Exclude<string, ''> | undefined;
@@ -246,7 +195,14 @@ abstract class AbstractWithArgs<
 		this.as = as;
 	}
 
-	abstract toTypeResult(): TypeResult;
+	toTypeResult() {
+		return factory.createTypeReferenceNode(
+			this.as || this.name,
+			this.args.map((value) => factory.createLiteralTypeNode(
+				factory.createStringLiteral(value),
+			)),
+		);
+	}
 
 	toString() {
 		return to_string(this);
@@ -268,26 +224,6 @@ abstract class AbstractWithArgs<
 			this,
 			config,
 		);
-	}
-
-	static toTypeResultStatic(from: AbstractWithArgs<(
-		| TypeReferenceNode
-		| IndexedAccessTypeNode
-		| ArrayTypeNode
-		| TupleTypeNode
-	)>) {
-		return factory.createTypeReferenceNode(
-			from.as || from.name,
-			from.args.map((value) => factory.createLiteralTypeNode(
-				factory.createStringLiteral(value),
-			)),
-		);
-	}
-}
-
-class WithArgs extends AbstractWithArgs<TypeReferenceNode> {
-	toTypeResult() {
-		return AbstractWithArgs.toTypeResultStatic(this);
 	}
 }
 
