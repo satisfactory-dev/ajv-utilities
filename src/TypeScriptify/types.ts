@@ -69,6 +69,11 @@ export type remove_dataCtxKeys = [
 	>)[],
 ];
 
+type specify_type = [
+	specify_types_config, // actual type information
+	string, // path to source relative to destination file or npm module
+];
+
 export type Config = {
 	remove_schema: boolean,
 	remove_dataCtxKeys: (
@@ -76,9 +81,12 @@ export type Config = {
 		| {[key: string]: remove_dataCtxKeys}
 	),
 	specify_types: {
-		[key: string]: [specify_types_config, string],
+		[key: string]: specify_type,
 	},
 	specify_types_by_validate_function_name: {
-		[key: `validate${number}`]: [specify_types_config, string],
+		[key: `validate${number}`]: specify_type,
+	},
+	specify_types_by_export_name: {
+		[key: string]: specify_type,
 	},
 };

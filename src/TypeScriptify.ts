@@ -39,6 +39,7 @@ import {
 } from './TypeScriptify/TypeReferences.ts';
 
 import {
+	SpecifyTypesByExportName,
 	SpecifyTypesBySourceURL,
 	SpecifyTypesByValidateFunction,
 } from './TypeScriptify/preprocessors/SpecifyTypes.ts';
@@ -216,6 +217,10 @@ export default class TypeScript {
 				),
 				new SpecifyModifyCandidates(
 					specify_modify_options_name_config,
+				),
+				new SpecifyTypesByExportName(
+					prepend_with_imports,
+					specify_types,
 				),
 			],
 			[

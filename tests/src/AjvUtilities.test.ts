@@ -239,6 +239,9 @@ void describe('AjvUtilities', () => {
 		const version_6_alt2_expectation = await readFile(
 			`${import.meta.dirname}/../fixtures/version_6.alt2.ts`,
 		);
+		const version_6_alt3_expectation = await readFile(
+			`${import.meta.dirname}/../fixtures/version_6.alt3.ts`,
+		);
 
 		const data_sets: (
 			| [string, string]
@@ -1349,6 +1352,46 @@ void describe('AjvUtilities', () => {
 						],
 						validate43: [
 							'stub_Settings',
+							'./types.ts',
+						],
+					},
+				},
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: true,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
+							CanConvertTypeJsonDefs,
+							version_6,
+						],
+					}),
+					{
+						is_IntermediaryCalculation: `${
+							CanConvertTypeJsonDefs.$id
+						}#/$defs/IntermediaryCalculation`,
+						version_6_validator: version_6.$id,
+					},
+				),
+				version_6_alt3_expectation.toString(),
+				{
+					specify_types: {
+						[version_6.$id]: [
+							'stub_State_Json',
+							'./types.ts',
+						],
+					},
+					specify_types_by_export_name: {
+						is_IntermediaryCalculation: [
+							'stub_IntermediaryCalculation',
 							'./types.ts',
 						],
 					},
