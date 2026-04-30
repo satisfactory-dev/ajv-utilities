@@ -54,7 +54,14 @@ function to_string(instance: HasOutput) {
 	);
 }
 
-abstract class Type {
+abstract class Type<
+	TypeResult extends (
+		| TypeReferenceNode
+		| IndexedAccessTypeNode
+		| TupleTypeNode
+		| ArrayTypeNode
+	),
+> implements HasOutput<TypeResult> {
 	readonly name: Exclude<string, ''>;
 
 	#id: Exclude<string, ''> | undefined;
@@ -71,18 +78,6 @@ abstract class Type {
 		this.name = name;
 	}
 
-	protected abstract toId(): string;
-
-	abstract toImportSpecifier(): ImportSpecifier;
-
-	abstract withArgs(args: [string, ...string[]]): WithArgs;
-
-	abstract withSubTypeChain(chain: [string, ...string[]]): WithSubTypeChain;
-
-	abstract withArray(config: as_array_config): WithArray;
-}
-
-export class NameOnly extends Type implements HasOutput<TypeReferenceNode> {
 	protected toId(): string {
 		return this.name;
 	}
@@ -95,13 +90,9 @@ export class NameOnly extends Type implements HasOutput<TypeReferenceNode> {
 		);
 	}
 
-	toTypeResult(): TypeReferenceNode {
-		return factory.createTypeReferenceNode(this.name);
-	}
+	abstract withArgs(args: [string, ...string[]]): WithArgs;
 
-	withArgs(args: [string, ...string[]]): WithArgs {
-		return new WithArgs(this.name, args);
-	}
+	abstract toTypeResult(): TypeResult;
 
 	withSubTypeChain(
 		sub_type_chain: [string, ...string[]],
@@ -126,7 +117,17 @@ export class NameOnly extends Type implements HasOutput<TypeReferenceNode> {
 	}
 }
 
-export class Aliased extends Type implements HasOutput<TypeReferenceNode> {
+export class NameOnly extends Type<TypeReferenceNode> {
+	toTypeResult(): TypeReferenceNode {
+		return factory.createTypeReferenceNode(this.name);
+	}
+
+	withArgs(args: [string, ...string[]]): WithArgs {
+		return new WithArgs(this.name, args);
+	}
+}
+
+export class Aliased extends Type<TypeReferenceNode> {
 	readonly as: Exclude<string, ''>;
 
 	constructor(name: Aliased['name'], as: Aliased['as']) {
@@ -154,33 +155,9 @@ export class Aliased extends Type implements HasOutput<TypeReferenceNode> {
 	withArgs(args: [string, ...string[]]): WithArgs {
 		return new WithArgs(this.name, args, this.as);
 	}
-
-	withSubTypeChain(
-		sub_type_chain: [string, ...string[]],
-	): WithSubTypeChain {
-		return new WithSubTypeChain(
-			this,
-			sub_type_chain,
-		);
-	}
-
-	withArray(
-		config: as_array_config,
-	): WithArray {
-		return new WithArray(
-			this,
-			config,
-		);
-	}
-
-	toString() {
-		return to_string(this);
-	}
 }
 
-class WithArgs implements HasOutput<TypeReferenceNode> {
-	readonly name: Exclude<string, ''>;
-
+class WithArgs extends Type<TypeReferenceNode> {
 	readonly as: Exclude<string, ''> | undefined;
 
 	readonly args: [string, ...string[]];
@@ -190,7 +167,8 @@ class WithArgs implements HasOutput<TypeReferenceNode> {
 		args: WithArgs['args'],
 		as?: Exclude<WithArgs['as'], undefined>,
 	) {
-		this.name = name;
+		super(name);
+
 		this.args = args;
 		this.as = as;
 	}
@@ -224,6 +202,10 @@ class WithArgs implements HasOutput<TypeReferenceNode> {
 			this,
 			config,
 		);
+	}
+
+	withArgs(args: WithArgs['args']) {
+		return new WithArgs(this.name, args, this.as);
 	}
 }
 
