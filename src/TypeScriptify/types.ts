@@ -3,9 +3,7 @@ import type {
 } from 'ajv';
 
 import type {
-	Aliased,
-	NameOnly,
-	WithArgs,
+	Type,
 	WithArray,
 	WithSubTypeChain,
 } from './TypeReferences.ts';
@@ -57,9 +55,7 @@ export type specify_types_config = (
 
 export type specify_types_instance = {
 	[key: string]: (
-		| NameOnly
-		| Aliased
-		| WithArgs
+		| Type
 		| WithSubTypeChain
 		| WithArray
 	),
