@@ -1375,13 +1375,13 @@ void describe('AjvUtilities', () => {
 						],
 					}),
 					{
+						version_6_validator: version_6.$id,
 						is_IntermediaryCalculation: `${
 							CanConvertTypeJsonDefs.$id
 						}#/$defs/IntermediaryCalculation`,
 						is_CanConvertTypeJson: `${
 							CanConvertTypeJsonDefs.$id
 						}#/$defs/CanConvertTypeJson`,
-						version_6_validator: version_6.$id,
 					},
 				),
 				version_6_alt3_expectation.toString(),
