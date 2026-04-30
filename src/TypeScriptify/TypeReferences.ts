@@ -176,24 +176,6 @@ class WithArgs extends Type<TypeReferenceNode> {
 		);
 	}
 
-	withSubTypeChain(
-		sub_type_chain: [string, ...string[]],
-	): WithSubTypeChain {
-		return new WithSubTypeChain(
-			this,
-			sub_type_chain,
-		);
-	}
-
-	withArray(
-		config: as_array_config,
-	): WithArray {
-		return new WithArray(
-			this,
-			config,
-		);
-	}
-
 	withArgs(args: WithArgs['args']) {
 		return new WithArgs(this.name, args, this.as);
 	}
