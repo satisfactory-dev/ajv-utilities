@@ -1,3 +1,4 @@
+// oxlint-disable @stylistic/max-len
 import {
 	readFile,
 	writeFile,

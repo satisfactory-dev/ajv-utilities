@@ -77,6 +77,26 @@ type instancePath_initializer = (
 	| CandidateBinaryExpressionStringConcat
 );
 
+type argument_1_property_instancePath = (
+	& (
+		| ShorthandPropertyAssignment
+		| (
+			& PropertyAssignment
+			& {
+				initializer: instancePath_initializer,
+			}
+		)
+	)
+	& {
+		name: (
+			& Identifier
+			& {
+				text: 'instancePath',
+			}
+		),
+	}
+);
+
 type Candidate = (
 	& CallExpression
 	& {
@@ -107,25 +127,7 @@ type Candidate = (
 							& NodeArray<PropertyAssignment>
 							& {
 								length: 5,
-								0: (
-									& (
-										| ShorthandPropertyAssignment
-										| (
-											& PropertyAssignment
-											& {
-												initializer: instancePath_initializer,
-											}
-										)
-									)
-									& {
-										name: (
-											& Identifier
-											& {
-												text: 'instancePath',
-											}
-										),
-									}
-								),
+								0: argument_1_property_instancePath,
 								2: (
 									& PropertyAssignment
 									& {
@@ -419,9 +421,13 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 		const existing_entries = Object.entries(existing);
 
 		for (const [
+			// oxlint-disable-next-line no-unused-vars
 			key,
 			[
+				// oxlint-disable-next-line no-unused-vars
 				as_object,
+
+				// oxlint-disable-next-line no-unused-vars
 				source,
 				sub_types,
 				as_string,
