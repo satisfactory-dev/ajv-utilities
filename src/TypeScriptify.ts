@@ -110,6 +110,14 @@ import HoistDeclarationAsZero from './TypeScriptify/modifiers/HoistDeclarationAs
 // oxlint-disable-next-line @stylistic/max-len
 import PatchDefinitelyHasEvaluated from './TypeScriptify/patchers/PatchDefinitelyHasEvaluated.ts';
 
+// oxlint-disable-next-line @stylistic/max-len
+import type {
+	ValidateCallInfo,
+} from './TypeScriptify/preprocessors/CollectValidateCalls.ts';
+
+// oxlint-disable-next-line @stylistic/max-len
+import CollectValidateCalls from './TypeScriptify/preprocessors/CollectValidateCalls.ts';
+
 export default class TypeScript {
 	ify(code: string, config: Partial<Config>): string {
 		code = esmify(code);
@@ -126,6 +134,17 @@ export default class TypeScript {
 			specify_modify_options_name_config
 		) = {};
 
+		const validate_calls = {};
+
+		const prepend_with_imports: prepend_with_imports = {
+			ajv: new Types(),
+			'@satisfactory-dev/ajv-utilities': new Types(),
+		};
+
+		let patch_with_is_array = false;
+		let patch_with_is_object = false;
+		let patch_with_definitely_has_evaluated = false;
+
 		let result = transform(source, [
 			(context) => this.#first_pass(
 				context,
@@ -133,8 +152,30 @@ export default class TypeScript {
 				specify_types,
 				specify_modify_options_name_config,
 				hoist_candidates,
+				validate_calls,
+				prepend_with_imports,
+				{
+					is_array: () => {
+						patch_with_is_array = true;
+					},
+					is_object: () => {
+						patch_with_is_object = true;
+					},
+					definitely_has_evaluated: () => {
+						patch_with_definitely_has_evaluated = true;
+					},
+				},
 			),
 		]);
+
+		if (Object.keys(validate_calls).length > 0) {
+			CollectValidateCalls.specify_types_from_collected(
+				validate_calls,
+				config,
+				specify_types,
+				prepend_with_imports,
+			);
+		}
 
 		result = transform(result.transformed[0], [
 			(context) => this.#second_pass(
@@ -143,6 +184,14 @@ export default class TypeScript {
 				Object.freeze(specify_types),
 				Object.freeze(specify_modify_options_name_config),
 				Object.freeze(hoist_candidates),
+				prepend_with_imports,
+				{
+					is_array: patch_with_is_array,
+					is_object: patch_with_is_object,
+					definitely_has_evaluated: (
+						patch_with_definitely_has_evaluated
+					),
+				},
 			),
 		]);
 
@@ -193,20 +242,24 @@ export default class TypeScript {
 		specify_types: specify_types_instance,
 		specify_modify_options_name_config: specify_modify_options_name_config,
 		hoist_candidates: hoist_candidates,
+		validate_calls: {
+			[key: string]: [
+				ValidateCallInfo,
+				...ValidateCallInfo[],
+			],
+		},
+		prepend_with_imports: prepend_with_imports,
+		patch_with: {
+			is_array: () => void,
+			is_object: () => void,
+			definitely_has_evaluated: () => void,
+		},
 	) {
-		const prepend_with_imports: prepend_with_imports = {
-			ajv: new Types(),
-			'@satisfactory-dev/ajv-utilities': new Types(),
-		};
-
-		let patch_with_is_array = false;
-		let patch_with_is_object = false;
-		let patch_with_definitely_has_evaluated = false;
-
 		const visitor = this.#generate_visitor(
 			context,
 			config,
 			[
+				new CollectValidateCalls(validate_calls),
 				new SpecifyTypesBySourceURL(
 					prepend_with_imports,
 					specify_types,
@@ -236,12 +289,8 @@ export default class TypeScript {
 				new AddErrorObjectType(prepend_with_imports),
 				new QuestionableCondition(),
 				new Ucs2LengthCorrection(),
-				new PatchIsObject(() => {
-					patch_with_is_object = true;
-				}),
-				new PatchIsArray(() => {
-					patch_with_is_array = true;
-				}),
+				new PatchIsObject(patch_with.is_object),
+				new PatchIsArray(patch_with.is_array),
 				new SpecifyIndicesType(),
 				new FindHoistCandidate(hoist_candidates),
 				new TypecastArrayAsConst(),
@@ -249,9 +298,40 @@ export default class TypeScript {
 				new HoistDeclarationAsZero(),
 				new PatchDefinitelyHasEvaluated(
 					prepend_with_imports,
-					() => {
-						patch_with_definitely_has_evaluated = true;
-					},
+					patch_with.definitely_has_evaluated,
+				),
+			],
+		);
+
+		return (
+			source: SourceFile,
+		) => visitNode(source, visitor) as SourceFile;
+	}
+
+	#second_pass(
+		context: TransformationContext,
+		config: Partial<Config>,
+		specify_types: Readonly<specify_types_instance>,
+		specify_modify_options_name_config: Readonly<
+			specify_modify_options_name_config
+		>,
+		hoist_candidates: Readonly<hoist_candidates>,
+		prepend_with_imports: prepend_with_imports,
+		patch_with: {
+			is_array: boolean,
+			is_object: boolean,
+			definitely_has_evaluated: boolean,
+		},
+	) {
+		const visitor = this.#generate_visitor(
+			context,
+			config,
+			[],
+			[
+				new SpecifyTypePredicate(specify_types),
+				new HoistDeclarationsHere(hoist_candidates),
+				new ModifyValidateOptionsByConfig(
+					specify_modify_options_name_config,
 				),
 			],
 		);
@@ -285,21 +365,21 @@ export default class TypeScript {
 
 			let modified: Statement[] | undefined = undefined;
 
-			if (patch_with_is_array) {
+			if (patch_with.is_array) {
 				modified = [
 					PatchIsArray.patch(),
 					...(modified || result.statements),
 				];
 			}
 
-			if (patch_with_is_object) {
+			if (patch_with.is_object) {
 				modified = [
 					PatchIsObject.patch(),
 					...(modified || result.statements),
 				];
 			}
 
-			if (patch_with_definitely_has_evaluated) {
+			if (patch_with.definitely_has_evaluated) {
 				modified = [
 					PatchDefinitelyHasEvaluated.patch(),
 					...(modified || result.statements),
@@ -324,36 +404,5 @@ export default class TypeScript {
 		};
 
 		return transformer;
-	}
-
-	#second_pass(
-		context: TransformationContext,
-		config: Partial<Config>,
-		specify_types: Readonly<specify_types_instance>,
-		specify_modify_options_name_config: Readonly<
-			specify_modify_options_name_config
-		>,
-		hoist_candidates: Readonly<hoist_candidates>,
-	) {
-		if (Object.keys(specify_types).length < 1) {
-			return (source: SourceFile) => source;
-		}
-
-		const visitor = this.#generate_visitor(
-			context,
-			config,
-			[],
-			[
-				new SpecifyTypePredicate(specify_types),
-				new HoistDeclarationsHere(hoist_candidates),
-				new ModifyValidateOptionsByConfig(
-					specify_modify_options_name_config,
-				),
-			],
-		);
-
-		return (
-			source: SourceFile,
-		) => visitNode(source, visitor) as SourceFile;
 	}
 }

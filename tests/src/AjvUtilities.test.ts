@@ -1390,8 +1390,138 @@ void describe('AjvUtilities', () => {
 						[version_6.$id]: [
 							'stub_State_Json',
 							'./types.ts',
+							[
+								[
+									'stub_Pool',
+									'./types.ts',
+									{
+										instancePath_partial: '/pools/',
+									},
+									[
+										[
+											{
+												name: 'stub_Pool',
+												sub_type_chain: ['production'],
+											},
+											'./types.ts',
+											{
+												instancePath: '/production',
+												parentDataProperty: 'production',
+											},
+										],
+										[
+											'stub_Distributor_json',
+											'./types.ts',
+											{
+												instancePath_partial: '/outputs',
+												parentDataProperty: 'outputs',
+											},
+											[
+												[
+													'stub_CanConvertJson',
+													'./types.ts',
+													{
+														instancePath_partial: '/instructions/',
+														parentDataProperty: 'amount',
+													},
+												],
+											],
+										],
+									],
+								],
+							],
 						],
 					},
+
+					/*
+					specify_types_by_validate_function_call: {
+						'*': [
+							[
+								[
+									'stub_IntermediaryNumber',
+									'./types.ts',
+									[
+										[
+											'stub_amount_string_flexible',
+											'./types.ts',
+											{
+												instancePath_partial: '/value',
+												parentDataProperty: 'value',
+											},
+										],
+									],
+								],
+							],
+						],
+						[version_6.$id]: [
+							[
+								'stub_Pool',
+								'./types.ts',
+								{
+									instancePath_partial: '/pools/',
+								},
+								[
+									[
+										{
+											name: 'stub_Pool',
+											sub_type_chain: ['production'],
+										},
+										'./types.ts',
+										{
+											instancePath: '/production',
+											parentDataProperty: 'production',
+										},
+									],
+									[
+										'stub_Distributor_json',
+										'./types.ts',
+										{
+											instancePath_partial: '/outputs',
+											parentDataProperty: 'outputs',
+										},
+										[
+											[
+												'stub_CanConvertJson',
+												'./types.ts',
+												{
+													instancePath_partial: '/instructions/',
+													parentDataProperty: 'amount',
+												},
+											],
+										],
+									],
+								],
+							],
+							[
+								'stub_Settings',
+								'./types.ts',
+								{
+									instancePath_partial: '/settings',
+									parentDataProperty: 'settings',
+								},
+							],
+							[
+								{
+									name: 'stub_Collection',
+									as_array: {minimum: 0},
+								},
+								'./types.ts',
+								{
+									instancePath_partial: '/collections',
+								},
+								[
+									[
+										'stub_Collection',
+										'./types.ts',
+										{
+											instancePath_partial: '/',
+										},
+									],
+								],
+							],
+						],
+					},
+					*/
 					specify_types_by_export_name: {
 						is_IntermediaryCalculation: [
 							'stub_IntermediaryCalculation',

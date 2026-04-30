@@ -236,13 +236,55 @@ export class Types {
 		return this.list_of_types ? this.list_of_types.length : 0;
 	}
 
-	#is_object_type(
+	static #is_object_type(
 		type: specify_types_config,
 	): type is Exclude<specify_types_config, string> {
 		return 'string' !== typeof type;
 	}
 
 	add<T extends specify_types_config>(type: T) {
+		return Types.toObject(
+			type,
+			(as_object) => {
+				if (undefined === this.list_of_types) {
+					this.list_of_types = [as_object];
+				} else {
+					const maybe = this.list_of_types.find((
+						maybe,
+					) => maybe.id === as_object.id);
+
+					if (!maybe) {
+						this.list_of_types.push(as_object);
+					} else {
+						as_object = maybe;
+					}
+				}
+
+				return as_object;
+			},
+		);
+	}
+
+	* [Symbol.iterator]() {
+		if (!this.list_of_types) {
+			return;
+		}
+
+		for (const type of this.list_of_types) {
+			yield type;
+		}
+	}
+
+	static toObject(
+		type: specify_types_config,
+		juggle?: (as_object: (
+			| Type<Exclude<string, ''>>
+			| Type<undefined>
+		)) => (
+			| Type<Exclude<string, ''>>
+			| Type<undefined>
+		),
+	) {
 		const is_object = this.#is_object_type(type);
 
 		let as_object: (
@@ -258,18 +300,8 @@ export class Types {
 				)
 		);
 
-		if (undefined === this.list_of_types) {
-			this.list_of_types = [as_object];
-		} else {
-			const maybe = this.list_of_types.find((
-				maybe,
-			) => maybe.id === as_object.id);
-
-			if (!maybe) {
-				this.list_of_types.push(as_object);
-			} else {
-				as_object = maybe;
-			}
+		if (juggle) {
+			as_object = juggle(as_object);
 		}
 
 		if (is_object) {
@@ -295,16 +327,6 @@ export class Types {
 		}
 
 		return as_object;
-	}
-
-	* [Symbol.iterator]() {
-		if (!this.list_of_types) {
-			return;
-		}
-
-		for (const type of this.list_of_types) {
-			yield type;
-		}
 	}
 }
 

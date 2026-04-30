@@ -69,10 +69,48 @@ export type remove_dataCtxKeys = [
 	>)[],
 ];
 
-type specify_type = [
+type specify_type_without_nested = [
 	specify_types_config, // actual type information
 	string, // path to source relative to destination file or npm module
 ];
+
+export type specify_type_with_nested = [
+	...specify_type_without_nested,
+	[
+		specify_type_nested,
+		...specify_type_nested[],
+	],
+];
+
+type specify_type = (
+	| specify_type_without_nested
+	| specify_type_with_nested
+);
+
+type specify_type_nested = (
+	| [
+		specify_types_config,
+		string,
+		Partial<{
+			instancePath: string,
+			instancePath_partial: string,
+			parentDataProperty: string,
+		}>,
+	]
+	| [
+		specify_types_config,
+		string,
+		Partial<{
+			instancePath: string,
+			instancePath_partial: string,
+			parentDataProperty: string,
+		}>,
+		[
+			specify_type_nested,
+			...specify_type_nested[],
+		],
+	]
+);
 
 export type Config = {
 	remove_schema: boolean,
