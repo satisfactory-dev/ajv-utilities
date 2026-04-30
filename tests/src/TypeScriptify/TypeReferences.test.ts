@@ -6,6 +6,7 @@ import {
 import assert from 'node:assert/strict';
 
 import {
+	to_string,
 	Types,
 } from '../../../src/TypeScriptify/TypeReferences.ts';
 
@@ -82,8 +83,8 @@ void describe(Types.name, () => {
 				const first = instance.add(a);
 				const second = instance.add(b);
 
-				assert.equal(first.toString(), expected_first_as_string);
-				assert.equal(second.toString(), expected_second_as_string);
+				assert.equal(to_string(first), expected_first_as_string);
+				assert.equal(to_string(second), expected_second_as_string);
 			});
 		}
 	});

@@ -38,11 +38,9 @@ interface HasOutput<
 	),
 > {
 	toTypeResult(): TypeResult;
-
-	toString(): string;
 }
 
-function to_string(instance: HasOutput) {
+export function to_string(instance: HasOutput) {
 	const printer = createPrinter({
 		omitTrailingSemicolon: true,
 	});
@@ -111,10 +109,6 @@ abstract class Type<
 			config,
 		);
 	}
-
-	toString() {
-		return to_string(this);
-	}
 }
 
 export class NameOnly extends Type<TypeReferenceNode> {
@@ -182,10 +176,6 @@ class WithArgs extends Type<TypeReferenceNode> {
 		);
 	}
 
-	toString() {
-		return to_string(this);
-	}
-
 	withSubTypeChain(
 		sub_type_chain: [string, ...string[]],
 	): WithSubTypeChain {
@@ -250,10 +240,6 @@ class WithSubTypeChain implements HasOutput<IndexedAccessTypeNode> {
 
 		return access;
 	}
-
-	toString() {
-		return to_string(this);
-	}
 }
 
 class WithArray implements HasOutput<TupleTypeNode | ArrayTypeNode> {
@@ -290,10 +276,6 @@ class WithArray implements HasOutput<TupleTypeNode | ArrayTypeNode> {
 				),
 			],
 		);
-	}
-
-	toString() {
-		return to_string(this);
 	}
 }
 
