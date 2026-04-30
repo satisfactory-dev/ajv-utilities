@@ -1378,6 +1378,9 @@ void describe('AjvUtilities', () => {
 						is_IntermediaryCalculation: `${
 							CanConvertTypeJsonDefs.$id
 						}#/$defs/IntermediaryCalculation`,
+						is_CanConvertTypeJson: `${
+							CanConvertTypeJsonDefs.$id
+						}#/$defs/CanConvertTypeJson`,
 						version_6_validator: version_6.$id,
 					},
 				),
@@ -1392,6 +1395,10 @@ void describe('AjvUtilities', () => {
 					specify_types_by_export_name: {
 						is_IntermediaryCalculation: [
 							'stub_IntermediaryCalculation',
+							'./types.ts',
+						],
+						is_CanConvertTypeJson: [
+							'stub_CanConvertJson',
 							'./types.ts',
 						],
 					},

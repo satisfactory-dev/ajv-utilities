@@ -1,6 +1,6 @@
 import type { ErrorObject, ValidateFunction } from 'ajv';
 import type { Is } from '@satisfactory-dev/ajv-utilities';
-import type { stub_IntermediaryCalculation, stub_State_Json } from './types.ts';
+import type { stub_CanConvertJson, stub_IntermediaryCalculation, stub_State_Json } from './types.ts';
 function ajv_utiltiies__definitely_evaluated<T>(maybe: Is<T>): Exclude<Is<T>["evaluated"], undefined> { if (undefined === maybe.evaluated)
     throw new Error(`${maybe.name}.evaluated not set!`); return maybe.evaluated; }
 function ajv_utilities__is_probably_object(maybe: unknown): maybe is Record<string, unknown> { return !!maybe && typeof maybe === "object" && !Array.isArray(maybe); }
@@ -484,26 +484,16 @@ function validate21(data: unknown, { instancePath = "", parentData, parentDataPr
     return errors === 0;
 }
 (validate21 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
-export const version_6_validator = validate29;
-const schema39 = { "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "production-planner-save-version-6", "type": "object", "required": ["version", "collections", "groups", "pools", "settings"] as const, "additionalProperties": false, "$defs": { "id": { "type": "integer", "minimum": 1 }, "name": { "type": "string", "minLength": 1, "pattern": "^(?!\\s+).+(?<!\\s)$" }, "pool_reference": { "$ref": "#/$defs/id" }, "recipe_selection": { "type": "object", "additionalProperties": false, "minProperties": 1, "patternProperties": { "^(?:Desc|BP|Foundation)_[^.]+_C$": { "type": "string", "pattern": "^(?:Recipe|Build)_.+_C$" } } }, "collection": { "type": "object", "required": ["id", "items"] as const, "unevaluatedProperties": false, "additionalProperties": false, "properties": { "id": { "$ref": "#/$defs/id" }, "name": { "$ref": "#/$defs/name" }, "recipe_selection": { "$ref": "#/$defs/recipe_selection" }, "items": { "type": "array", "minItems": 0, "items": { "$ref": "#/$defs/id" } } } }, "collection_array": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/collection" } }, "production_set": { "type": "object", "additionalProperties": false, "patternProperties": { "^(?:Desc|BP|Foundation)_[^.]+_C$": { "$ref": "docs.json.ts--production-planner--lib--CanConvertTypeJsonDefs#/$defs/CanConvertTypeJson" } } }, "outputs": { "type": "object", "required": ["instructions"] as const, "additionalProperties": false, "properties": { "instructions": { "type": "object", "minProperties": 1, "additionalProperties": false, "patternProperties": { "^(?:Desc|BP|Foundation)_[^.]+_C$": { "type": "array", "minItems": 1, "items": { "type": "object", "required": ["amount", "destination"] as const, "additionalProperties": false, "properties": { "amount": { "$ref": "docs.json.ts--production-planner--lib--CanConvertTypeJsonDefs#/$defs/CanConvertTypeJson" }, "destination": { "type": "object", "required": ["type", "id"] as const, "additionalProperties": false, "properties": { "type": { "type": "string", "enum": ["pool"] as const }, "id": { "$ref": "#/$defs/id" } } } } } } } } } }, "pool": { "type": "object", "required": ["id"] as const, "unevaluatedProperties": false, "additionalProperties": false, "properties": { "id": { "$ref": "#/$defs/id" }, "name": { "$ref": "#/$defs/name" }, "production": { "$ref": "#/$defs/production_set" }, "recipe_selection": { "$ref": "#/$defs/recipe_selection" }, "manual_input": { "$ref": "#/$defs/production_set" }, "outputs": { "$ref": "#/$defs/outputs" } } }, "settings": { "type": "object", "required": ["auto_follow_current_pool", "calculator_display_mode", "current_pool_id", "show_full_pool_button_list", "auto_recalculate"] as const, "unevaluatedProperties": false, "additionalProperties": false, "properties": { "auto_follow_current_pool": { "type": "boolean" }, "calculator_display_mode": { "type": "boolean" }, "current_pool_id": { "$ref": "#/$defs/pool_reference" }, "recipe_selection": { "$ref": "#/$defs/recipe_selection" }, "show_full_pool_button_list": { "type": "boolean" }, "auto_recalculate": { "$ref": "#/$defs/settings_auto_recalculate" } } }, "settings_auto_recalculate": { "type": "object", "required": ["recipe_selection_ui_change"] as const, "unevaluatedProperties": false, "additionalProperties": false, "properties": { "recipe_selection_ui_change": { "type": "boolean" } } } }, "properties": { "version": { "type": "integer", "const": 6 }, "pools": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/pool" } }, "groups": { "$ref": "#/$defs/collection_array" }, "collections": { "$ref": "#/$defs/collection_array" }, "settings": { "$ref": "#/$defs/settings" } } };
-const schema40 = { "type": "object", "required": ["id"] as const, "unevaluatedProperties": false, "additionalProperties": false, "properties": { "id": { "$ref": "#/$defs/id" }, "name": { "$ref": "#/$defs/name" }, "production": { "$ref": "#/$defs/production_set" }, "recipe_selection": { "$ref": "#/$defs/recipe_selection" }, "manual_input": { "$ref": "#/$defs/production_set" }, "outputs": { "$ref": "#/$defs/outputs" } } };
-const schema41 = { "type": "integer", "minimum": 1 };
-const schema42 = { "type": "string", "minLength": 1, "pattern": "^(?!\\s+).+(?<!\\s)$" };
-const schema46 = { "type": "object", "additionalProperties": false, "minProperties": 1, "patternProperties": { "^(?:Desc|BP|Foundation)_[^.]+_C$": { "type": "string", "pattern": "^(?:Recipe|Build)_.+_C$" } } };
-const func1 = ucs2length;
-const pattern9 = new RegExp("^(?!\\s+).+(?<!\\s)$", "u");
-const pattern10 = new RegExp("^(?:Desc|BP|Foundation)_[^.]+_C$", "u");
-const pattern14 = new RegExp("^(?:Recipe|Build)_.+_C$", "u");
-const schema43 = { "type": "object", "additionalProperties": false, "patternProperties": { "^(?:Desc|BP|Foundation)_[^.]+_C$": { "$ref": "docs.json.ts--production-planner--lib--CanConvertTypeJsonDefs#/$defs/CanConvertTypeJson" } } };
-function validate32(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
+export const is_CanConvertTypeJson = validate29;
+function validate29(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
     rootData: unknown;
-}> = {}) {
+}> = {}): data is stub_CanConvertJson {
     let props0: (true | {
         [key: string]: true;
     } | undefined) = undefined;
     let vErrors: ErrorObject[] = [];
     let errors = 0;
-    const evaluated0 = ajv_utiltiies__definitely_evaluated(validate32);
+    const evaluated0 = ajv_utiltiies__definitely_evaluated(validate29);
     if (evaluated0?.dynamicProps) {
         evaluated0.props = undefined;
     }
@@ -619,17 +609,28 @@ function validate32(data: unknown, { instancePath = "", parentData, parentDataPr
             }
         }
     }
-    (validate32 as Is).errors = vErrors.length ? vErrors : null;
+    (validate29 as Is).errors = vErrors.length ? vErrors : null;
     evaluated0.props = props0;
     return errors === 0;
 }
-(validate32 as Is).evaluated = { "dynamicProps": true, "dynamicItems": false };
-function validate31(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
+(validate29 as Is).evaluated = { "dynamicProps": true, "dynamicItems": false };
+export const version_6_validator = validate32;
+const schema41 = { "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "production-planner-save-version-6", "type": "object", "required": ["version", "collections", "groups", "pools", "settings"] as const, "additionalProperties": false, "$defs": { "id": { "type": "integer", "minimum": 1 }, "name": { "type": "string", "minLength": 1, "pattern": "^(?!\\s+).+(?<!\\s)$" }, "pool_reference": { "$ref": "#/$defs/id" }, "recipe_selection": { "type": "object", "additionalProperties": false, "minProperties": 1, "patternProperties": { "^(?:Desc|BP|Foundation)_[^.]+_C$": { "type": "string", "pattern": "^(?:Recipe|Build)_.+_C$" } } }, "collection": { "type": "object", "required": ["id", "items"] as const, "unevaluatedProperties": false, "additionalProperties": false, "properties": { "id": { "$ref": "#/$defs/id" }, "name": { "$ref": "#/$defs/name" }, "recipe_selection": { "$ref": "#/$defs/recipe_selection" }, "items": { "type": "array", "minItems": 0, "items": { "$ref": "#/$defs/id" } } } }, "collection_array": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/collection" } }, "production_set": { "type": "object", "additionalProperties": false, "patternProperties": { "^(?:Desc|BP|Foundation)_[^.]+_C$": { "$ref": "docs.json.ts--production-planner--lib--CanConvertTypeJsonDefs#/$defs/CanConvertTypeJson" } } }, "outputs": { "type": "object", "required": ["instructions"] as const, "additionalProperties": false, "properties": { "instructions": { "type": "object", "minProperties": 1, "additionalProperties": false, "patternProperties": { "^(?:Desc|BP|Foundation)_[^.]+_C$": { "type": "array", "minItems": 1, "items": { "type": "object", "required": ["amount", "destination"] as const, "additionalProperties": false, "properties": { "amount": { "$ref": "docs.json.ts--production-planner--lib--CanConvertTypeJsonDefs#/$defs/CanConvertTypeJson" }, "destination": { "type": "object", "required": ["type", "id"] as const, "additionalProperties": false, "properties": { "type": { "type": "string", "enum": ["pool"] as const }, "id": { "$ref": "#/$defs/id" } } } } } } } } } }, "pool": { "type": "object", "required": ["id"] as const, "unevaluatedProperties": false, "additionalProperties": false, "properties": { "id": { "$ref": "#/$defs/id" }, "name": { "$ref": "#/$defs/name" }, "production": { "$ref": "#/$defs/production_set" }, "recipe_selection": { "$ref": "#/$defs/recipe_selection" }, "manual_input": { "$ref": "#/$defs/production_set" }, "outputs": { "$ref": "#/$defs/outputs" } } }, "settings": { "type": "object", "required": ["auto_follow_current_pool", "calculator_display_mode", "current_pool_id", "show_full_pool_button_list", "auto_recalculate"] as const, "unevaluatedProperties": false, "additionalProperties": false, "properties": { "auto_follow_current_pool": { "type": "boolean" }, "calculator_display_mode": { "type": "boolean" }, "current_pool_id": { "$ref": "#/$defs/pool_reference" }, "recipe_selection": { "$ref": "#/$defs/recipe_selection" }, "show_full_pool_button_list": { "type": "boolean" }, "auto_recalculate": { "$ref": "#/$defs/settings_auto_recalculate" } } }, "settings_auto_recalculate": { "type": "object", "required": ["recipe_selection_ui_change"] as const, "unevaluatedProperties": false, "additionalProperties": false, "properties": { "recipe_selection_ui_change": { "type": "boolean" } } } }, "properties": { "version": { "type": "integer", "const": 6 }, "pools": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/pool" } }, "groups": { "$ref": "#/$defs/collection_array" }, "collections": { "$ref": "#/$defs/collection_array" }, "settings": { "$ref": "#/$defs/settings" } } };
+const schema42 = { "type": "object", "required": ["id"] as const, "unevaluatedProperties": false, "additionalProperties": false, "properties": { "id": { "$ref": "#/$defs/id" }, "name": { "$ref": "#/$defs/name" }, "production": { "$ref": "#/$defs/production_set" }, "recipe_selection": { "$ref": "#/$defs/recipe_selection" }, "manual_input": { "$ref": "#/$defs/production_set" }, "outputs": { "$ref": "#/$defs/outputs" } } };
+const schema43 = { "type": "integer", "minimum": 1 };
+const schema44 = { "type": "string", "minLength": 1, "pattern": "^(?!\\s+).+(?<!\\s)$" };
+const schema46 = { "type": "object", "additionalProperties": false, "minProperties": 1, "patternProperties": { "^(?:Desc|BP|Foundation)_[^.]+_C$": { "type": "string", "pattern": "^(?:Recipe|Build)_.+_C$" } } };
+const func1 = ucs2length;
+const pattern9 = new RegExp("^(?!\\s+).+(?<!\\s)$", "u");
+const pattern10 = new RegExp("^(?:Desc|BP|Foundation)_[^.]+_C$", "u");
+const pattern14 = new RegExp("^(?:Recipe|Build)_.+_C$", "u");
+const schema45 = { "type": "object", "additionalProperties": false, "patternProperties": { "^(?:Desc|BP|Foundation)_[^.]+_C$": { "$ref": "docs.json.ts--production-planner--lib--CanConvertTypeJsonDefs#/$defs/CanConvertTypeJson" } } };
+function validate34(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
     rootData: unknown;
 }> = {}) {
     let vErrors: ErrorObject[] = [];
     let errors = 0;
-    const evaluated0 = ajv_utiltiies__definitely_evaluated(validate31);
+    const evaluated0 = ajv_utiltiies__definitely_evaluated(validate34);
     if (evaluated0?.dynamicProps) {
         evaluated0.props = undefined;
     }
@@ -639,29 +640,29 @@ function validate31(data: unknown, { instancePath = "", parentData, parentDataPr
     if (ajv_utilities__is_probably_object(data)) {
         for (const key0 in data) {
             if (!(pattern10.test(key0))) {
-                const err0: ErrorObject = { instancePath, schemaPath: "#/additionalProperties", keyword: "additionalProperties", params: { additionalProperty: key0 }, message: "must NOT have additional properties", schema: false, parentSchema: schema43, data };
+                const err0: ErrorObject = { instancePath, schemaPath: "#/additionalProperties", keyword: "additionalProperties", params: { additionalProperty: key0 }, message: "must NOT have additional properties", schema: false, parentSchema: schema45, data };
                 vErrors.push(err0)
                 errors++;
             }
         }
         for (const key1 in data) {
             if (pattern10.test(key1)) {
-                if (!(validate32(data[key1], { instancePath: instancePath + "/" + key1.replace(/~/g, "~0").replace(/\//g, "~1"), parentData: data, parentDataProperty: key1, rootData, dynamicAnchors }))) {
-                    vErrors = vErrors.concat((validate32 as Is).errors || []);
+                if (!(validate29(data[key1], { instancePath: instancePath + "/" + key1.replace(/~/g, "~0").replace(/\//g, "~1"), parentData: data, parentDataProperty: key1, rootData, dynamicAnchors }))) {
+                    vErrors = vErrors.concat((validate29 as Is).errors || []);
                     errors = vErrors.length;
                 }
             }
         }
     }
     else {
-        const err1: ErrorObject = { instancePath, schemaPath: "#/type", keyword: "type", params: { type: "object" }, message: "must be object", schema: schema43.type, parentSchema: schema43, data };
+        const err1: ErrorObject = { instancePath, schemaPath: "#/type", keyword: "type", params: { type: "object" }, message: "must be object", schema: schema45.type, parentSchema: schema45, data };
         vErrors.push(err1)
         errors++;
     }
-    (validate31 as Is).errors = vErrors.length ? vErrors : null;
+    (validate34 as Is).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-(validate31 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
+(validate34 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
 const schema47 = { "type": "object", "required": ["instructions"] as const, "additionalProperties": false, "properties": { "instructions": { "type": "object", "minProperties": 1, "additionalProperties": false, "patternProperties": { "^(?:Desc|BP|Foundation)_[^.]+_C$": { "type": "array", "minItems": 1, "items": { "type": "object", "required": ["amount", "destination"] as const, "additionalProperties": false, "properties": { "amount": { "$ref": "docs.json.ts--production-planner--lib--CanConvertTypeJsonDefs#/$defs/CanConvertTypeJson" }, "destination": { "type": "object", "required": ["type", "id"] as const, "additionalProperties": false, "properties": { "type": { "type": "string", "enum": ["pool"] as const }, "id": { "$ref": "#/$defs/id" } } } } } } } } } };
 function validate38(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
     rootData: unknown;
@@ -734,8 +735,8 @@ function validate38(data: unknown, { instancePath = "", parentData, parentDataPr
                                         }
                                     }
                                     if (data2.amount !== undefined) {
-                                        if (!(validate32(data2.amount, { instancePath: instancePath + "/instructions/" + key2.replace(/~/g, "~0").replace(/\//g, "~1") + "/" + i0 + "/amount", parentData: data2, parentDataProperty: "amount", rootData, dynamicAnchors }))) {
-                                            vErrors = vErrors.concat((validate32 as Is).errors || []);
+                                        if (!(validate29(data2.amount, { instancePath: instancePath + "/instructions/" + key2.replace(/~/g, "~0").replace(/\//g, "~1") + "/" + i0 + "/amount", parentData: data2, parentDataProperty: "amount", rootData, dynamicAnchors }))) {
+                                            vErrors = vErrors.concat((validate29 as Is).errors || []);
                                             errors = vErrors.length;
                                         }
                                     }
@@ -775,13 +776,13 @@ function validate38(data: unknown, { instancePath = "", parentData, parentDataPr
                                             if (data4.id !== undefined) {
                                                 let data6 = data4.id;
                                                 if (!(((typeof data6 == "number") && (!(data6 % 1) && !isNaN(data6))) && (isFinite(data6)))) {
-                                                    const err13: ErrorObject = { instancePath: instancePath + "/instructions/" + key2.replace(/~/g, "~0").replace(/\//g, "~1") + "/" + i0 + "/destination/id", schemaPath: "#/$defs/id/type", keyword: "type", params: { type: "integer" }, message: "must be integer", schema: schema41.type, parentSchema: schema41, data: data6 };
+                                                    const err13: ErrorObject = { instancePath: instancePath + "/instructions/" + key2.replace(/~/g, "~0").replace(/\//g, "~1") + "/" + i0 + "/destination/id", schemaPath: "#/$defs/id/type", keyword: "type", params: { type: "integer" }, message: "must be integer", schema: schema43.type, parentSchema: schema43, data: data6 };
                                                     vErrors.push(err13)
                                                     errors++;
                                                 }
                                                 if ((typeof data6 == "number") && (isFinite(data6))) {
                                                     if (data6 < 1 || isNaN(data6)) {
-                                                        const err14: ErrorObject = { instancePath: instancePath + "/instructions/" + key2.replace(/~/g, "~0").replace(/\//g, "~1") + "/" + i0 + "/destination/id", schemaPath: "#/$defs/id/minimum", keyword: "minimum", params: { comparison: ">=", limit: 1 }, message: "must be >= 1", schema: 1, parentSchema: schema41, data: data6 };
+                                                        const err14: ErrorObject = { instancePath: instancePath + "/instructions/" + key2.replace(/~/g, "~0").replace(/\//g, "~1") + "/" + i0 + "/destination/id", schemaPath: "#/$defs/id/minimum", keyword: "minimum", params: { comparison: ">=", limit: 1 }, message: "must be >= 1", schema: 1, parentSchema: schema43, data: data6 };
                                                         vErrors.push(err14)
                                                         errors++;
                                                     }
@@ -826,12 +827,12 @@ function validate38(data: unknown, { instancePath = "", parentData, parentDataPr
     return errors === 0;
 }
 (validate38 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
-function validate30(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
+function validate33(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
     rootData: unknown;
 }> = {}) {
     let vErrors: ErrorObject[] = [];
     let errors = 0;
-    const evaluated0 = ajv_utiltiies__definitely_evaluated(validate30);
+    const evaluated0 = ajv_utiltiies__definitely_evaluated(validate33);
     if (evaluated0?.dynamicProps) {
         evaluated0.props = undefined;
     }
@@ -840,13 +841,13 @@ function validate30(data: unknown, { instancePath = "", parentData, parentDataPr
     }
     if (ajv_utilities__is_probably_object(data)) {
         if (data.id === undefined) {
-            const err0: ErrorObject = { instancePath, schemaPath: "#/required", keyword: "required", params: { missingProperty: "id" }, message: "must have required property '" + "id" + "'", schema: schema40.required, parentSchema: schema40, data };
+            const err0: ErrorObject = { instancePath, schemaPath: "#/required", keyword: "required", params: { missingProperty: "id" }, message: "must have required property '" + "id" + "'", schema: schema42.required, parentSchema: schema42, data };
             vErrors.push(err0)
             errors++;
         }
         for (const key0 in data) {
             if (!((((((key0 === "id") || (key0 === "name")) || (key0 === "production")) || (key0 === "recipe_selection")) || (key0 === "manual_input")) || (key0 === "outputs"))) {
-                const err1: ErrorObject = { instancePath, schemaPath: "#/additionalProperties", keyword: "additionalProperties", params: { additionalProperty: key0 }, message: "must NOT have additional properties", schema: false, parentSchema: schema40, data };
+                const err1: ErrorObject = { instancePath, schemaPath: "#/additionalProperties", keyword: "additionalProperties", params: { additionalProperty: key0 }, message: "must NOT have additional properties", schema: false, parentSchema: schema42, data };
                 vErrors.push(err1)
                 errors++;
             }
@@ -854,13 +855,13 @@ function validate30(data: unknown, { instancePath = "", parentData, parentDataPr
         if (data.id !== undefined) {
             let data0 = data.id;
             if (!(((typeof data0 == "number") && (!(data0 % 1) && !isNaN(data0))) && (isFinite(data0)))) {
-                const err2: ErrorObject = { instancePath: instancePath + "/id", schemaPath: "#/$defs/id/type", keyword: "type", params: { type: "integer" }, message: "must be integer", schema: schema41.type, parentSchema: schema41, data: data0 };
+                const err2: ErrorObject = { instancePath: instancePath + "/id", schemaPath: "#/$defs/id/type", keyword: "type", params: { type: "integer" }, message: "must be integer", schema: schema43.type, parentSchema: schema43, data: data0 };
                 vErrors.push(err2)
                 errors++;
             }
             if ((typeof data0 == "number") && (isFinite(data0))) {
                 if (data0 < 1 || isNaN(data0)) {
-                    const err3: ErrorObject = { instancePath: instancePath + "/id", schemaPath: "#/$defs/id/minimum", keyword: "minimum", params: { comparison: ">=", limit: 1 }, message: "must be >= 1", schema: 1, parentSchema: schema41, data: data0 };
+                    const err3: ErrorObject = { instancePath: instancePath + "/id", schemaPath: "#/$defs/id/minimum", keyword: "minimum", params: { comparison: ">=", limit: 1 }, message: "must be >= 1", schema: 1, parentSchema: schema43, data: data0 };
                     vErrors.push(err3)
                     errors++;
                 }
@@ -870,25 +871,25 @@ function validate30(data: unknown, { instancePath = "", parentData, parentDataPr
             let data1 = data.name;
             if (typeof data1 === "string") {
                 if (func1(data1) < 1) {
-                    const err4: ErrorObject = { instancePath: instancePath + "/name", schemaPath: "#/$defs/name/minLength", keyword: "minLength", params: { limit: 1 }, message: "must NOT have fewer than 1 characters", schema: 1, parentSchema: schema42, data: data1 };
+                    const err4: ErrorObject = { instancePath: instancePath + "/name", schemaPath: "#/$defs/name/minLength", keyword: "minLength", params: { limit: 1 }, message: "must NOT have fewer than 1 characters", schema: 1, parentSchema: schema44, data: data1 };
                     vErrors.push(err4)
                     errors++;
                 }
                 if (!pattern9.test(data1)) {
-                    const err5: ErrorObject = { instancePath: instancePath + "/name", schemaPath: "#/$defs/name/pattern", keyword: "pattern", params: { pattern: "^(?!\\s+).+(?<!\\s)$" }, message: "must match pattern \"" + "^(?!\\s+).+(?<!\\s)$" + "\"", schema: "^(?!\\s+).+(?<!\\s)$", parentSchema: schema42, data: data1 };
+                    const err5: ErrorObject = { instancePath: instancePath + "/name", schemaPath: "#/$defs/name/pattern", keyword: "pattern", params: { pattern: "^(?!\\s+).+(?<!\\s)$" }, message: "must match pattern \"" + "^(?!\\s+).+(?<!\\s)$" + "\"", schema: "^(?!\\s+).+(?<!\\s)$", parentSchema: schema44, data: data1 };
                     vErrors.push(err5)
                     errors++;
                 }
             }
             else {
-                const err6: ErrorObject = { instancePath: instancePath + "/name", schemaPath: "#/$defs/name/type", keyword: "type", params: { type: "string" }, message: "must be string", schema: schema42.type, parentSchema: schema42, data: data1 };
+                const err6: ErrorObject = { instancePath: instancePath + "/name", schemaPath: "#/$defs/name/type", keyword: "type", params: { type: "string" }, message: "must be string", schema: schema44.type, parentSchema: schema44, data: data1 };
                 vErrors.push(err6)
                 errors++;
             }
         }
         if (data.production !== undefined) {
-            if (!(validate31(data.production, { instancePath: instancePath + "/production", parentData: data, parentDataProperty: "production", rootData, dynamicAnchors }))) {
-                vErrors = vErrors.concat((validate31 as Is).errors || []);
+            if (!(validate34(data.production, { instancePath: instancePath + "/production", parentData: data, parentDataProperty: "production", rootData, dynamicAnchors }))) {
+                vErrors = vErrors.concat((validate34 as Is).errors || []);
                 errors = vErrors.length;
             }
         }
@@ -932,8 +933,8 @@ function validate30(data: unknown, { instancePath = "", parentData, parentDataPr
             }
         }
         if (data.manual_input !== undefined) {
-            if (!(validate31(data.manual_input, { instancePath: instancePath + "/manual_input", parentData: data, parentDataProperty: "manual_input", rootData, dynamicAnchors }))) {
-                vErrors = vErrors.concat((validate31 as Is).errors || []);
+            if (!(validate34(data.manual_input, { instancePath: instancePath + "/manual_input", parentData: data, parentDataProperty: "manual_input", rootData, dynamicAnchors }))) {
+                vErrors = vErrors.concat((validate34 as Is).errors || []);
                 errors = vErrors.length;
             }
         }
@@ -945,14 +946,14 @@ function validate30(data: unknown, { instancePath = "", parentData, parentDataPr
         }
     }
     else {
-        const err12: ErrorObject = { instancePath, schemaPath: "#/type", keyword: "type", params: { type: "object" }, message: "must be object", schema: schema40.type, parentSchema: schema40, data };
+        const err12: ErrorObject = { instancePath, schemaPath: "#/type", keyword: "type", params: { type: "object" }, message: "must be object", schema: schema42.type, parentSchema: schema42, data };
         vErrors.push(err12)
         errors++;
     }
-    (validate30 as Is).errors = vErrors.length ? vErrors : null;
+    (validate33 as Is).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-(validate30 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
+(validate33 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
 const schema49 = { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/collection" } };
 const schema50 = { "type": "object", "required": ["id", "items"] as const, "unevaluatedProperties": false, "additionalProperties": false, "properties": { "id": { "$ref": "#/$defs/id" }, "name": { "$ref": "#/$defs/name" }, "recipe_selection": { "$ref": "#/$defs/recipe_selection" }, "items": { "type": "array", "minItems": 0, "items": { "$ref": "#/$defs/id" } } } };
 function validate43(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
@@ -988,13 +989,13 @@ function validate43(data: unknown, { instancePath = "", parentData, parentDataPr
         if (data.id !== undefined) {
             let data0 = data.id;
             if (!(((typeof data0 == "number") && (!(data0 % 1) && !isNaN(data0))) && (isFinite(data0)))) {
-                const err3: ErrorObject = { instancePath: instancePath + "/id", schemaPath: "#/$defs/id/type", keyword: "type", params: { type: "integer" }, message: "must be integer", schema: schema41.type, parentSchema: schema41, data: data0 };
+                const err3: ErrorObject = { instancePath: instancePath + "/id", schemaPath: "#/$defs/id/type", keyword: "type", params: { type: "integer" }, message: "must be integer", schema: schema43.type, parentSchema: schema43, data: data0 };
                 vErrors.push(err3)
                 errors++;
             }
             if ((typeof data0 == "number") && (isFinite(data0))) {
                 if (data0 < 1 || isNaN(data0)) {
-                    const err4: ErrorObject = { instancePath: instancePath + "/id", schemaPath: "#/$defs/id/minimum", keyword: "minimum", params: { comparison: ">=", limit: 1 }, message: "must be >= 1", schema: 1, parentSchema: schema41, data: data0 };
+                    const err4: ErrorObject = { instancePath: instancePath + "/id", schemaPath: "#/$defs/id/minimum", keyword: "minimum", params: { comparison: ">=", limit: 1 }, message: "must be >= 1", schema: 1, parentSchema: schema43, data: data0 };
                     vErrors.push(err4)
                     errors++;
                 }
@@ -1004,18 +1005,18 @@ function validate43(data: unknown, { instancePath = "", parentData, parentDataPr
             let data1 = data.name;
             if (typeof data1 === "string") {
                 if (func1(data1) < 1) {
-                    const err5: ErrorObject = { instancePath: instancePath + "/name", schemaPath: "#/$defs/name/minLength", keyword: "minLength", params: { limit: 1 }, message: "must NOT have fewer than 1 characters", schema: 1, parentSchema: schema42, data: data1 };
+                    const err5: ErrorObject = { instancePath: instancePath + "/name", schemaPath: "#/$defs/name/minLength", keyword: "minLength", params: { limit: 1 }, message: "must NOT have fewer than 1 characters", schema: 1, parentSchema: schema44, data: data1 };
                     vErrors.push(err5)
                     errors++;
                 }
                 if (!pattern9.test(data1)) {
-                    const err6: ErrorObject = { instancePath: instancePath + "/name", schemaPath: "#/$defs/name/pattern", keyword: "pattern", params: { pattern: "^(?!\\s+).+(?<!\\s)$" }, message: "must match pattern \"" + "^(?!\\s+).+(?<!\\s)$" + "\"", schema: "^(?!\\s+).+(?<!\\s)$", parentSchema: schema42, data: data1 };
+                    const err6: ErrorObject = { instancePath: instancePath + "/name", schemaPath: "#/$defs/name/pattern", keyword: "pattern", params: { pattern: "^(?!\\s+).+(?<!\\s)$" }, message: "must match pattern \"" + "^(?!\\s+).+(?<!\\s)$" + "\"", schema: "^(?!\\s+).+(?<!\\s)$", parentSchema: schema44, data: data1 };
                     vErrors.push(err6)
                     errors++;
                 }
             }
             else {
-                const err7: ErrorObject = { instancePath: instancePath + "/name", schemaPath: "#/$defs/name/type", keyword: "type", params: { type: "string" }, message: "must be string", schema: schema42.type, parentSchema: schema42, data: data1 };
+                const err7: ErrorObject = { instancePath: instancePath + "/name", schemaPath: "#/$defs/name/type", keyword: "type", params: { type: "string" }, message: "must be string", schema: schema44.type, parentSchema: schema44, data: data1 };
                 vErrors.push(err7)
                 errors++;
             }
@@ -1071,13 +1072,13 @@ function validate43(data: unknown, { instancePath = "", parentData, parentDataPr
                 for (let i0 = 0; i0 < len0; i0++) {
                     let data5 = data4[i0];
                     if (!(((typeof data5 == "number") && (!(data5 % 1) && !isNaN(data5))) && (isFinite(data5)))) {
-                        const err14: ErrorObject = { instancePath: instancePath + "/items/" + i0, schemaPath: "#/$defs/id/type", keyword: "type", params: { type: "integer" }, message: "must be integer", schema: schema41.type, parentSchema: schema41, data: data5 };
+                        const err14: ErrorObject = { instancePath: instancePath + "/items/" + i0, schemaPath: "#/$defs/id/type", keyword: "type", params: { type: "integer" }, message: "must be integer", schema: schema43.type, parentSchema: schema43, data: data5 };
                         vErrors.push(err14)
                         errors++;
                     }
                     if ((typeof data5 == "number") && (isFinite(data5))) {
                         if (data5 < 1 || isNaN(data5)) {
-                            const err15: ErrorObject = { instancePath: instancePath + "/items/" + i0, schemaPath: "#/$defs/id/minimum", keyword: "minimum", params: { comparison: ">=", limit: 1 }, message: "must be >= 1", schema: 1, parentSchema: schema41, data: data5 };
+                            const err15: ErrorObject = { instancePath: instancePath + "/items/" + i0, schemaPath: "#/$defs/id/minimum", keyword: "minimum", params: { comparison: ">=", limit: 1 }, message: "must be >= 1", schema: 1, parentSchema: schema43, data: data5 };
                             vErrors.push(err15)
                             errors++;
                         }
@@ -1201,13 +1202,13 @@ function validate47(data: unknown, { instancePath = "", parentData, parentDataPr
         if (data.current_pool_id !== undefined) {
             let data2 = data.current_pool_id;
             if (!(((typeof data2 == "number") && (!(data2 % 1) && !isNaN(data2))) && (isFinite(data2)))) {
-                const err8: ErrorObject = { instancePath: instancePath + "/current_pool_id", schemaPath: "#/$defs/pool_reference/type", keyword: "type", params: { type: "integer" }, message: "must be integer", schema: schema41.type, parentSchema: schema41, data: data2 };
+                const err8: ErrorObject = { instancePath: instancePath + "/current_pool_id", schemaPath: "#/$defs/pool_reference/type", keyword: "type", params: { type: "integer" }, message: "must be integer", schema: schema43.type, parentSchema: schema43, data: data2 };
                 vErrors.push(err8)
                 errors++;
             }
             if ((typeof data2 == "number") && (isFinite(data2))) {
                 if (data2 < 1 || isNaN(data2)) {
-                    const err9: ErrorObject = { instancePath: instancePath + "/current_pool_id", schemaPath: "#/$defs/pool_reference/minimum", keyword: "minimum", params: { comparison: ">=", limit: 1 }, message: "must be >= 1", schema: 1, parentSchema: schema41, data: data2 };
+                    const err9: ErrorObject = { instancePath: instancePath + "/current_pool_id", schemaPath: "#/$defs/pool_reference/minimum", keyword: "minimum", params: { comparison: ">=", limit: 1 }, message: "must be >= 1", schema: 1, parentSchema: schema43, data: data2 };
                     vErrors.push(err9)
                     errors++;
                 }
@@ -1300,13 +1301,13 @@ function validate47(data: unknown, { instancePath = "", parentData, parentDataPr
     return errors === 0;
 }
 (validate47 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
-function validate29(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
+function validate32(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
     rootData: unknown;
 }> = {}): data is stub_State_Json {
     /*# sourceURL="production-planner-save-version-6" */ ;
     let vErrors: ErrorObject[] = [];
     let errors = 0;
-    const evaluated0 = ajv_utiltiies__definitely_evaluated(validate29);
+    const evaluated0 = ajv_utiltiies__definitely_evaluated(validate32);
     if (evaluated0?.dynamicProps) {
         evaluated0.props = undefined;
     }
@@ -1315,33 +1316,33 @@ function validate29(data: unknown, { instancePath = "", parentData, parentDataPr
     }
     if (ajv_utilities__is_probably_object(data)) {
         if (data.version === undefined) {
-            const err0: ErrorObject = { instancePath, schemaPath: "#/required", keyword: "required", params: { missingProperty: "version" }, message: "must have required property '" + "version" + "'", schema: schema39.required, parentSchema: schema39, data };
+            const err0: ErrorObject = { instancePath, schemaPath: "#/required", keyword: "required", params: { missingProperty: "version" }, message: "must have required property '" + "version" + "'", schema: schema41.required, parentSchema: schema41, data };
             vErrors.push(err0)
             errors++;
         }
         if (data.collections === undefined) {
-            const err1: ErrorObject = { instancePath, schemaPath: "#/required", keyword: "required", params: { missingProperty: "collections" }, message: "must have required property '" + "collections" + "'", schema: schema39.required, parentSchema: schema39, data };
+            const err1: ErrorObject = { instancePath, schemaPath: "#/required", keyword: "required", params: { missingProperty: "collections" }, message: "must have required property '" + "collections" + "'", schema: schema41.required, parentSchema: schema41, data };
             vErrors.push(err1)
             errors++;
         }
         if (data.groups === undefined) {
-            const err2: ErrorObject = { instancePath, schemaPath: "#/required", keyword: "required", params: { missingProperty: "groups" }, message: "must have required property '" + "groups" + "'", schema: schema39.required, parentSchema: schema39, data };
+            const err2: ErrorObject = { instancePath, schemaPath: "#/required", keyword: "required", params: { missingProperty: "groups" }, message: "must have required property '" + "groups" + "'", schema: schema41.required, parentSchema: schema41, data };
             vErrors.push(err2)
             errors++;
         }
         if (data.pools === undefined) {
-            const err3: ErrorObject = { instancePath, schemaPath: "#/required", keyword: "required", params: { missingProperty: "pools" }, message: "must have required property '" + "pools" + "'", schema: schema39.required, parentSchema: schema39, data };
+            const err3: ErrorObject = { instancePath, schemaPath: "#/required", keyword: "required", params: { missingProperty: "pools" }, message: "must have required property '" + "pools" + "'", schema: schema41.required, parentSchema: schema41, data };
             vErrors.push(err3)
             errors++;
         }
         if (data.settings === undefined) {
-            const err4: ErrorObject = { instancePath, schemaPath: "#/required", keyword: "required", params: { missingProperty: "settings" }, message: "must have required property '" + "settings" + "'", schema: schema39.required, parentSchema: schema39, data };
+            const err4: ErrorObject = { instancePath, schemaPath: "#/required", keyword: "required", params: { missingProperty: "settings" }, message: "must have required property '" + "settings" + "'", schema: schema41.required, parentSchema: schema41, data };
             vErrors.push(err4)
             errors++;
         }
         for (const key0 in data) {
             if (!(((((key0 === "version") || (key0 === "pools")) || (key0 === "groups")) || (key0 === "collections")) || (key0 === "settings"))) {
-                const err5: ErrorObject = { instancePath, schemaPath: "#/additionalProperties", keyword: "additionalProperties", params: { additionalProperty: key0 }, message: "must NOT have additional properties", schema: false, parentSchema: schema39, data };
+                const err5: ErrorObject = { instancePath, schemaPath: "#/additionalProperties", keyword: "additionalProperties", params: { additionalProperty: key0 }, message: "must NOT have additional properties", schema: false, parentSchema: schema41, data };
                 vErrors.push(err5)
                 errors++;
             }
@@ -1349,12 +1350,12 @@ function validate29(data: unknown, { instancePath = "", parentData, parentDataPr
         if (data.version !== undefined) {
             let data0 = data.version;
             if (!(((typeof data0 == "number") && (!(data0 % 1) && !isNaN(data0))) && (isFinite(data0)))) {
-                const err6: ErrorObject = { instancePath: instancePath + "/version", schemaPath: "#/properties/version/type", keyword: "type", params: { type: "integer" }, message: "must be integer", schema: schema39.properties.version.type, parentSchema: schema39.properties.version, data: data0 };
+                const err6: ErrorObject = { instancePath: instancePath + "/version", schemaPath: "#/properties/version/type", keyword: "type", params: { type: "integer" }, message: "must be integer", schema: schema41.properties.version.type, parentSchema: schema41.properties.version, data: data0 };
                 vErrors.push(err6)
                 errors++;
             }
             if (6 !== data0) {
-                const err7: ErrorObject = { instancePath: instancePath + "/version", schemaPath: "#/properties/version/const", keyword: "const", params: { allowedValue: 6 }, message: "must be equal to constant", schema: 6, parentSchema: schema39.properties.version, data: data0 };
+                const err7: ErrorObject = { instancePath: instancePath + "/version", schemaPath: "#/properties/version/const", keyword: "const", params: { allowedValue: 6 }, message: "must be equal to constant", schema: 6, parentSchema: schema41.properties.version, data: data0 };
                 vErrors.push(err7)
                 errors++;
             }
@@ -1363,20 +1364,20 @@ function validate29(data: unknown, { instancePath = "", parentData, parentDataPr
             let data1 = data.pools;
             if (ajv_utilities__is_probably_array(data1)) {
                 if (data1.length < 1) {
-                    const err8: ErrorObject = { instancePath: instancePath + "/pools", schemaPath: "#/properties/pools/minItems", keyword: "minItems", params: { limit: 1 }, message: "must NOT have fewer than 1 items", schema: 1, parentSchema: schema39.properties.pools, data: data1 };
+                    const err8: ErrorObject = { instancePath: instancePath + "/pools", schemaPath: "#/properties/pools/minItems", keyword: "minItems", params: { limit: 1 }, message: "must NOT have fewer than 1 items", schema: 1, parentSchema: schema41.properties.pools, data: data1 };
                     vErrors.push(err8)
                     errors++;
                 }
                 const len0 = data1.length;
                 for (let i0 = 0; i0 < len0; i0++) {
-                    if (!(validate30(data1[i0], { instancePath: instancePath + "/pools/" + i0, parentData: data1, parentDataProperty: i0, rootData, dynamicAnchors }))) {
-                        vErrors = vErrors.concat((validate30 as Is).errors || []);
+                    if (!(validate33(data1[i0], { instancePath: instancePath + "/pools/" + i0, parentData: data1, parentDataProperty: i0, rootData, dynamicAnchors }))) {
+                        vErrors = vErrors.concat((validate33 as Is).errors || []);
                         errors = vErrors.length;
                     }
                 }
             }
             else {
-                const err9: ErrorObject = { instancePath: instancePath + "/pools", schemaPath: "#/properties/pools/type", keyword: "type", params: { type: "array" }, message: "must be array", schema: schema39.properties.pools.type, parentSchema: schema39.properties.pools, data: data1 };
+                const err9: ErrorObject = { instancePath: instancePath + "/pools", schemaPath: "#/properties/pools/type", keyword: "type", params: { type: "array" }, message: "must be array", schema: schema41.properties.pools.type, parentSchema: schema41.properties.pools, data: data1 };
                 vErrors.push(err9)
                 errors++;
             }
@@ -1401,11 +1402,11 @@ function validate29(data: unknown, { instancePath = "", parentData, parentDataPr
         }
     }
     else {
-        const err10: ErrorObject = { instancePath, schemaPath: "#/type", keyword: "type", params: { type: "object" }, message: "must be object", schema: schema39.type, parentSchema: schema39, data };
+        const err10: ErrorObject = { instancePath, schemaPath: "#/type", keyword: "type", params: { type: "object" }, message: "must be object", schema: schema41.type, parentSchema: schema41, data };
         vErrors.push(err10)
         errors++;
     }
-    (validate29 as Is).errors = vErrors.length ? vErrors : null;
+    (validate32 as Is).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-(validate29 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
+(validate32 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
