@@ -222,17 +222,19 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 					].name.text
 				)
 				&& (
-					isShorthandPropertyAssignment(maybe.arguments[1].properties[2])
+					isShorthandPropertyAssignment(
+						maybe.arguments[1].properties[2],
+					)
 					|| (
 						isPropertyAssignment(maybe.arguments[1].properties[2])
-				&& (
-					isStringLiteral(
-						maybe.arguments[1].properties[2].initializer,
-					)
-					|| isIdentifier(
-						maybe.arguments[1].properties[2].initializer,
-					)
-				)
+						&& (
+							isStringLiteral(
+								maybe.arguments[1].properties[2].initializer,
+							)
+							|| isIdentifier(
+								maybe.arguments[1].properties[2].initializer,
+							)
+						)
 					)
 				)
 				&& isIdentifier(maybe.arguments[1].properties[2].name)
@@ -290,15 +292,15 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 											1
 										].properties[
 											2
-										]
+										],
 									)
 									&& isStringLiteral(
-									node.arguments[
-										1
-									].properties[
-										2
-									].initializer,
-								)
+										node.arguments[
+											1
+										].properties[
+											2
+										].initializer,
+									)
 								)
 									? node.arguments[
 										1
@@ -570,9 +572,9 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 		} else if (undefined !== instancePath) {
 			checking = checking.filter((maybe) => (
 				(
-				maybe.instancePath
-				&& 1 === maybe.instancePath.length
-				&& maybe.instancePath[0] === instancePath
+					maybe.instancePath
+					&& 1 === maybe.instancePath.length
+					&& maybe.instancePath[0] === instancePath
 				)
 				|| (
 					maybe.instancePath === null
