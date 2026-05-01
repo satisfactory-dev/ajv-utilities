@@ -483,7 +483,7 @@ function validate24(data: unknown, { instancePath = "", parentData, parentDataPr
 (validate24 as Is).evaluated = { "dynamicProps": true, "dynamicItems": false };
 function validate22(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
     rootData: unknown;
-}> = {}) {
+}> = {}): data is stub_Pool["production"] {
     let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = ajv_utiltiies__definitely_evaluated(validate22);

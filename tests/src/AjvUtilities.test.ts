@@ -1406,7 +1406,7 @@ void describe('AjvUtilities', () => {
 											},
 											'./types.ts',
 											{
-												instancePath: '/production',
+												instancePath_partial: '/production',
 												parentDataProperty: 'production',
 											},
 										],
