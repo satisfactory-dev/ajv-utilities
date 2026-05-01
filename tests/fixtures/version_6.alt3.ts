@@ -1,6 +1,6 @@
 import type { ErrorObject, ValidateFunction } from 'ajv';
 import type { Is } from '@satisfactory-dev/ajv-utilities';
-import type { stub_CanConvertJson, stub_Collection, stub_Distributor_json, stub_IntermediaryCalculation, stub_Pool, stub_Settings, stub_State_Json } from './types.ts';
+import type { stub_CanConvertJson, stub_Collection, stub_Distributor_json, stub_IntermediaryCalculation, stub_IntermediaryNumber, stub_Pool, stub_Settings, stub_State_Json } from './types.ts';
 function ajv_utiltiies__definitely_evaluated<T>(maybe: Is<T>): Exclude<Is<T>["evaluated"], undefined> { if (undefined === maybe.evaluated)
     throw new Error(`${maybe.name}.evaluated not set!`); return maybe.evaluated; }
 function ajv_utilities__is_probably_object(maybe: unknown): maybe is Record<string, unknown> { return !!maybe && typeof maybe === "object" && !Array.isArray(maybe); }
@@ -28,7 +28,7 @@ const pattern8 = new RegExp("^\\d*(?:\\.\\d{1,6})$", "u");
 const pattern9 = new RegExp("^\\d+$", "u");
 function validate26(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
     rootData: unknown;
-}> = {}) {
+}> = {}): data is stub_IntermediaryNumber["value"] {
     let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = ajv_utiltiies__definitely_evaluated(validate26);
@@ -131,7 +131,7 @@ const pattern10 = new RegExp("^-?(?:\\d*\\.\\d+|\\d+(?:\\.\\d+)?)$", "u");
 const pattern11 = new RegExp("^(-?\\d+(?:\\.\\d+))e([+-])(\\d+)$", "u");
 function validate25(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
     rootData: unknown;
-}> = {}) {
+}> = {}): data is stub_IntermediaryNumber {
     let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = ajv_utiltiies__definitely_evaluated(validate25);

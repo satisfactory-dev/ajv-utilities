@@ -1460,6 +1460,23 @@ void describe('AjvUtilities', () => {
 							],
 						],
 					},
+					specify_types_by_inside_out_match: [
+						[
+							{
+								name: 'stub_IntermediaryNumber',
+								sub_type_chain: ['value'],
+							},
+							'./types.ts',
+							{
+								instancePath_partial: '/value',
+								parentDataProperty: 'value',
+							},
+							[
+								'stub_IntermediaryNumber',
+								'./types.ts',
+							],
+						],
+					],
 					specify_types_by_export_name: {
 						is_IntermediaryCalculation: [
 							'stub_IntermediaryCalculation',

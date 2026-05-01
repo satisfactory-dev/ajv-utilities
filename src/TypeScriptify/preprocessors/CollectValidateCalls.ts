@@ -37,6 +37,7 @@ import type {
 	specify_type_nested,
 	specify_type_with_nested,
 	specify_types_instance,
+	validate_call_argument_1_match,
 } from '../types.ts';
 
 import type {
@@ -395,6 +396,31 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 		existing: specify_types_instance,
 		prepend_with_imports: prepend_with_imports,
 	) {
+		this.#specify_types_from_collected_outside_in(
+			info,
+			config,
+			existing,
+			prepend_with_imports,
+		);
+		this.#specify_types_from_collected_inside_out(
+			info,
+			config,
+			existing,
+			prepend_with_imports,
+		);
+	}
+
+	static #specify_types_from_collected_outside_in(
+		info: {
+			[key: string]: [
+				ValidateCallInfo,
+				...ValidateCallInfo[],
+			],
+		},
+		config: Partial<Config>,
+		existing: specify_types_instance,
+		prepend_with_imports: prepend_with_imports,
+	) {
 		const configurable = Object.entries(config.specify_types || {})
 			.filter((maybe): maybe is [
 				string,
@@ -429,14 +455,9 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 		const existing_entries = Object.entries(existing);
 
 		for (const [
-			// oxlint-disable-next-line no-unused-vars
-			key,
+			,
 			[
-				// oxlint-disable-next-line no-unused-vars
-				as_object,
-
-				// oxlint-disable-next-line no-unused-vars
-				source,
+				,,
 				sub_types,
 				as_string,
 			],
@@ -455,7 +476,7 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 				continue;
 			}
 
-			this.#specify_types_from_collected(
+			this.#specify_types_from_collected_outside_in_deep_dive(
 				info,
 				function_name,
 				sub_types,
@@ -465,7 +486,91 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 		}
 	}
 
-	static #specify_types_from_collected(
+	static #specify_types_from_collected_inside_out(
+		info: {
+			[key: string]: [
+				ValidateCallInfo,
+				...ValidateCallInfo[],
+			],
+		},
+		config: Partial<Config>,
+		existing: specify_types_instance,
+		prepend_with_imports: prepend_with_imports,
+	) {
+		const configurable = config.specify_types_by_inside_out_match || [];
+
+		if (configurable.length < 1) {
+			return;
+		}
+
+		const info_entries = Object.entries(info);
+
+		for (const [
+			sub_type,
+			source,
+			match_with,
+			parent_is,
+		] of configurable) {
+			for (const [parent_function, has_calls] of info_entries) {
+				const checking = this.#filter_info(
+					match_with,
+					has_calls,
+				);
+
+				if (1 === checking.length) {
+					if (!(source in prepend_with_imports)) {
+						prepend_with_imports[source] = new Types();
+					}
+
+					if (!(parent_is[1] in prepend_with_imports)) {
+						prepend_with_imports[parent_is[1]] = new Types();
+					}
+
+					existing[checking[0].name] = prepend_with_imports[
+						source
+					].add(sub_type);
+
+					existing[parent_function] = prepend_with_imports[
+						parent_is[1]
+					].add(parent_is[0]);
+				}
+			}
+		}
+	}
+
+	static #filter_info(
+		{
+			instancePath,
+			instancePath_partial,
+			parentDataProperty,
+		}: validate_call_argument_1_match,
+		checking: ValidateCallInfo[],
+	) {
+		if (undefined !== instancePath_partial) {
+			checking = checking.filter((maybe) => (
+				maybe.instancePath
+				&& maybe.instancePath.includes(
+					instancePath_partial,
+				)
+			));
+		} else if (undefined !== instancePath) {
+			checking = checking.filter((maybe) => (
+				maybe.instancePath
+				&& 1 === maybe.instancePath.length
+				&& maybe.instancePath[0] === instancePath
+			));
+		}
+
+		if (parentDataProperty) {
+			checking = checking.filter((maybe) => (
+				maybe.parentDataProperty === parentDataProperty
+			));
+		}
+
+		return checking;
+	}
+
+	static #specify_types_from_collected_outside_in_deep_dive(
 		info: {
 			[key: string]: [
 				ValidateCallInfo,
@@ -480,34 +585,10 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 		for (const sub_type of sub_types) {
 			const [,, match_with] = sub_type;
 
-			let checking: ValidateCallInfo[] = info[function_name];
-
-			const {
-				instancePath,
-				instancePath_partial,
-				parentDataProperty,
-			} = match_with;
-
-			if (undefined !== instancePath_partial) {
-				checking = checking.filter((maybe) => (
-					maybe.instancePath
-					&& maybe.instancePath.includes(
-						instancePath_partial,
-					)
-				));
-			} else if (undefined !== instancePath) {
-				checking = checking.filter((maybe) => (
-					maybe.instancePath
-					&& 1 === maybe.instancePath.length
-					&& maybe.instancePath[0] === instancePath
-				));
-			}
-
-			if (parentDataProperty) {
-				checking = checking.filter((maybe) => (
-					maybe.parentDataProperty === parentDataProperty
-				));
-			}
+			const checking = this.#filter_info(
+				match_with,
+				info[function_name],
+			);
 
 			if (1 === checking.length) {
 				if (!(sub_type[1] in prepend_with_imports)) {
@@ -519,7 +600,7 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 				].add(sub_type[0]);
 
 				if (4 === sub_type.length && checking[0].name in info) {
-					this.#specify_types_from_collected(
+					this.#specify_types_from_collected_outside_in_deep_dive(
 						info,
 						checking[0].name,
 						sub_type[3],

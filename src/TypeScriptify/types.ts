@@ -87,30 +87,38 @@ type specify_type = (
 	| specify_type_with_nested
 );
 
+export type validate_call_argument_1_match = Partial<{
+	instancePath: string,
+	instancePath_partial: string,
+	parentDataProperty: string,
+}>;
+
 export type specify_type_nested = (
 	| [
 		specify_types_config,
 		string,
-		Partial<{
-			instancePath: string,
-			instancePath_partial: string,
-			parentDataProperty: string,
-		}>,
+		validate_call_argument_1_match,
 	]
 	| [
 		specify_types_config,
 		string,
-		Partial<{
-			instancePath: string,
-			instancePath_partial: string,
-			parentDataProperty: string,
-		}>,
+		validate_call_argument_1_match,
 		[
 			specify_type_nested,
 			...specify_type_nested[],
 		],
 	]
 );
+
+type specify_type_inside_out_current = [
+	...specify_type_without_nested,
+	validate_call_argument_1_match,
+];
+
+type specify_type_inside_out = [
+	...specify_type_inside_out_current,
+	specify_type_without_nested,
+];
 
 export type Config = {
 	remove_schema: boolean,
@@ -127,4 +135,8 @@ export type Config = {
 	specify_types_by_export_name: {
 		[key: string]: specify_type,
 	},
+	specify_types_by_inside_out_match: [
+		specify_type_inside_out,
+		...specify_type_inside_out[],
+	],
 };
