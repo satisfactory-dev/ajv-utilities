@@ -87,7 +87,7 @@ type specify_type = (
 	| specify_type_with_nested
 );
 
-type specify_type_nested = (
+export type specify_type_nested = (
 	| [
 		specify_types_config,
 		string,

@@ -1,6 +1,6 @@
 import type { ErrorObject, ValidateFunction } from 'ajv';
 import type { Is } from '@satisfactory-dev/ajv-utilities';
-import type { stub_CanConvertJson, stub_IntermediaryCalculation, stub_Pool, stub_State_Json } from './types.ts';
+import type { stub_CanConvertJson, stub_Collection, stub_Distributor_json, stub_IntermediaryCalculation, stub_Pool, stub_Settings, stub_State_Json } from './types.ts';
 function ajv_utiltiies__definitely_evaluated<T>(maybe: Is<T>): Exclude<Is<T>["evaluated"], undefined> { if (undefined === maybe.evaluated)
     throw new Error(`${maybe.name}.evaluated not set!`); return maybe.evaluated; }
 function ajv_utilities__is_probably_object(maybe: unknown): maybe is Record<string, unknown> { return !!maybe && typeof maybe === "object" && !Array.isArray(maybe); }
@@ -354,7 +354,7 @@ function validate29(data: unknown, { instancePath = "", parentData, parentDataPr
 (validate29 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
 function validate24(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
     rootData: unknown;
-}> = {}) {
+}> = {}): data is stub_CanConvertJson {
     let props0: (true | {
         [key: string]: true;
     } | undefined) = undefined;
@@ -522,7 +522,7 @@ function validate22(data: unknown, { instancePath = "", parentData, parentDataPr
 const schema45 = { "type": "object", "required": ["instructions"] as const, "additionalProperties": false, "properties": { "instructions": { "type": "object", "minProperties": 1, "additionalProperties": false, "patternProperties": { "^(?:Desc|BP|Foundation)_[^.]+_C$": { "type": "array", "minItems": 1, "items": { "type": "object", "required": ["amount", "destination"] as const, "additionalProperties": false, "properties": { "amount": { "$ref": "docs.json.ts--production-planner--lib--CanConvertTypeJsonDefs#/$defs/CanConvertTypeJson" }, "destination": { "type": "object", "required": ["type", "id"] as const, "additionalProperties": false, "properties": { "type": { "type": "string", "enum": ["pool"] as const }, "id": { "$ref": "#/$defs/id" } } } } } } } } } };
 function validate34(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
     rootData: unknown;
-}> = {}) {
+}> = {}): data is stub_Distributor_json {
     let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = ajv_utiltiies__definitely_evaluated(validate34);
@@ -814,7 +814,7 @@ const schema47 = { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/c
 const schema48 = { "type": "object", "required": ["id", "items"] as const, "unevaluatedProperties": false, "additionalProperties": false, "properties": { "id": { "$ref": "#/$defs/id" }, "name": { "$ref": "#/$defs/name" }, "recipe_selection": { "$ref": "#/$defs/recipe_selection" }, "items": { "type": "array", "minItems": 0, "items": { "$ref": "#/$defs/id" } } } };
 function validate39(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
     rootData: unknown;
-}> = {}) {
+}> = {}): data is stub_Collection {
     let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = ajv_utiltiies__definitely_evaluated(validate39);
@@ -959,7 +959,7 @@ function validate39(data: unknown, { instancePath = "", parentData, parentDataPr
 (validate39 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
 function validate38(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
     rootData: unknown;
-}> = {}) {
+}> = {}): data is stub_Collection[] {
     let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = ajv_utiltiies__definitely_evaluated(validate38);
@@ -996,7 +996,7 @@ const schema53 = { "type": "object", "required": ["auto_follow_current_pool", "c
 const schema56 = { "type": "object", "required": ["recipe_selection_ui_change"] as const, "unevaluatedProperties": false, "additionalProperties": false, "properties": { "recipe_selection_ui_change": { "type": "boolean" } } };
 function validate43(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
     rootData: unknown;
-}> = {}) {
+}> = {}): data is stub_Settings {
     let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = ajv_utiltiies__definitely_evaluated(validate43);

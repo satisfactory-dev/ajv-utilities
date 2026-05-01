@@ -34,6 +34,7 @@ import {
 
 import type {
 	Config,
+	specify_type_nested,
 	specify_type_with_nested,
 	specify_types_instance,
 } from '../types.ts';
@@ -67,6 +68,7 @@ type CandidateBinaryExpressionStringConcat = (
 		right: (
 			| Identifier
 			| PropertyAccessExpression
+			| CallExpression
 		),
 	}
 );
@@ -321,7 +323,10 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 	): maybe is CandidateBinaryExpressionString {
 		return (
 			isBinaryExpression(maybe)
-			&& isIdentifier(maybe.left)
+			&& (
+				isIdentifier(maybe.left)
+				|| this.#is_CandidateBinaryExpressionStringConcat(maybe.left)
+			)
 			&& SyntaxKind.PlusToken === maybe.operatorToken.kind
 			&& isStringLiteral(maybe.right)
 		);
@@ -332,11 +337,14 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 	): maybe is CandidateBinaryExpressionStringConcat {
 		return (
 			isBinaryExpression(maybe)
-			&& this.#is_CandidateBinaryExpressionString(maybe.left)
+			&& (
+				this.#is_CandidateBinaryExpressionString(maybe.left)
+			)
 			&& SyntaxKind.PlusToken === maybe.operatorToken.kind
 			&& (
 				isIdentifier(maybe.right)
 				|| isPropertyAccessExpression(maybe.right)
+				|| isCallExpression(maybe.right)
 			)
 		);
 	}
@@ -447,53 +455,80 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 				continue;
 			}
 
-			for (const sub_type of sub_types) {
-				const [,, match_with] = sub_type;
+			this.#specify_types_from_collected(
+				info,
+				function_name,
+				sub_types,
+				existing,
+				prepend_with_imports,
+			);
+		}
+	}
 
-				let checking: ValidateCallInfo[] = info[function_name];
+	static #specify_types_from_collected(
+		info: {
+			[key: string]: [
+				ValidateCallInfo,
+				...ValidateCallInfo[],
+			],
+		},
+		function_name: keyof typeof info,
+		sub_types: [specify_type_nested, ...specify_type_nested[]],
+		existing: specify_types_instance,
+		prepend_with_imports: prepend_with_imports,
+	) {
+		for (const sub_type of sub_types) {
+			const [,, match_with] = sub_type;
 
-				const {
-					instancePath,
-					instancePath_partial,
-					parentDataProperty,
-				} = match_with;
+			let checking: ValidateCallInfo[] = info[function_name];
 
-				if (undefined !== instancePath_partial) {
-					checking = checking.filter((maybe) => (
-						maybe.instancePath
-						&& maybe.instancePath.includes(
-							instancePath_partial,
-						)
-					));
-				} else if (undefined !== instancePath) {
-					checking = checking.filter((maybe) => (
-						maybe.instancePath
-						&& 1 === maybe.instancePath.length
-						&& maybe.instancePath[0] === instancePath
-					));
+			const {
+				instancePath,
+				instancePath_partial,
+				parentDataProperty,
+			} = match_with;
+
+			if (undefined !== instancePath_partial) {
+				checking = checking.filter((maybe) => (
+					maybe.instancePath
+					&& maybe.instancePath.includes(
+						instancePath_partial,
+					)
+				));
+			} else if (undefined !== instancePath) {
+				checking = checking.filter((maybe) => (
+					maybe.instancePath
+					&& 1 === maybe.instancePath.length
+					&& maybe.instancePath[0] === instancePath
+				));
+			}
+
+			if (parentDataProperty) {
+				checking = checking.filter((maybe) => (
+					maybe.parentDataProperty === parentDataProperty
+				));
+			}
+
+			if (1 === checking.length) {
+				if (!(sub_type[1] in prepend_with_imports)) {
+					prepend_with_imports[sub_type[1]] = new Types();
 				}
 
-				if (parentDataProperty) {
-					checking = checking.filter((maybe) => (
-						maybe.parentDataProperty === parentDataProperty
-					));
+				existing[checking[0].name] = prepend_with_imports[
+					sub_type[1]
+				].add(sub_type[0]);
+
+				if (4 === sub_type.length && checking[0].name in info) {
+					this.#specify_types_from_collected(
+						info,
+						checking[0].name,
+						sub_type[3],
+						existing,
+						prepend_with_imports,
+					);
 				}
-
-				if (1 === checking.length) {
-					if (!(sub_type[1] in prepend_with_imports)) {
-						prepend_with_imports[sub_type[1]] = new Types();
-					}
-
-					existing[checking[0].name] = prepend_with_imports[
-						sub_type[1]
-					].add(sub_type[0]);
-
-					if (4 === sub_type.length) {
-						// @todo deep dive
-					}
-				} else if (checking.length > 0) {
-					throw new Error('Unexpected matches found!');
-				}
+			} else if (checking.length > 0) {
+				throw new Error('Unexpected matches found!');
 			}
 		}
 	}
