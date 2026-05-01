@@ -88,9 +88,9 @@ type specify_type = (
 );
 
 export type validate_call_argument_1_match = Partial<{
-	instancePath: string,
+	instancePath: string | null,
 	instancePath_partial: string,
-	parentDataProperty: string,
+	parentDataProperty: string | null,
 }>;
 
 export type specify_type_nested = (

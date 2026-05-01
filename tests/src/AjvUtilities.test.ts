@@ -1377,12 +1377,6 @@ void describe('AjvUtilities', () => {
 					}),
 					{
 						version_6_validator: version_6.$id,
-						is_IntermediaryCalculation: `${
-							CanConvertTypeJsonDefs.$id
-						}#/$defs/IntermediaryCalculation`,
-						is_CanConvertTypeJson: `${
-							CanConvertTypeJsonDefs.$id
-						}#/$defs/CanConvertTypeJson`,
 					},
 				),
 				version_6_alt3_expectation.toString(),
@@ -1425,6 +1419,16 @@ void describe('AjvUtilities', () => {
 														instancePath_partial: '/instructions/',
 														parentDataProperty: 'amount',
 													},
+													[
+														[
+															'stub_IntermediaryCalculation',
+															'./types.ts',
+															{
+																instancePath: null,
+																parentDataProperty: null,
+															},
+														],
+													],
 												],
 											],
 										],
@@ -1477,16 +1481,6 @@ void describe('AjvUtilities', () => {
 							],
 						],
 					],
-					specify_types_by_export_name: {
-						is_IntermediaryCalculation: [
-							'stub_IntermediaryCalculation',
-							'./types.ts',
-						],
-						is_CanConvertTypeJson: [
-							'stub_CanConvertJson',
-							'./types.ts',
-						],
-					},
 				},
 			],
 		];

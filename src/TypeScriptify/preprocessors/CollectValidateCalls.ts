@@ -221,11 +221,10 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 						0
 					].name.text
 				)
-				&& isPropertyAssignment(maybe.arguments[1].properties[2])
-				&& isIdentifier(maybe.arguments[1].properties[2].name)
-				&& 'parentDataProperty' === (
-					maybe.arguments[1].properties[2].name.text
-				)
+				&& (
+					isShorthandPropertyAssignment(maybe.arguments[1].properties[2])
+					|| (
+						isPropertyAssignment(maybe.arguments[1].properties[2])
 				&& (
 					isStringLiteral(
 						maybe.arguments[1].properties[2].initializer,
@@ -233,6 +232,12 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 					|| isIdentifier(
 						maybe.arguments[1].properties[2].initializer,
 					)
+				)
+					)
+				)
+				&& isIdentifier(maybe.arguments[1].properties[2].name)
+				&& 'parentDataProperty' === (
+					maybe.arguments[1].properties[2].name.text
 				)
 			),
 			(node) => {
@@ -279,12 +284,21 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 							name: node.expression.text,
 							instancePath,
 							parentDataProperty: (
-								isStringLiteral(
+								(
+									isPropertyAssignment(
+										node.arguments[
+											1
+										].properties[
+											2
+										]
+									)
+									&& isStringLiteral(
 									node.arguments[
 										1
 									].properties[
 										2
 									].initializer,
+								)
 								)
 									? node.arguments[
 										1
@@ -396,13 +410,13 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 		existing: specify_types_instance,
 		prepend_with_imports: prepend_with_imports,
 	) {
-		this.#specify_types_from_collected_outside_in(
+		this.#specify_types_from_collected_inside_out(
 			info,
 			config,
 			existing,
 			prepend_with_imports,
 		);
-		this.#specify_types_from_collected_inside_out(
+		this.#specify_types_from_collected_outside_in(
 			info,
 			config,
 			existing,
@@ -555,9 +569,15 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 			));
 		} else if (undefined !== instancePath) {
 			checking = checking.filter((maybe) => (
+				(
 				maybe.instancePath
 				&& 1 === maybe.instancePath.length
 				&& maybe.instancePath[0] === instancePath
+				)
+				|| (
+					maybe.instancePath === null
+					&& instancePath === null
+				)
 			));
 		}
 
@@ -588,7 +608,7 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 			const checking = this.#filter_info(
 				match_with,
 				info[function_name],
-			);
+			).filter((maybe) => !(maybe.name in existing));
 
 			if (1 === checking.length) {
 				if (!(sub_type[1] in prepend_with_imports)) {
