@@ -67,6 +67,66 @@ void describe(Types.name, () => {
 			],
 		];
 
+		const expectations_dataset: [
+			specify_types_config,
+			string,
+		][] = [
+			[
+				{name: 'foo', as_array: true},
+				'foo[]',
+			],
+			[
+				{name: 'foo', as_array: {minimum: 0}},
+				'foo[]',
+			],
+			[
+				{name: 'foo', as_array: {minimum: -1}},
+				'foo[]',
+			],
+			[
+				{name: 'foo', as_array: {minimum: -1234567890}},
+				'foo[]',
+			],
+			[
+				{name: 'foo', as_array: {minimum: 1}},
+				`[${
+					'\n    '
+				}${
+					['foo', '...foo[]'].join(',\n    ')
+				}${
+					'\n'
+				}]`,
+			],
+			[
+				{name: 'foo', as_array: {minimum: 2}},
+				`[${
+					'\n    '
+				}${
+					['foo', 'foo', '...foo[]'].join(',\n    ')
+				}${
+					'\n'
+				}]`,
+			],
+			[
+				{name: 'foo', as_array: {minimum: 3}},
+				`[${
+					'\n    '
+				}${
+					['foo', 'foo', 'foo', '...foo[]'].join(',\n    ')
+				}${
+					'\n'
+				}]`,
+			],
+			[
+				{name: 'foo', sub_type_chain: ['bar']},
+				'foo["bar"]',
+			],
+			[
+				{name: 'foo', sub_type_chain: ['bar', 'baz']},
+				'foo["bar"]["baz"]',
+			],
+		];
+
 		for (let i = 0; i < first_added_instance_dataset.length; ++i) {
 			const [
 				a,
@@ -85,6 +145,18 @@ void describe(Types.name, () => {
 
 				assert.equal(to_string(first), expected_first_as_string);
 				assert.equal(to_string(second), expected_second_as_string);
+			});
+		}
+
+		for (let i = 0; i < expectations_dataset.length; ++i) {
+			const [input, expectation] = expectations_dataset[i];
+
+			void it(`behaves with expectations_dataset[${i}]`, () => {
+				const instance = new Types();
+
+				const result = instance.add(input);
+
+				assert.equal(to_string(result), expectation);
 			});
 		}
 	});
