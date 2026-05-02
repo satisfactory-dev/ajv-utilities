@@ -752,3 +752,76 @@ export class DirectTernaryConcat extends TernaryConcat<
 		);
 	}
 }
+
+type WrappedTernaryConcatPropertyAccessExpression<
+	T extends `wrapper${number}` = `wrapper${number}`,
+> = (
+	& PropertyAccessExpression
+	& {
+		expression: (
+			& PropertyAccessExpression
+			& {
+				expression: (
+					& Identifier
+					& {
+						text: T,
+					}
+				),
+				name: (
+					& Identifier
+					& {
+						text: 'validate',
+					}
+				),
+			}
+		),
+		name: (
+			& Identifier
+			& {
+				text: 'errors',
+			}
+		),
+	}
+);
+
+export class WrappedTernaryConcat extends TernaryConcat<
+	WrappedTernaryConcatPropertyAccessExpression
+> {
+	constructor(
+		prepend_with_imports: prepend_with_imports,
+	) {
+		super(
+			prepend_with_imports,
+			(maybe): maybe is WrappedTernaryConcatPropertyAccessExpression => (
+				isPropertyAccessExpression(maybe)
+				&& isPropertyAccessExpression(maybe.expression)
+				&& isIdentifier(maybe.expression.expression)
+				&& /^wrapper\d+$/.test(maybe.expression.expression.text)
+				&& isIdentifier(maybe.expression.name)
+				&& 'validate' === maybe.expression.name.text
+				&& isIdentifier(maybe.name)
+				&& 'errors' === maybe.name.text
+			),
+			(a, b) => (
+				a.name.text === b.name.text
+			),
+			(node) => {
+				return factory.createCallExpression(
+					factory.updatePropertyAccessExpression(
+						node.whenFalse.expression,
+						node.whenFalse.expression.expression,
+						node.whenFalse.expression.name,
+					),
+					undefined,
+					[
+						factory.createBinaryExpression(
+							node.whenFalse.arguments[0],
+							factory.createToken(SyntaxKind.BarBarToken),
+							factory.createArrayLiteralExpression(),
+						),
+					],
+				);
+			},
+		);
+	}
+}

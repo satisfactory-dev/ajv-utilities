@@ -8724,7 +8724,7 @@ function validate28(data: unknown, { instancePath = "", parentData, parentDataPr
         }
         if (data.left !== undefined) {
             if (!(wrapper0.validate(data.left, { instancePath: instancePath + "/left", parentData: data, parentDataProperty: "left", rootData, dynamicAnchors }))) {
-                vErrors = vErrors === null ? wrapper0.validate.errors : vErrors.concat(wrapper0.validate.errors);
+                vErrors = vErrors.concat(wrapper0.validate.errors || []);
                 errors = vErrors.length;
             }
         }
@@ -8743,7 +8743,7 @@ function validate28(data: unknown, { instancePath = "", parentData, parentDataPr
         }
         if (data.right !== undefined) {
             if (!(wrapper0.validate(data.right, { instancePath: instancePath + "/right", parentData: data, parentDataProperty: "right", rootData, dynamicAnchors }))) {
-                vErrors = vErrors === null ? wrapper0.validate.errors : vErrors.concat(wrapper0.validate.errors);
+                vErrors = vErrors.concat(wrapper0.validate.errors || []);
                 errors = vErrors.length;
             }
         }
