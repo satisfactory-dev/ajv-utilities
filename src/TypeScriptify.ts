@@ -118,6 +118,9 @@ import type {
 // oxlint-disable-next-line @stylistic/max-len
 import CollectValidateCalls from './TypeScriptify/preprocessors/CollectValidateCalls.ts';
 
+// oxlint-disable-next-line @stylistic/max-len
+import ModifyValidateWrapper from './TypeScriptify/modifiers/ModifyValidateWrapper.ts';
+
 export default class TypeScript {
 	ify(code: string, config: Partial<Config>): string {
 		code = esmify(code);
@@ -300,6 +303,7 @@ export default class TypeScript {
 					prepend_with_imports,
 					patch_with.definitely_has_evaluated,
 				),
+				new ModifyValidateWrapper(prepend_with_imports),
 			],
 		);
 

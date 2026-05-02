@@ -263,7 +263,9 @@ function validate25(data: unknown, { instancePath = "", parentData, parentDataPr
 }
 (validate25 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
 const schema42 = { "type": "object", "required": ["type", "left", "operation", "right"] as const, "additionalProperties": false, "properties": { "type": { "type": "string", "const": "IntermediaryCalculation" }, "left": { "$ref": "#/$defs/CanConvertTypeJson" }, "operation": { "type": "string", "enum": ["+", "-", "*", "x", "/", "%"] as const }, "right": { "$ref": "#/$defs/CanConvertTypeJson" } } };
-const wrapper0 = { validate: validate24 };
+const wrapper0: {
+    validate: Is;
+} = { validate: validate24 };
 function validate29(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
     rootData: unknown;
 }> = {}): data is stubs["IntermediaryCalculation"] {
