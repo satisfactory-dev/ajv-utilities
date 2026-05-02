@@ -3,16 +3,8 @@ import type {
 } from './TypeReferences.ts';
 
 export default class KnownImports {
-	static SchemaObject(prepend_with_imports: prepend_with_imports) {
-		prepend_with_imports.ajv.add('SchemaObject');
-	}
-
-	static ValidateFunction(prepend_with_imports: prepend_with_imports) {
-		prepend_with_imports.ajv.add('ValidateFunction');
-	}
-
-	static Is(prepend_with_imports: prepend_with_imports) {
-		prepend_with_imports['@satisfactory-dev/ajv-utilities'].add('Is');
+	static ErrorObject(prepend_with_imports: prepend_with_imports) {
+		prepend_with_imports.ajv.add('ErrorObject');
 	}
 
 	static IsStandalone(prepend_with_imports: prepend_with_imports) {

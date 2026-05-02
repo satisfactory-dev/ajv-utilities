@@ -15,6 +15,7 @@ import {
 import type {
 	prepend_with_imports,
 } from '../TypeReferences.ts';
+import KnownImports from '../known_imports.ts';
 
 type AddErrorObjectTypeCandidate = (
 	& VariableDeclaration
@@ -39,7 +40,7 @@ export default class AddErrorObjectType extends ConditionalModification<
 				&& /^err\d+$/.test(node.name.text)
 			),
 			(node) => {
-				prepend_with_imports.ajv.add('ErrorObject');
+				KnownImports.ErrorObject(prepend_with_imports);
 
 				return factory.updateVariableDeclaration(
 					node,

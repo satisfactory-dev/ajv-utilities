@@ -68,7 +68,7 @@ export class ModifyVErrors extends ConditionalModification<
 				&& node.initializer?.kind === SyntaxKind.NullKeyword
 			),
 			(node) => {
-				prepend_with_imports.ajv.add('ErrorObject');
+				KnownImports.ErrorObject(prepend_with_imports);
 
 				return factory.updateVariableDeclaration(
 					node,
