@@ -1126,7 +1126,7 @@ void describe('AjvUtilities', () => {
 								[
 									{
 										name: 'stub_Collection',
-										as_array: {minimum: 0},
+										as_array: {minimum: 1},
 									},
 									'./types.ts',
 									{

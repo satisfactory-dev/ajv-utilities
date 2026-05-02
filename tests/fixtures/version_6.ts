@@ -943,7 +943,10 @@ function validate39(data: unknown, { instancePath = "", parentData, parentDataPr
     return errors === 0;
 }
 (validate39 as IsStandalone).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
-function validate38(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is stub_Collection[] {
+function validate38(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is [
+    stub_Collection,
+    ...stub_Collection[]
+] {
     let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = ajv_utiltiies__definitely_evaluated(validate38);
