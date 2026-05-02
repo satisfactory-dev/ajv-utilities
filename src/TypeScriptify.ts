@@ -60,7 +60,7 @@ import {
 	ConditionalLengthSet,
 	ModifyVErrors,
 	ReplaceVErrorsPushIfElse,
-	TernaryConcat,
+	DirectTernaryConcat,
 } from './TypeScriptify/modifiers/ModifyVErrors.ts';
 
 // oxlint-disable-next-line @stylistic/max-len
@@ -285,7 +285,7 @@ export default class TypeScript {
 				new ModifyVErrors(prepend_with_imports),
 				new ReplaceVErrorsPushIfElse(),
 				new ConditionalLengthSet(),
-				new TernaryConcat(prepend_with_imports),
+				new DirectTernaryConcat(prepend_with_imports),
 				new QuestionableEvaluatedProperty(),
 				new TypecastEvalulated(prepend_with_imports),
 				new TypecastSetErrors(prepend_with_imports),

@@ -9,6 +9,7 @@ import type {
 	ExpressionStatement,
 	Identifier,
 	IfStatement,
+	Node,
 	NodeArray,
 	PropertyAccessExpression,
 	VariableDeclaration,
@@ -586,7 +587,7 @@ export class ConditionalLengthSet extends ConditionalModification<
 }
 
 type TernaryConcatCandidate<
-	T extends `validate${number}` = `validate${number}`,
+	T extends PropertyAccessExpression,
 > = (
 	& ConditionalExpression
 	& {
@@ -610,23 +611,7 @@ type TernaryConcatCandidate<
 				},
 			}
 		),
-		whenTrue: (
-			& PropertyAccessExpression
-			& {
-				expression: (
-					& Identifier
-					& {
-						text: T,
-					}
-				),
-				name: (
-					& Identifier
-					& {
-						text: 'errors',
-					}
-				),
-			}
-		),
+		whenTrue: T,
 		whenFalse: (
 			& CallExpression
 			& {
@@ -651,23 +636,7 @@ type TernaryConcatCandidate<
 					& NodeArray<PropertyAccessExpression>
 					& {
 						length: 1,
-						0: (
-							& PropertyAccessExpression
-							& {
-								expression: (
-									& Identifier
-									& {
-										text: T,
-									}
-								),
-								name: (
-									& Identifier
-									& {
-										text: 'errors',
-									}
-								),
-							}
-						),
+						0: T,
 					}
 				),
 			}
@@ -675,25 +644,24 @@ type TernaryConcatCandidate<
 	}
 );
 
-export class TernaryConcat extends ConditionalModification<
-	TernaryConcatCandidate
-> {
-	constructor(prepend_with_imports: prepend_with_imports) {
+abstract class TernaryConcat<
+	T extends PropertyAccessExpression,
+> extends ConditionalModification<TernaryConcatCandidate<T>> {
+	constructor(
+		prepend_with_imports: prepend_with_imports,
+		is_property_access_expression: (maybe: Node) => maybe is T,
+		accesses_match: (a: T, b: T) => boolean,
+		visit: TernaryConcat<T>['visit'],
+	) {
 		super(
-			(maybe): maybe is TernaryConcatCandidate => (
+			(maybe): maybe is TernaryConcatCandidate<T> => (
 				isConditionalExpression(maybe)
 				&& isBinaryExpression(maybe.condition)
 				&& isIdentifier(maybe.condition.left)
 				&& 'vErrors' === maybe.condition.left.text
 				&& SyntaxKind.EqualsEqualsEqualsToken === maybe.condition.operatorToken.kind
 				&& SyntaxKind.NullKeyword === maybe.condition.right.kind
-				&& isPropertyAccessExpression(maybe.whenTrue)
-				&& isIdentifier(maybe.whenTrue.expression)
-				&& this.validate_function_name.test(
-					maybe.whenTrue.expression.text,
-				)
-				&& isIdentifier(maybe.whenTrue.name)
-				&& 'errors' === maybe.whenTrue.name.text
+				&& is_property_access_expression(maybe.whenTrue)
 				&& isCallExpression(maybe.whenFalse)
 				&& isPropertyAccessExpression(maybe.whenFalse.expression)
 				&& isIdentifier(maybe.whenFalse.expression.expression)
@@ -701,16 +669,56 @@ export class TernaryConcat extends ConditionalModification<
 				&& isIdentifier(maybe.whenFalse.expression.name)
 				&& 'concat' === maybe.whenFalse.expression.name.text
 				&& 1 === maybe.whenFalse.arguments.length
-				&& isPropertyAccessExpression(maybe.whenFalse.arguments[0])
-				&& isIdentifier(maybe.whenFalse.arguments[0].expression)
-				&& this.validate_function_name.test(
-					maybe.whenFalse.arguments[0].expression.text,
+				&& is_property_access_expression(maybe.whenFalse.arguments[0])
+				&& accesses_match(
+					maybe.whenTrue,
+					maybe.whenFalse.arguments[0],
 				)
-				&& maybe.whenTrue.expression.text === maybe.whenFalse.arguments[
-					0
-				].expression.text
-				&& isIdentifier(maybe.whenFalse.arguments[0].name)
-				&& 'errors' === maybe.whenFalse.arguments[0].name.text
+			),
+			visit,
+		);
+	}
+}
+
+type DirectTernaryConcatPropertyAccessExpression<
+	T extends `validate${number}` = `validate${number}`,
+> = (
+	& PropertyAccessExpression
+	& {
+		expression: (
+			& Identifier
+			& {
+				text: T,
+			}
+		),
+		name: (
+			& Identifier
+			& {
+				text: 'errors',
+			}
+		),
+	}
+);
+
+export class DirectTernaryConcat extends TernaryConcat<
+	DirectTernaryConcatPropertyAccessExpression
+> {
+	constructor(
+		prepend_with_imports: prepend_with_imports,
+	) {
+		super(
+			prepend_with_imports,
+			(maybe): maybe is DirectTernaryConcatPropertyAccessExpression => (
+				isPropertyAccessExpression(maybe)
+				&& isIdentifier(maybe.expression)
+				&& this.validate_function_name.test(
+					maybe.expression.text,
+				)
+				&& isIdentifier(maybe.name)
+				&& 'errors' === maybe.name.text
+			),
+			(a, b) => (
+				a.name.text === b.name.text
 			),
 			(node) => {
 				KnownImports.IsStandalone(prepend_with_imports);
