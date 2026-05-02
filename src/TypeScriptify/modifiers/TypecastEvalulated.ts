@@ -18,6 +18,7 @@ import {
 import type {
 	prepend_with_imports,
 } from '../TypeReferences.ts';
+import KnownImports from '../known_imports.ts';
 
 type QuestionableEvaluatedPropertyCandidate = (
 	& PropertyAccessExpression
@@ -107,15 +108,13 @@ export class TypecastEvalulated extends ConditionalModification<
 				)
 			),
 			(node) => {
-				prepend_with_imports[
-					'@satisfactory-dev/ajv-utilities'
-				].add('Is');
+				KnownImports.IsStandalone(prepend_with_imports);
 
 				return factory.createPropertyAccessExpression(
 					factory.createParenthesizedExpression(
 						factory.createAsExpression(
 							factory.createIdentifier(node.expression.text),
-							factory.createTypeReferenceNode('Is'),
+							factory.createTypeReferenceNode('IsStandalone'),
 						),
 					),
 					factory.createIdentifier(node.name.text),

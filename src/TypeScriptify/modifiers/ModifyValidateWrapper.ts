@@ -87,7 +87,7 @@ export default class ModifyValidateWrapper extends ConditionalModification<
 				)
 			),
 			(node) => {
-				KnownImports.Is(prepend_with_imports);
+				KnownImports.IsStandalone(prepend_with_imports);
 
 				return factory.updateVariableDeclaration(
 					node,
@@ -98,7 +98,7 @@ export default class ModifyValidateWrapper extends ConditionalModification<
 							undefined,
 							'validate',
 							undefined,
-							factory.createTypeReferenceNode('Is'),
+							factory.createTypeReferenceNode('IsStandalone'),
 						),
 					]),
 					node.initializer,

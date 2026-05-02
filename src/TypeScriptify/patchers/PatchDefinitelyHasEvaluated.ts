@@ -59,7 +59,7 @@ export default class PatchDefinitelyHasEvaluated extends ConditionalModification
 				&& isVariableDeclaration(maybe.parent)
 			),
 			(node) => {
-				KnownImports.Is(prepend_with_imports);
+				KnownImports.IsStandalone(prepend_with_imports);
 				patch_needed();
 
 				return factory.createCallExpression(
@@ -90,7 +90,7 @@ export default class PatchDefinitelyHasEvaluated extends ConditionalModification
 				factory.createIdentifier('maybe'),
 				undefined,
 				factory.createTypeReferenceNode(
-					factory.createIdentifier('Is'),
+					factory.createIdentifier('IsStandalone'),
 					[factory.createTypeReferenceNode('T')],
 				),
 			)],
@@ -99,7 +99,7 @@ export default class PatchDefinitelyHasEvaluated extends ConditionalModification
 				[
 					factory.createIndexedAccessTypeNode(
 						factory.createTypeReferenceNode(
-							factory.createIdentifier('Is'),
+							factory.createIdentifier('IsStandalone'),
 							[factory.createTypeReferenceNode('T')],
 						),
 						factory.createLiteralTypeNode(

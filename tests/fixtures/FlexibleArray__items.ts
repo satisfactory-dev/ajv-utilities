@@ -1,7 +1,7 @@
-import type { ErrorObject, ValidateFunction } from 'ajv';
-import type { Is } from '@satisfactory-dev/ajv-utilities';
+import type { ErrorObject } from 'ajv';
+import type { IsStandalone, StandaloneDataValidationCxt } from '@satisfactory-dev/ajv-utilities';
 import type { FlexibleArray_type } from './types.ts';
-function ajv_utiltiies__definitely_evaluated<T>(maybe: Is<T>): Exclude<Is<T>["evaluated"], undefined> { if (undefined === maybe.evaluated)
+function ajv_utiltiies__definitely_evaluated<T>(maybe: IsStandalone<T>): Exclude<IsStandalone<T>["evaluated"], undefined> { if (undefined === maybe.evaluated)
     throw new Error(`${maybe.name}.evaluated not set!`); return maybe.evaluated; }
 function ajv_utilities__is_probably_object(maybe: unknown): maybe is Record<string, unknown> { return !!maybe && typeof maybe === "object" && !Array.isArray(maybe); }
 function ajv_utilities__is_probably_array(maybe: unknown): maybe is unknown[] { return Array.isArray(maybe); }
@@ -10,9 +10,7 @@ export const FlexibleArray__items = validate20;
 const schema31 = { "$id": "docs.json.ts--lib--PropertySchemaToRegex--FlexibleArray--items", "type": "object", "additionalProperties": false, "required": ["type", "items", "minItems", "uniqueItems"] as const, "properties": { "$schema": { "type": "string", "enum": ["https://json-schema.org/draft/2020-12/schema"] as const }, "$id": { "type": "string", "minLength": 1 }, "type": { "type": "string", "const": "array" }, "uniqueItems": { "type": "boolean", "const": true }, "$defs": { "type": "object", "minProperties": 1, "additionalProperties": { "oneOf": [{ "type": "object", "required": ["type"] as const, "properties": { "type": { "type": "string", "minLength": 1 } } }, { "type": "object", "additionalProperties": false, "required": ["allOf"] as const, "properties": { "allOf": { "type": "array", "minItems": 2, "items": { "oneOf": [{ "type": "object", "required": ["type"] as const, "properties": { "type": { "type": "string", "minLength": 1 } } }, { "type": "object", "additionalProperties": false, "required": ["$ref"] as const, "properties": { "$ref": { "type": "string", "pattern": "^(.+)?#\\/\\$defs\\/(.+)$" } } }] as const } } } }, { "type": "object", "additionalProperties": false, "required": ["oneOf"] as const, "properties": { "oneOf": { "type": "array", "minItems": 2, "items": { "oneOf": [{ "type": "object", "required": ["type"] as const, "properties": { "type": { "type": "string", "minLength": 1 } } }, { "type": "object", "additionalProperties": false, "required": ["$ref"] as const, "properties": { "$ref": { "type": "string", "pattern": "^(.+)?#\\/\\$defs\\/(.+)$" } } }] as const } } } }] as const } }, "minItems": { "type": "integer", "minimum": 0 }, "maxItems": { "type": "integer", "minimum": 0 }, "items": {} } };
 const func1 = ucs2length;
 const pattern4 = new RegExp("^(.+)?#\\/\\$defs\\/(.+)$", "u");
-function validate20(data: unknown, { instancePath = "" }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
-    rootData: unknown;
-}> = {}): data is FlexibleArray_type<"items"> {
+function validate20(data: unknown, { instancePath = "" }: Partial<StandaloneDataValidationCxt> = {}): data is FlexibleArray_type<"items"> {
     let props0: (true | {
         [key: string]: true;
     } | undefined) = undefined, props1: (true | {
@@ -532,7 +530,7 @@ function validate20(data: unknown, { instancePath = "" }: Partial<Omit<Exclude<P
         vErrors.push(err54)
         errors++;
     }
-    (validate20 as Is).errors = vErrors.length ? vErrors : null;
+    (validate20 as IsStandalone).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-(validate20 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
+(validate20 as IsStandalone).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };

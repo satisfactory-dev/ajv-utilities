@@ -78,7 +78,7 @@ export default class TypecastSetErrors extends ConditionalModification<
 				)
 			),
 			(node) => {
-				KnownImports.Is(prepend_with_imports);
+				KnownImports.IsStandalone(prepend_with_imports);
 
 				return factory.updateBinaryExpression(
 					node,
@@ -87,7 +87,7 @@ export default class TypecastSetErrors extends ConditionalModification<
 						factory.createAsExpression(
 							node.left.expression,
 							factory.createTypeReferenceNode(
-								'Is',
+								'IsStandalone',
 							),
 						),
 						node.left.name,

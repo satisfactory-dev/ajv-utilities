@@ -1,4 +1,7 @@
 import type {
+	DataValidationCxt,
+} from 'ajv/dist/types/index.js';
+import type {
 	ValidateFunction,
 } from 'ajv';
 
@@ -8,16 +11,28 @@ import type {
 	WithSubTypeChain,
 } from './TypeReferences.ts';
 
+export type StandaloneDataValidationCxt = (
+	& Omit<
+		DataValidationCxt,
+		'rootData'
+	>
+	& {
+		rootData: unknown,
+	}
+);
+
+export type IsStandalone<T = unknown> = {
+	(
+		data: unknown,
+		dataCxt?: Partial<StandaloneDataValidationCxt>,
+	): data is T,
+	errors?: ValidateFunction<T>['errors'],
+	evaluated?: ValidateFunction<T>['evaluated'],
+};
+
 export type Is<T = unknown> = (
 	| ValidateFunction<T>
-	| {
-		(
-			data: unknown,
-			dataCxt?: Parameters<ValidateFunction<T>>[1],
-		): data is T,
-		errors?: ValidateFunction<T>['errors'],
-		evaluated?: ValidateFunction<T>['evaluated'],
-	}
+	| IsStandalone<T>
 );
 
 export type as_array_config = (

@@ -1,16 +1,14 @@
-import type { ErrorObject, ValidateFunction } from 'ajv';
-import type { Is } from '@satisfactory-dev/ajv-utilities';
+import type { ErrorObject } from 'ajv';
+import type { IsStandalone, StandaloneDataValidationCxt } from '@satisfactory-dev/ajv-utilities';
 import type { const_string as bar, enum_string as baz } from './types.ts';
-function ajv_utiltiies__definitely_evaluated<T>(maybe: Is<T>): Exclude<Is<T>["evaluated"], undefined> { if (undefined === maybe.evaluated)
+function ajv_utiltiies__definitely_evaluated<T>(maybe: IsStandalone<T>): Exclude<IsStandalone<T>["evaluated"], undefined> { if (undefined === maybe.evaluated)
     throw new Error(`${maybe.name}.evaluated not set!`); return maybe.evaluated; }
 function ajv_utilities__is_probably_object(maybe: unknown): maybe is Record<string, unknown> { return !!maybe && typeof maybe === "object" && !Array.isArray(maybe); }
 function ajv_utilities__is_probably_array(maybe: unknown): maybe is unknown[] { return Array.isArray(maybe); }
 import { ucs2length } from '@satisfactory-dev/ajv-utilities/ajv';
 export const validate_as_ConstString = validate20;
 const schema31 = { "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "docs.json.ts--lib--PropertySchemaToRegex--ConstString", "type": "object", "additionalProperties": false, "required": ["type", "const"] as const, "properties": { "type": { "type": "string", "const": "string" }, "const": { "type": "string" } } };
-function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
-    rootData: unknown;
-}> = {}): data is bar {
+function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is bar {
     /*# sourceURL="docs.json.ts--lib--PropertySchemaToRegex--ConstString" */ ;
     let vErrors: ErrorObject[] = [];
     let errors = 0;
@@ -65,16 +63,14 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
         vErrors.push(err6)
         errors++;
     }
-    (validate20 as Is).errors = vErrors.length ? vErrors : null;
+    (validate20 as IsStandalone).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-(validate20 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
+(validate20 as IsStandalone).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
 export const validate_as_EnumString = validate21;
 const schema32 = { "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "docs.json.ts--lib--PropertySchemaToRegex--EnumString", "type": "object", "additionalProperties": false, "required": ["type", "enum"] as const, "properties": { "type": { "type": "string", "const": "string" }, "enum": { "type": "array", "minItems": 2, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } } } };
 const func1 = ucs2length;
-function validate21(data: unknown, { instancePath = "" }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
-    rootData: unknown;
-}> = {}): data is baz<"foo", "bar"> {
+function validate21(data: unknown, { instancePath = "" }: Partial<StandaloneDataValidationCxt> = {}): data is baz<"foo", "bar"> {
     /*# sourceURL="docs.json.ts--lib--PropertySchemaToRegex--EnumString" */ ;
     let vErrors: ErrorObject[] = [];
     let errors = 0;
@@ -174,7 +170,7 @@ function validate21(data: unknown, { instancePath = "" }: Partial<Omit<Exclude<P
         vErrors.push(err10)
         errors++;
     }
-    (validate21 as Is).errors = vErrors.length ? vErrors : null;
+    (validate21 as IsStandalone).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-(validate21 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
+(validate21 as IsStandalone).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };

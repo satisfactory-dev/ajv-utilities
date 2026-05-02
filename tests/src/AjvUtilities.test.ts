@@ -291,24 +291,19 @@ void describe('AjvUtilities', () => {
 				),
 				[
 					// oxlint-disable-next-line @stylistic/max-len
-					`import type { ValidateFunction } from 'ajv';`,
-
-					// oxlint-disable-next-line @stylistic/max-len
-					`import type { Is } from '@satisfactory-dev/ajv-utilities';`,
+					`import type { IsStandalone, StandaloneDataValidationCxt } from '@satisfactory-dev/ajv-utilities';`,
 					'export const foo = validate20;',
 					'const schema31 = { "$id": "foo" };',
 
 					// oxlint-disable-next-line @stylistic/max-len
-					'function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {',
-					'    rootData: unknown;',
-					'}> = {}) {',
+					'function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}) {',
 					'    /*# sourceURL="foo" */ ;',
-					'    (validate20 as Is).errors = null;',
+					'    (validate20 as IsStandalone).errors = null;',
 					'    return true;',
 					'}',
 
 					// oxlint-disable-next-line @stylistic/max-len
-					'(validate20 as Is).evaluated = { "dynamicProps": false, "dynamicItems": false };',
+					'(validate20 as IsStandalone).evaluated = { "dynamicProps": false, "dynamicItems": false };',
 					'',
 				].join('\n'),
 			],
@@ -336,23 +331,18 @@ void describe('AjvUtilities', () => {
 				),
 				[
 					// oxlint-disable-next-line @stylistic/max-len
-					`import type { ValidateFunction } from 'ajv';`,
-
-					// oxlint-disable-next-line @stylistic/max-len
-					`import type { Is } from '@satisfactory-dev/ajv-utilities';`,
+					`import type { IsStandalone, StandaloneDataValidationCxt } from '@satisfactory-dev/ajv-utilities';`,
 					'export const foo = validate20;',
 
 					// oxlint-disable-next-line @stylistic/max-len
-					'function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {',
-					'    rootData: unknown;',
-					'}> = {}) {',
+					'function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}) {',
 					'    /*# sourceURL="foo" */ ;',
-					'    (validate20 as Is).errors = null;',
+					'    (validate20 as IsStandalone).errors = null;',
 					'    return true;',
 					'}',
 
 					// oxlint-disable-next-line @stylistic/max-len
-					'(validate20 as Is).evaluated = { "dynamicProps": false, "dynamicItems": false };',
+					'(validate20 as IsStandalone).evaluated = { "dynamicProps": false, "dynamicItems": false };',
 					'',
 				].join('\n'),
 				{

@@ -1,13 +1,11 @@
-import type { ErrorObject, ValidateFunction } from 'ajv';
-import type { Is } from '@satisfactory-dev/ajv-utilities';
+import type { ErrorObject } from 'ajv';
+import type { IsStandalone, StandaloneDataValidationCxt } from '@satisfactory-dev/ajv-utilities';
 import type { const_string } from './types.ts';
-function ajv_utiltiies__definitely_evaluated<T>(maybe: Is<T>): Exclude<Is<T>["evaluated"], undefined> { if (undefined === maybe.evaluated)
+function ajv_utiltiies__definitely_evaluated<T>(maybe: IsStandalone<T>): Exclude<IsStandalone<T>["evaluated"], undefined> { if (undefined === maybe.evaluated)
     throw new Error(`${maybe.name}.evaluated not set!`); return maybe.evaluated; }
 function ajv_utilities__is_probably_object(maybe: unknown): maybe is Record<string, unknown> { return !!maybe && typeof maybe === "object" && !Array.isArray(maybe); }
 export const foo = validate20;
-function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
-    rootData: unknown;
-}> = {}): data is const_string {
+function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is const_string {
     /*# sourceURL="docs.json.ts--lib--PropertySchemaToRegex--ConstString" */ ;
     let vErrors: ErrorObject[] = [];
     let errors = 0;
@@ -62,7 +60,7 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
         vErrors.push(err6)
         errors++;
     }
-    (validate20 as Is).errors = vErrors.length ? vErrors : null;
+    (validate20 as IsStandalone).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-(validate20 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
+(validate20 as IsStandalone).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };

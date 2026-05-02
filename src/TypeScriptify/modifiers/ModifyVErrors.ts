@@ -713,7 +713,7 @@ export class TernaryConcat extends ConditionalModification<
 				&& 'errors' === maybe.whenFalse.arguments[0].name.text
 			),
 			(node) => {
-				KnownImports.Is(prepend_with_imports);
+				KnownImports.IsStandalone(prepend_with_imports);
 
 				return factory.createCallExpression(
 					factory.updatePropertyAccessExpression(
@@ -730,7 +730,7 @@ export class TernaryConcat extends ConditionalModification<
 										factory.createIdentifier(
 											node.whenTrue.expression.text,
 										),
-										factory.createTypeReferenceNode('Is'),
+										factory.createTypeReferenceNode('IsStandalone'),
 									),
 								),
 								factory.createIdentifier('errors'),

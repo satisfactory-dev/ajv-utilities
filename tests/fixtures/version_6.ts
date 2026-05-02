@@ -1,7 +1,7 @@
-import type { ErrorObject, ValidateFunction } from 'ajv';
-import type { Is } from '@satisfactory-dev/ajv-utilities';
+import type { ErrorObject } from 'ajv';
+import type { IsStandalone, StandaloneDataValidationCxt } from '@satisfactory-dev/ajv-utilities';
 import type { stub_amount_string_flexible, stub_CanConvertJson, stub_Collection, stub_Distributor_json, stub_IntermediaryCalculation, stub_IntermediaryNumber, stub_Pool, stub_Settings, stub_State_Json } from './types.ts';
-function ajv_utiltiies__definitely_evaluated<T>(maybe: Is<T>): Exclude<Is<T>["evaluated"], undefined> { if (undefined === maybe.evaluated)
+function ajv_utiltiies__definitely_evaluated<T>(maybe: IsStandalone<T>): Exclude<IsStandalone<T>["evaluated"], undefined> { if (undefined === maybe.evaluated)
     throw new Error(`${maybe.name}.evaluated not set!`); return maybe.evaluated; }
 function ajv_utilities__is_probably_object(maybe: unknown): maybe is Record<string, unknown> { return !!maybe && typeof maybe === "object" && !Array.isArray(maybe); }
 function ajv_utilities__is_probably_array(maybe: unknown): maybe is unknown[] { return Array.isArray(maybe); }
@@ -26,9 +26,7 @@ const schema40 = { "type": "string", "pattern": "^\\d+(?:\\.\\d{1,6})?$" };
 const pattern7 = new RegExp("^\\d+(?:\\.\\d{1,6})?$", "u");
 const pattern8 = new RegExp("^\\d*(?:\\.\\d{1,6})$", "u");
 const pattern9 = new RegExp("^\\d+$", "u");
-function validate26(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
-    rootData: unknown;
-}> = {}): data is stub_amount_string_flexible {
+function validate26(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is stub_amount_string_flexible {
     let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = ajv_utiltiies__definitely_evaluated(validate26);
@@ -123,15 +121,13 @@ function validate26(data: unknown, { instancePath = "", parentData, parentDataPr
             }
         }
     }
-    (validate26 as Is).errors = vErrors.length ? vErrors : null;
+    (validate26 as IsStandalone).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-(validate26 as Is).evaluated = { "dynamicProps": false, "dynamicItems": false };
+(validate26 as IsStandalone).evaluated = { "dynamicProps": false, "dynamicItems": false };
 const pattern10 = new RegExp("^-?(?:\\d*\\.\\d+|\\d+(?:\\.\\d+)?)$", "u");
 const pattern11 = new RegExp("^(-?\\d+(?:\\.\\d+))e([+-])(\\d+)$", "u");
-function validate25(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
-    rootData: unknown;
-}> = {}): data is stub_IntermediaryNumber {
+function validate25(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is stub_IntermediaryNumber {
     let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = ajv_utiltiies__definitely_evaluated(validate25);
@@ -179,7 +175,7 @@ function validate25(data: unknown, { instancePath = "", parentData, parentDataPr
             let passing0 = null;
             const _errs6 = errors;
             if (!(validate26(data1, { instancePath: instancePath + "/value", parentData: data, parentDataProperty: "value", rootData, dynamicAnchors }))) {
-                vErrors = vErrors.concat((validate26 as Is).errors || []);
+                vErrors = vErrors.concat((validate26 as IsStandalone).errors || []);
                 errors = vErrors.length;
             }
             var _valid0 = _errs6 === errors;
@@ -258,17 +254,15 @@ function validate25(data: unknown, { instancePath = "", parentData, parentDataPr
         vErrors.push(err10)
         errors++;
     }
-    (validate25 as Is).errors = vErrors.length ? vErrors : null;
+    (validate25 as IsStandalone).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-(validate25 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
+(validate25 as IsStandalone).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
 const schema42 = { "type": "object", "required": ["type", "left", "operation", "right"] as const, "additionalProperties": false, "properties": { "type": { "type": "string", "const": "IntermediaryCalculation" }, "left": { "$ref": "#/$defs/CanConvertTypeJson" }, "operation": { "type": "string", "enum": ["+", "-", "*", "x", "/", "%"] as const }, "right": { "$ref": "#/$defs/CanConvertTypeJson" } } };
 const wrapper0: {
-    validate: Is;
+    validate: IsStandalone;
 } = { validate: validate24 };
-function validate29(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
-    rootData: unknown;
-}> = {}): data is stub_IntermediaryCalculation {
+function validate29(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is stub_IntermediaryCalculation {
     let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = ajv_utiltiies__definitely_evaluated(validate29);
@@ -350,13 +344,11 @@ function validate29(data: unknown, { instancePath = "", parentData, parentDataPr
         vErrors.push(err9)
         errors++;
     }
-    (validate29 as Is).errors = vErrors.length ? vErrors : null;
+    (validate29 as IsStandalone).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-(validate29 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
-function validate24(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
-    rootData: unknown;
-}> = {}): data is stub_CanConvertJson {
+(validate29 as IsStandalone).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
+function validate24(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is stub_CanConvertJson {
     let props0: (true | {
         [key: string]: true;
     } | undefined) = undefined;
@@ -374,7 +366,7 @@ function validate24(data: unknown, { instancePath = "", parentData, parentDataPr
     let passing0 = null;
     const _errs1 = errors;
     if (!(validate25(data, { instancePath, parentData, parentDataProperty, rootData, dynamicAnchors }))) {
-        vErrors = vErrors.concat((validate25 as Is).errors || []);
+        vErrors = vErrors.concat((validate25 as IsStandalone).errors || []);
         errors = vErrors.length;
     }
     var _valid0 = _errs1 === errors;
@@ -385,7 +377,7 @@ function validate24(data: unknown, { instancePath = "", parentData, parentDataPr
     }
     const _errs2 = errors;
     if (!(validate29(data, { instancePath, parentData, parentDataProperty, rootData, dynamicAnchors }))) {
-        vErrors = vErrors.concat((validate29 as Is).errors || []);
+        vErrors = vErrors.concat((validate29 as IsStandalone).errors || []);
         errors = vErrors.length;
     }
     var _valid0 = _errs2 === errors;
@@ -478,14 +470,12 @@ function validate24(data: unknown, { instancePath = "", parentData, parentDataPr
             }
         }
     }
-    (validate24 as Is).errors = vErrors.length ? vErrors : null;
+    (validate24 as IsStandalone).errors = vErrors.length ? vErrors : null;
     evaluated0.props = props0;
     return errors === 0;
 }
-(validate24 as Is).evaluated = { "dynamicProps": true, "dynamicItems": false };
-function validate22(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
-    rootData: unknown;
-}> = {}): data is stub_Pool["production"] {
+(validate24 as IsStandalone).evaluated = { "dynamicProps": true, "dynamicItems": false };
+function validate22(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is stub_Pool["production"] {
     let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = ajv_utiltiies__definitely_evaluated(validate22);
@@ -506,7 +496,7 @@ function validate22(data: unknown, { instancePath = "", parentData, parentDataPr
         for (const key1 in data) {
             if (pattern5.test(key1)) {
                 if (!(validate24(data[key1], { instancePath: instancePath + "/" + key1.replace(/~/g, "~0").replace(/\//g, "~1"), parentData: data, parentDataProperty: key1, rootData, dynamicAnchors }))) {
-                    vErrors = vErrors.concat((validate24 as Is).errors || []);
+                    vErrors = vErrors.concat((validate24 as IsStandalone).errors || []);
                     errors = vErrors.length;
                 }
             }
@@ -517,14 +507,12 @@ function validate22(data: unknown, { instancePath = "", parentData, parentDataPr
         vErrors.push(err1)
         errors++;
     }
-    (validate22 as Is).errors = vErrors.length ? vErrors : null;
+    (validate22 as IsStandalone).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-(validate22 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
+(validate22 as IsStandalone).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
 const schema45 = { "type": "object", "required": ["instructions"] as const, "additionalProperties": false, "properties": { "instructions": { "type": "object", "minProperties": 1, "additionalProperties": false, "patternProperties": { "^(?:Desc|BP|Foundation)_[^.]+_C$": { "type": "array", "minItems": 1, "items": { "type": "object", "required": ["amount", "destination"] as const, "additionalProperties": false, "properties": { "amount": { "$ref": "docs.json.ts--production-planner--lib--CanConvertTypeJsonDefs#/$defs/CanConvertTypeJson" }, "destination": { "type": "object", "required": ["type", "id"] as const, "additionalProperties": false, "properties": { "type": { "type": "string", "enum": ["pool"] as const }, "id": { "$ref": "#/$defs/id" } } } } } } } } } };
-function validate34(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
-    rootData: unknown;
-}> = {}): data is stub_Distributor_json {
+function validate34(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is stub_Distributor_json {
     let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = ajv_utiltiies__definitely_evaluated(validate34);
@@ -594,7 +582,7 @@ function validate34(data: unknown, { instancePath = "", parentData, parentDataPr
                                     }
                                     if (data2.amount !== undefined) {
                                         if (!(validate24(data2.amount, { instancePath: instancePath + "/instructions/" + key2.replace(/~/g, "~0").replace(/\//g, "~1") + "/" + i0 + "/amount", parentData: data2, parentDataProperty: "amount", rootData, dynamicAnchors }))) {
-                                            vErrors = vErrors.concat((validate24 as Is).errors || []);
+                                            vErrors = vErrors.concat((validate24 as IsStandalone).errors || []);
                                             errors = vErrors.length;
                                         }
                                     }
@@ -681,13 +669,11 @@ function validate34(data: unknown, { instancePath = "", parentData, parentDataPr
         vErrors.push(err19)
         errors++;
     }
-    (validate34 as Is).errors = vErrors.length ? vErrors : null;
+    (validate34 as IsStandalone).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-(validate34 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
-function validate21(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
-    rootData: unknown;
-}> = {}): data is stub_Pool {
+(validate34 as IsStandalone).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
+function validate21(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is stub_Pool {
     let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = ajv_utiltiies__definitely_evaluated(validate21);
@@ -747,7 +733,7 @@ function validate21(data: unknown, { instancePath = "", parentData, parentDataPr
         }
         if (data.production !== undefined) {
             if (!(validate22(data.production, { instancePath: instancePath + "/production", parentData: data, parentDataProperty: "production", rootData, dynamicAnchors }))) {
-                vErrors = vErrors.concat((validate22 as Is).errors || []);
+                vErrors = vErrors.concat((validate22 as IsStandalone).errors || []);
                 errors = vErrors.length;
             }
         }
@@ -792,13 +778,13 @@ function validate21(data: unknown, { instancePath = "", parentData, parentDataPr
         }
         if (data.manual_input !== undefined) {
             if (!(validate22(data.manual_input, { instancePath: instancePath + "/manual_input", parentData: data, parentDataProperty: "manual_input", rootData, dynamicAnchors }))) {
-                vErrors = vErrors.concat((validate22 as Is).errors || []);
+                vErrors = vErrors.concat((validate22 as IsStandalone).errors || []);
                 errors = vErrors.length;
             }
         }
         if (data.outputs !== undefined) {
             if (!(validate34(data.outputs, { instancePath: instancePath + "/outputs", parentData: data, parentDataProperty: "outputs", rootData, dynamicAnchors }))) {
-                vErrors = vErrors.concat((validate34 as Is).errors || []);
+                vErrors = vErrors.concat((validate34 as IsStandalone).errors || []);
                 errors = vErrors.length;
             }
         }
@@ -808,15 +794,13 @@ function validate21(data: unknown, { instancePath = "", parentData, parentDataPr
         vErrors.push(err12)
         errors++;
     }
-    (validate21 as Is).errors = vErrors.length ? vErrors : null;
+    (validate21 as IsStandalone).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-(validate21 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
+(validate21 as IsStandalone).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
 const schema47 = { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/collection" } };
 const schema48 = { "type": "object", "required": ["id", "items"] as const, "unevaluatedProperties": false, "additionalProperties": false, "properties": { "id": { "$ref": "#/$defs/id" }, "name": { "$ref": "#/$defs/name" }, "recipe_selection": { "$ref": "#/$defs/recipe_selection" }, "items": { "type": "array", "minItems": 0, "items": { "$ref": "#/$defs/id" } } } };
-function validate39(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
-    rootData: unknown;
-}> = {}): data is stub_Collection {
+function validate39(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is stub_Collection {
     let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = ajv_utiltiies__definitely_evaluated(validate39);
@@ -955,13 +939,11 @@ function validate39(data: unknown, { instancePath = "", parentData, parentDataPr
         vErrors.push(err17)
         errors++;
     }
-    (validate39 as Is).errors = vErrors.length ? vErrors : null;
+    (validate39 as IsStandalone).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-(validate39 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
-function validate38(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
-    rootData: unknown;
-}> = {}): data is [
+(validate39 as IsStandalone).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
+function validate38(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is [
     stub_Collection,
     ...stub_Collection[]
 ] {
@@ -983,7 +965,7 @@ function validate38(data: unknown, { instancePath = "", parentData, parentDataPr
         const len0 = data.length;
         for (let i0 = 0; i0 < len0; i0++) {
             if (!(validate39(data[i0], { instancePath: instancePath + "/" + i0, parentData: data, parentDataProperty: i0, rootData, dynamicAnchors }))) {
-                vErrors = vErrors.concat((validate39 as Is).errors || []);
+                vErrors = vErrors.concat((validate39 as IsStandalone).errors || []);
                 errors = vErrors.length;
             }
         }
@@ -993,15 +975,13 @@ function validate38(data: unknown, { instancePath = "", parentData, parentDataPr
         vErrors.push(err1)
         errors++;
     }
-    (validate38 as Is).errors = vErrors.length ? vErrors : null;
+    (validate38 as IsStandalone).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-(validate38 as Is).evaluated = { "items": true, "dynamicProps": false, "dynamicItems": false };
+(validate38 as IsStandalone).evaluated = { "items": true, "dynamicProps": false, "dynamicItems": false };
 const schema53 = { "type": "object", "required": ["auto_follow_current_pool", "calculator_display_mode", "current_pool_id", "show_full_pool_button_list", "auto_recalculate"] as const, "unevaluatedProperties": false, "additionalProperties": false, "properties": { "auto_follow_current_pool": { "type": "boolean" }, "calculator_display_mode": { "type": "boolean" }, "current_pool_id": { "$ref": "#/$defs/pool_reference" }, "recipe_selection": { "$ref": "#/$defs/recipe_selection" }, "show_full_pool_button_list": { "type": "boolean" }, "auto_recalculate": { "$ref": "#/$defs/settings_auto_recalculate" } } };
 const schema56 = { "type": "object", "required": ["recipe_selection_ui_change"] as const, "unevaluatedProperties": false, "additionalProperties": false, "properties": { "recipe_selection_ui_change": { "type": "boolean" } } };
-function validate43(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
-    rootData: unknown;
-}> = {}): data is stub_Settings {
+function validate43(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is stub_Settings {
     let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = ajv_utiltiies__definitely_evaluated(validate43);
@@ -1158,13 +1138,11 @@ function validate43(data: unknown, { instancePath = "", parentData, parentDataPr
         vErrors.push(err20)
         errors++;
     }
-    (validate43 as Is).errors = vErrors.length ? vErrors : null;
+    (validate43 as IsStandalone).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-(validate43 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
-function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
-    rootData: unknown;
-}> = {}): data is stub_State_Json {
+(validate43 as IsStandalone).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
+function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is stub_State_Json {
     /*# sourceURL="production-planner-save-version-6" */ ;
     let vErrors: ErrorObject[] = [];
     let errors = 0;
@@ -1232,7 +1210,7 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
                 const len0 = data1.length;
                 for (let i0 = 0; i0 < len0; i0++) {
                     if (!(validate21(data1[i0], { instancePath: instancePath + "/pools/" + i0, parentData: data1, parentDataProperty: i0, rootData, dynamicAnchors }))) {
-                        vErrors = vErrors.concat((validate21 as Is).errors || []);
+                        vErrors = vErrors.concat((validate21 as IsStandalone).errors || []);
                         errors = vErrors.length;
                     }
                 }
@@ -1245,19 +1223,19 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
         }
         if (data.groups !== undefined) {
             if (!(validate38(data.groups, { instancePath: instancePath + "/groups", parentData: data, parentDataProperty: "groups", rootData, dynamicAnchors }))) {
-                vErrors = vErrors.concat((validate38 as Is).errors || []);
+                vErrors = vErrors.concat((validate38 as IsStandalone).errors || []);
                 errors = vErrors.length;
             }
         }
         if (data.collections !== undefined) {
             if (!(validate38(data.collections, { instancePath: instancePath + "/collections", parentData: data, parentDataProperty: "collections", rootData, dynamicAnchors }))) {
-                vErrors = vErrors.concat((validate38 as Is).errors || []);
+                vErrors = vErrors.concat((validate38 as IsStandalone).errors || []);
                 errors = vErrors.length;
             }
         }
         if (data.settings !== undefined) {
             if (!(validate43(data.settings, { instancePath: instancePath + "/settings", parentData: data, parentDataProperty: "settings", rootData, dynamicAnchors }))) {
-                vErrors = vErrors.concat((validate43 as Is).errors || []);
+                vErrors = vErrors.concat((validate43 as IsStandalone).errors || []);
                 errors = vErrors.length;
             }
         }
@@ -1267,7 +1245,7 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
         vErrors.push(err10)
         errors++;
     }
-    (validate20 as Is).errors = vErrors.length ? vErrors : null;
+    (validate20 as IsStandalone).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-(validate20 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
+(validate20 as IsStandalone).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };

@@ -1,7 +1,7 @@
-import type { ErrorObject, ValidateFunction } from 'ajv';
-import type { Is } from '@satisfactory-dev/ajv-utilities';
+import type { ErrorObject } from 'ajv';
+import type { IsStandalone, StandaloneDataValidationCxt } from '@satisfactory-dev/ajv-utilities';
 import type { templated_string_type } from '@signpostmarv/json-schema-typescript-codegen/ajv';
-function ajv_utiltiies__definitely_evaluated<T>(maybe: Is<T>): Exclude<Is<T>["evaluated"], undefined> { if (undefined === maybe.evaluated)
+function ajv_utiltiies__definitely_evaluated<T>(maybe: IsStandalone<T>): Exclude<IsStandalone<T>["evaluated"], undefined> { if (undefined === maybe.evaluated)
     throw new Error(`${maybe.name}.evaluated not set!`); return maybe.evaluated; }
 function ajv_utilities__is_probably_object(maybe: unknown): maybe is Record<string, unknown> { return !!maybe && typeof maybe === "object" && !Array.isArray(maybe); }
 function ajv_utilities__is_probably_array(maybe: unknown): maybe is unknown[] { return Array.isArray(maybe); }
@@ -11,9 +11,7 @@ export const PropertySchemaToRegex_TemplatedString = validate20;
 const schema31 = { "$id": "docs.json.ts--lib--PropertySchemaToRegex--TemplatedString", "type": "object", "required": ["type", "templated_string"] as const, "additionalProperties": false, "properties": { "$defs": { "type": "object", "additionalProperties": { "type": "object" } }, "type": { "type": "string", "const": "string" }, "templated_string": { "type": "array", "minItems": 1, "items": { "oneOf": [{ "type": "string", "minLength": 1 }, { "type": "object", "const": { "type": "string" } }, { "type": "object", "const": { "type": "string", "minLength": 1 } }, { "type": "array", "minItems": 2, "items": { "oneOf": [{ "type": "string", "minLength": 1 }, { "type": "object", "const": { "type": "string" } }] as const } }, { "$ref": "#" }] as const } } } };
 const func1 = ucs2length;
 const func0 = fast_deep_equal;
-function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<Omit<Exclude<Parameters<ValidateFunction>[1], undefined>, "rootData"> & {
-    rootData: unknown;
-}> = {}): data is templated_string_type {
+function validate20(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is templated_string_type {
     /*# sourceURL="docs.json.ts--lib--PropertySchemaToRegex--TemplatedString" */ ;
     let vErrors: ErrorObject[] = [];
     let errors = 0;
@@ -237,11 +235,11 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
                                 }
                                 const _errs27 = errors;
                                 if (!(validate20(data4, { instancePath: instancePath + "/templated_string/" + i0, parentData: data3, parentDataProperty: i0, rootData, dynamicAnchors }))) {
-                                    vErrors = vErrors.concat((validate20 as Is).errors || []);
+                                    vErrors = vErrors.concat((validate20 as IsStandalone).errors || []);
                                     errors = vErrors.length;
                                 }
                                 else {
-                                    var items1 = (validate20 as Is).evaluated?.items;
+                                    var items1 = (validate20 as IsStandalone).evaluated?.items;
                                 }
                                 var _valid0 = _errs27 === errors;
                                 if (_valid0 && valid4) {
@@ -290,7 +288,7 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
         vErrors.push(err23)
         errors++;
     }
-    (validate20 as Is).errors = vErrors.length ? vErrors : null;
+    (validate20 as IsStandalone).errors = vErrors.length ? vErrors : null;
     return errors === 0;
 }
-(validate20 as Is).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
+(validate20 as IsStandalone).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };

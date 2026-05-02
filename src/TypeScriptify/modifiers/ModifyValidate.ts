@@ -109,47 +109,11 @@ export class ModifyValidateOptions extends ModifyValidate {
 	}
 
 	#shim_DataValidationCxt() {
-		KnownImports.ValidateFunction(this.#prepend_with_imports);
+		KnownImports.StandaloneDataValidationCxt(this.#prepend_with_imports);
 
-		return factory.createIntersectionTypeNode([
-			factory.createTypeReferenceNode(
-				'Omit',
-				[
-					factory.createTypeReferenceNode(
-						'Exclude',
-						[
-							factory.createIndexedAccessTypeNode(
-								factory.createTypeReferenceNode(
-									'Parameters',
-									[
-										factory.createTypeReferenceNode(
-											'ValidateFunction',
-										),
-									],
-								),
-								factory.createLiteralTypeNode(
-									factory.createNumericLiteral(1),
-								),
-							),
-							factory.createToken(SyntaxKind.UndefinedKeyword),
-						],
-					),
-					factory.createLiteralTypeNode(
-						factory.createStringLiteral('rootData'),
-					),
-				],
-			),
-			factory.createTypeLiteralNode([
-				factory.createPropertySignature(
-					undefined,
-					'rootData',
-					undefined,
-					factory.createKeywordTypeNode(
-						SyntaxKind.UnknownKeyword,
-					),
-				),
-			]),
-		]);
+		return factory.createTypeReferenceNode(
+			'StandaloneDataValidationCxt',
+		);
 	}
 
 	#modify_validate(
