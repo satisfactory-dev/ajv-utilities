@@ -144,12 +144,6 @@ export type Config = {
 	specify_types: {
 		[key: string]: specify_type,
 	},
-	specify_types_by_validate_function_name: {
-		[key: `validate${number}`]: specify_type,
-	},
-	specify_types_by_export_name: {
-		[key: string]: specify_type,
-	},
 	specify_types_by_inside_out_match: [
 		specify_type_inside_out,
 		...specify_type_inside_out[],

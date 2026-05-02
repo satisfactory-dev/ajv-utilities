@@ -39,9 +39,7 @@ import {
 } from './TypeScriptify/TypeReferences.ts';
 
 import {
-	SpecifyTypesByExportName,
 	SpecifyTypesBySourceURL,
-	SpecifyTypesByValidateFunction,
 } from './TypeScriptify/preprocessors/SpecifyTypes.ts';
 
 // oxlint-disable-next-line @stylistic/max-len
@@ -268,16 +266,8 @@ export default class TypeScript {
 					prepend_with_imports,
 					specify_types,
 				),
-				new SpecifyTypesByValidateFunction(
-					prepend_with_imports,
-					specify_types,
-				),
 				new SpecifyModifyCandidates(
 					specify_modify_options_name_config,
-				),
-				new SpecifyTypesByExportName(
-					prepend_with_imports,
-					specify_types,
 				),
 			],
 			[

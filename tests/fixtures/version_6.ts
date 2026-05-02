@@ -1,6 +1,6 @@
 import type { ErrorObject } from 'ajv';
 import type { IsStandalone, StandaloneDataValidationCxt } from '@satisfactory-dev/ajv-utilities';
-import type { stub_amount_string_flexible, stub_CanConvertJson, stub_Collection, stub_Distributor_json, stub_IntermediaryCalculation, stub_IntermediaryNumber, stub_Pool, stub_Settings, stub_State_Json } from './types.ts';
+import type { stub_CanConvertJson, stub_Collection, stub_Distributor_json, stub_IntermediaryCalculation, stub_IntermediaryNumber, stub_Pool, stub_Settings, stub_State_Json } from './types.ts';
 function ajv_utiltiies__definitely_evaluated<T>(maybe: IsStandalone<T>): Exclude<IsStandalone<T>["evaluated"], undefined> { if (undefined === maybe.evaluated)
     throw new Error(`${maybe.name}.evaluated not set!`); return maybe.evaluated; }
 function ajv_utilities__is_probably_object(maybe: unknown): maybe is Record<string, unknown> { return !!maybe && typeof maybe === "object" && !Array.isArray(maybe); }
@@ -26,7 +26,7 @@ const schema40 = { "type": "string", "pattern": "^\\d+(?:\\.\\d{1,6})?$" };
 const pattern7 = new RegExp("^\\d+(?:\\.\\d{1,6})?$", "u");
 const pattern8 = new RegExp("^\\d*(?:\\.\\d{1,6})$", "u");
 const pattern9 = new RegExp("^\\d+$", "u");
-function validate26(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is stub_amount_string_flexible {
+function validate26(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is stub_IntermediaryNumber["value"] {
     let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = ajv_utiltiies__definitely_evaluated(validate26);
@@ -943,10 +943,7 @@ function validate39(data: unknown, { instancePath = "", parentData, parentDataPr
     return errors === 0;
 }
 (validate39 as IsStandalone).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
-function validate38(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is [
-    stub_Collection,
-    ...stub_Collection[]
-] {
+function validate38(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is stub_Collection[] {
     let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = ajv_utiltiies__definitely_evaluated(validate38);

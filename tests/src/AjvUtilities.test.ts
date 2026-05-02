@@ -234,15 +234,6 @@ void describe('AjvUtilities', () => {
 		const version_6_expectation = await readFile(
 			`${import.meta.dirname}/../fixtures/version_6.ts`,
 		);
-		const version_6_alt_expectation = await readFile(
-			`${import.meta.dirname}/../fixtures/version_6.alt.ts`,
-		);
-		const version_6_alt2_expectation = await readFile(
-			`${import.meta.dirname}/../fixtures/version_6.alt2.ts`,
-		);
-		const version_6_alt3_expectation = await readFile(
-			`${import.meta.dirname}/../fixtures/version_6.alt3.ts`,
-		);
 
 		const data_sets: (
 			| [string, string]
@@ -990,34 +981,62 @@ void describe('AjvUtilities', () => {
 						[production_request.$id]: [
 							'stub_production_request',
 							'./types.ts',
+							[
+								[
+									'stub_production_output',
+									'./types.ts',
+									{
+										instancePath_partial: '/pool',
+										parentDataProperty: 'pool',
+									},
+									[
+										[
+											'stub_numeric',
+											'./types.ts',
+											{
+												instancePath_partial: '/',
+												parentDataProperty: null,
+											},
+											[
+												[
+													'stub_CanConvertJson',
+													'./types.ts',
+													{
+														instancePath: null,
+														parentDataProperty: null,
+													},
+													[
+														[
+															'stub_IntermediaryCalculation',
+															'./types.ts',
+															{
+																instancePath: null,
+																parentDataProperty: null,
+															},
+														],
+													],
+												],
+											],
+										],
+									],
+								],
+							],
 						],
 					},
-					specify_types_by_validate_function_name: {
-						validate22: [
-							'stub_numeric',
-							'./types.ts',
-						],
-						validate23: [
-							'stub_CanConvertJson',
-							'./types.ts',
-						],
-						validate24: [
-							'stub_IntermediaryNumber',
-							'./types.ts',
-						],
-						validate25: [
+					specify_types_by_inside_out_match: [
+						[
 							'stub_amount_string_alt1',
 							'./types.ts',
+							{
+								instancePath_partial: '/value',
+								parentDataProperty: 'value',
+							},
+							[
+								'stub_IntermediaryNumber',
+								'./types.ts',
+							],
 						],
-						validate28: [
-							'stub_IntermediaryCalculation',
-							'./types.ts',
-						],
-						validate32: [
-							'stub_production_output',
-							'./types.ts',
-						],
-					},
+					],
 				},
 			],
 			[
@@ -1042,334 +1061,6 @@ void describe('AjvUtilities', () => {
 					},
 				),
 				version_6_expectation.toString(),
-				{
-					specify_types: {
-						[version_6.$id]: [
-							'stub_State_Json',
-							'./types.ts',
-						],
-					},
-					specify_types_by_validate_function_name: {
-						validate21: [
-							'stub_Pool',
-							'./types.ts',
-						],
-						validate22: [
-							{
-								name: 'stub_Pool',
-								sub_type_chain: ['production'],
-							},
-							'./types.ts',
-						],
-						validate24: [
-							'stub_CanConvertJson',
-							'./types.ts',
-						],
-						validate25: [
-							'stub_IntermediaryNumber',
-							'./types.ts',
-						],
-						validate26: [
-							'stub_amount_string_flexible',
-							'./types.ts',
-						],
-						validate29: [
-							'stub_IntermediaryCalculation',
-							'./types.ts',
-						],
-						validate34: [
-							'stub_Distributor_json',
-							'./types.ts',
-						],
-						validate38: [
-							{name: 'stub_Collection', as_array: {minimum: 1}},
-							'./types.ts',
-						],
-						validate39: [
-							'stub_Collection',
-							'./types.ts',
-						],
-						validate43: [
-							'stub_Settings',
-							'./types.ts',
-						],
-					},
-				},
-			],
-			[
-				standaloneCode(
-					new Ajv({
-						verbose: true,
-						logger: false,
-						allErrors: true,
-						code: {
-							source: true,
-							esm: true,
-							lines: true,
-							optimize: 2,
-						},
-						schemas: [
-							CanConvertTypeJsonDefs,
-							version_6,
-						],
-					}),
-					{
-						version_6_validator: version_6.$id,
-					},
-				),
-				version_6_alt_expectation.toString(),
-				{
-					specify_types: {
-						[version_6.$id]: [
-							{name: 'stubs', sub_type_chain: ['State_Json']},
-							'./types.ts',
-						],
-					},
-					specify_types_by_validate_function_name: {
-						validate21: [
-							{name: 'stubs', sub_type_chain: ['Pool']},
-							'./types.ts',
-						],
-						validate22: [
-							{
-								name: 'stubs',
-								sub_type_chain: ['Pool', 'production'],
-							},
-							'./types.ts',
-						],
-						validate24: [
-							{
-								name: 'stubs',
-								sub_type_chain: ['CanConvertJson'],
-							},
-							'./types.ts',
-						],
-						validate25: [
-							{
-								name: 'stubs',
-								sub_type_chain: ['IntermediaryNumber'],
-							},
-							'./types.ts',
-						],
-						validate26: [
-							{
-								name: 'stubs',
-								sub_type_chain: ['amount_string_flexible'],
-							},
-							'./types.ts',
-						],
-						validate29: [
-							{
-								name: 'stubs',
-								sub_type_chain: ['IntermediaryCalculation'],
-							},
-							'./types.ts',
-						],
-						validate34: [
-							{
-								name: 'stubs',
-								sub_type_chain: ['Distributor_json'],
-							},
-							'./types.ts',
-						],
-						validate38: [
-							{
-								name: 'stub_Collection',
-								as_array: {minimum: 1},
-							},
-							'./types.ts',
-						],
-						validate39: [
-							{
-								name: 'stubs',
-								sub_type_chain: ['Collection'],
-							},
-							'./types.ts',
-						],
-						validate43: [
-							{
-								name: 'stubs',
-								sub_type_chain: ['Settings'],
-							},
-							'./types.ts',
-						],
-					},
-				},
-			],
-			[
-				standaloneCode(
-					new Ajv({
-						verbose: true,
-						logger: false,
-						allErrors: true,
-						code: {
-							source: true,
-							esm: true,
-							lines: true,
-							optimize: 2,
-						},
-						schemas: [
-							CanConvertTypeJsonDefs,
-							version_6,
-						],
-					}),
-					{
-						version_6_validator: version_6.$id,
-					},
-				),
-				version_6_alt2_expectation.toString(),
-				{
-					specify_types: {
-						[version_6.$id]: [
-							'stub_State_Json',
-							'./types.ts',
-						],
-					},
-					specify_types_by_validate_function_name: {
-						validate21: [
-							'stub_Pool',
-							'./types.ts',
-						],
-						validate22: [
-							{
-								name: 'stub_Pool',
-								sub_type_chain: ['production'],
-							},
-							'./types.ts',
-						],
-						validate24: [
-							'stub_CanConvertJson',
-							'./types.ts',
-						],
-						validate25: [
-							'stub_IntermediaryNumber',
-							'./types.ts',
-						],
-						validate26: [
-							'stub_amount_string_flexible',
-							'./types.ts',
-						],
-						validate29: [
-							'stub_IntermediaryCalculation',
-							'./types.ts',
-						],
-						validate34: [
-							'stub_Distributor_json',
-							'./types.ts',
-						],
-						validate38: [
-							{name: 'stub_Collection', as_array: true},
-							'./types.ts',
-						],
-						validate39: [
-							'stub_Collection',
-							'./types.ts',
-						],
-						validate43: [
-							'stub_Settings',
-							'./types.ts',
-						],
-					},
-				},
-			],
-			[
-				standaloneCode(
-					new Ajv({
-						verbose: true,
-						logger: false,
-						allErrors: true,
-						code: {
-							source: true,
-							esm: true,
-							lines: true,
-							optimize: 2,
-						},
-						schemas: [
-							CanConvertTypeJsonDefs,
-							version_6,
-						],
-					}),
-					{
-						version_6_validator: version_6.$id,
-					},
-				),
-				version_6_alt2_expectation.toString(),
-				{
-					specify_types: {
-						[version_6.$id]: [
-							'stub_State_Json',
-							'./types.ts',
-						],
-					},
-					specify_types_by_validate_function_name: {
-						validate21: [
-							'stub_Pool',
-							'./types.ts',
-						],
-						validate22: [
-							{
-								name: 'stub_Pool',
-								sub_type_chain: ['production'],
-							},
-							'./types.ts',
-						],
-						validate24: [
-							'stub_CanConvertJson',
-							'./types.ts',
-						],
-						validate25: [
-							'stub_IntermediaryNumber',
-							'./types.ts',
-						],
-						validate26: [
-							'stub_amount_string_flexible',
-							'./types.ts',
-						],
-						validate29: [
-							'stub_IntermediaryCalculation',
-							'./types.ts',
-						],
-						validate34: [
-							'stub_Distributor_json',
-							'./types.ts',
-						],
-						validate38: [
-							{name: 'stub_Collection', as_array: {minimum: 0}},
-							'./types.ts',
-						],
-						validate39: [
-							'stub_Collection',
-							'./types.ts',
-						],
-						validate43: [
-							'stub_Settings',
-							'./types.ts',
-						],
-					},
-				},
-			],
-			[
-				standaloneCode(
-					new Ajv({
-						verbose: true,
-						logger: false,
-						allErrors: true,
-						code: {
-							source: true,
-							esm: true,
-							lines: true,
-							optimize: 2,
-						},
-						schemas: [
-							CanConvertTypeJsonDefs,
-							version_6,
-						],
-					}),
-					{
-						version_6_validator: version_6.$id,
-					},
-				),
-				version_6_alt3_expectation.toString(),
 				{
 					specify_types: {
 						[version_6.$id]: [

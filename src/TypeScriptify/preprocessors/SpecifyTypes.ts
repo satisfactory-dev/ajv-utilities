@@ -2,18 +2,10 @@ import type {
 	EmptyStatement,
 	FunctionDeclaration,
 	Identifier,
-	KeywordToken,
-	NodeArray,
-	VariableDeclaration,
-	VariableDeclarationList,
-	VariableStatement,
 } from 'typescript';
 import {
 	isEmptyStatement,
 	isFunctionDeclaration,
-	isIdentifier,
-	isVariableStatement,
-	SyntaxKind,
 } from 'typescript';
 
 import {
@@ -115,142 +107,6 @@ export class SpecifyTypesBySourceURL extends ConditionalPreprocessor<
 						node.parent.parent.name.text
 					] = prepend_with_imports[maybe[1]].add(maybe[0]);
 				}
-			},
-		);
-	}
-}
-
-export class SpecifyTypesByValidateFunction extends ConditionalPreprocessor<
-	SpecifyTypesCandidate['parent']['parent']
-> {
-	constructor(
-		prepend_with_imports: prepend_with_imports,
-		specify_types: specify_types_instance,
-	) {
-		super(
-			(maybe): maybe is SpecifyTypesCandidate['parent']['parent'] => (
-				isFunctionDeclaration(maybe)
-				&& !!maybe.name
-				&& this.validate_function_name.test(
-					maybe.name.text,
-				)
-			),
-			(node, config) => {
-				if (
-					!config.specify_types_by_validate_function_name
-
-					// oxlint-disable-next-line @stylistic/max-len
-					|| !(node.name.text in config.specify_types_by_validate_function_name)
-				) {
-					return;
-				}
-
-				// oxlint-disable-next-line @stylistic/max-len
-				const type_config = config.specify_types_by_validate_function_name[
-					node.name.text
-				];
-
-				if (!(type_config[1] in prepend_with_imports)) {
-					prepend_with_imports[type_config[1]] = new Types();
-				}
-
-				specify_types[
-					node.name.text
-				] = prepend_with_imports[type_config[1]].add(type_config[0]);
-			},
-		);
-	}
-}
-
-type SpecifyTypesByExportNameCandidate = (
-	& VariableStatement
-	& {
-		modifiers: [
-			KeywordToken<SyntaxKind.ExportKeyword>,
-		],
-		declarationList: (
-			& VariableDeclarationList
-			& {
-				declarations: (
-					& NodeArray<VariableDeclaration>
-					& {
-						length: 1,
-						0: (
-							& VariableDeclaration
-							& {
-								name: Identifier,
-								initializer: (
-									& Identifier
-									& {
-										text: `validate${number}`,
-									}
-								),
-							}
-						),
-					}
-				),
-			}
-		),
-	}
-);
-
-export class SpecifyTypesByExportName extends ConditionalPreprocessor<
-	SpecifyTypesByExportNameCandidate
-> {
-	constructor(
-		prepend_with_imports: prepend_with_imports,
-		specify_types: specify_types_instance,
-	) {
-		super(
-			(maybe): maybe is SpecifyTypesByExportNameCandidate => {
-				const result = (
-					isVariableStatement(maybe)
-					&& !!maybe.modifiers
-					&& 1 === maybe.modifiers.length
-					&& SyntaxKind.ExportKeyword === maybe.modifiers[0].kind
-					&& 1 === maybe.declarationList.declarations.length
-					&& isIdentifier(maybe.declarationList.declarations[0].name)
-					&& !!maybe.declarationList.declarations[0].initializer
-					&& isIdentifier(
-						maybe.declarationList.declarations[0].initializer,
-					)
-					&& this.validate_function_name.test(
-						maybe.declarationList.declarations[0].initializer.text,
-					)
-				);
-
-				return result;
-			},
-			(node, config) => {
-				if (
-					!config.specify_types_by_export_name
-					|| !(node.declarationList.declarations[
-						0
-					].name.text in config.specify_types_by_export_name)
-				) {
-					return;
-				}
-
-				const export_name = node.declarationList.declarations[
-					0
-				].name.text;
-
-				const function_name = node.declarationList.declarations[
-					0
-				].initializer.text;
-
-				// oxlint-disable-next-line @stylistic/max-len
-				const type_config = config.specify_types_by_export_name[
-					export_name
-				];
-
-				if (!(type_config[1] in prepend_with_imports)) {
-					prepend_with_imports[type_config[1]] = new Types();
-				}
-
-				specify_types[
-					function_name
-				] = prepend_with_imports[type_config[1]].add(type_config[0]);
 			},
 		);
 	}
