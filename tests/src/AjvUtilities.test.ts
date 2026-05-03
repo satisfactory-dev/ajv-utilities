@@ -1128,11 +1128,11 @@ void describe('AjvUtilities', () => {
 										conditionally: {
 											parentDataProperty: {
 												collections: [
-									{
-										name: 'stub_Collection',
-										as_array: {minimum: 1},
-									},
-									'./types.ts',
+													{
+														name: 'stub_Collection',
+														as_array: {minimum: 1},
+													},
+													'./types.ts',
 												],
 												groups: [
 													{
