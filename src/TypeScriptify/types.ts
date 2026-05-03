@@ -6,6 +6,8 @@ import type {
 } from 'ajv';
 
 import type {
+	ConditionalPredicate,
+	GenericT,
 	Type,
 	WithArray,
 	WithSubTypeChain,
@@ -73,6 +75,8 @@ export type specify_types_instance = {
 		| Type
 		| WithSubTypeChain
 		| WithArray
+		| GenericT
+		| ConditionalPredicate
 	),
 };
 
@@ -84,13 +88,43 @@ export type remove_dataCtxKeys = [
 	>)[],
 ];
 
-type specify_type_without_nested = [
+export type specify_type_without_nested = [
 	specify_types_config, // actual type information
 	string, // path to source relative to destination file or npm module
 ];
 
 export type specify_type_with_nested = [
 	...specify_type_without_nested,
+	[
+		specify_type_nested,
+		...specify_type_nested[],
+	],
+];
+
+export type specify_type_without_nested_but_generic = [
+	'T',
+	[
+		specify_type_without_nested,
+		...specify_type_without_nested[],
+	],
+	validate_call_argument_1_match,
+];
+
+export type specify_type_conditionally_without_nested = [
+	{
+		conditionally: (
+			| {
+				parentDataProperty: {
+					[key: string]: specify_type_without_nested,
+				},
+			}
+		),
+	},
+	validate_call_argument_1_match,
+];
+
+export type specify_type_conditionally_with_nested = [
+	...specify_type_conditionally_without_nested,
 	[
 		specify_type_nested,
 		...specify_type_nested[],
@@ -123,6 +157,9 @@ export type specify_type_nested = (
 			...specify_type_nested[],
 		],
 	]
+	| specify_type_without_nested_but_generic
+	| specify_type_conditionally_without_nested
+	| specify_type_conditionally_with_nested
 );
 
 type specify_type_inside_out_current = [

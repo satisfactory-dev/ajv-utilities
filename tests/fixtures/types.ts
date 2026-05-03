@@ -120,6 +120,17 @@ type stub_Settings = (
 	}>
 );
 
+type stub_Group = (
+	& {
+		id: number,
+	}
+	& Partial<{
+		name: string,
+		items: [number, ...number[]],
+		recipe_selection: stub_recipe_selection,
+	}>
+);
+
 type stub_Collection = (
 	& {
 		id: number,
@@ -138,7 +149,7 @@ type stub_State_Json = (
 	}
 	& Partial<{
 		pools: [stub_Pool, ...stub_Pool[]],
-		groups: [stub_Collection, ...stub_Collection[]],
+		groups: [stub_Group, ...stub_Group[]],
 		collections: [stub_Collection, ...stub_Collection[]],
 	}>
 );
@@ -181,6 +192,7 @@ export type {
 	stub_CanConvertJson,
 	stub_State_Json,
 	stub_Settings,
+	stub_Group,
 	stub_Collection,
 	stub_Pool,
 	stub_Distributor_json,

@@ -34,8 +34,12 @@ import {
 
 import type {
 	Config,
+	specify_type_conditionally_with_nested,
+	specify_type_conditionally_without_nested,
 	specify_type_nested,
 	specify_type_with_nested,
+	specify_type_without_nested_but_generic,
+	specify_types_config,
 	specify_types_instance,
 	validate_call_argument_1_match,
 } from '../types.ts';
@@ -44,6 +48,8 @@ import type {
 	prepend_with_imports,
 } from '../TypeReferences.ts';
 import {
+	ConditionalPredicate,
+	GenericT,
 	to_string,
 	Types,
 } from '../TypeReferences.ts';
@@ -605,7 +611,9 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 		prepend_with_imports: prepend_with_imports,
 	) {
 		for (const sub_type of sub_types) {
-			const [,, match_with] = sub_type;
+			const match_with = this.#is_conditional(sub_type)
+				? sub_type[1]
+				: sub_type[2];
 
 			const checking = this.#filter_info(
 				match_with,
@@ -613,13 +621,49 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 			).filter((maybe) => !(maybe.name in existing));
 
 			if (1 === checking.length) {
-				if (!(sub_type[1] in prepend_with_imports)) {
-					prepend_with_imports[sub_type[1]] = new Types();
-				}
+				if (this.#is_generic(sub_type)) {
+					for (const actual_sub_type of sub_type[1]) {
+						this.#handle_imports(
+							existing,
+							prepend_with_imports,
+							actual_sub_type,
+							checking[0].name,
+						);
+					}
 
-				existing[checking[0].name] = prepend_with_imports[
-					sub_type[1]
-				].add(sub_type[0]);
+					existing[checking[0].name] = new GenericT(
+						sub_type[1].map((e) => (
+							'string' === typeof e[0]
+								? e[0]
+								: e[0].name
+						)),
+					);
+				} else if (this.#is_conditional(sub_type)) {
+					for (
+						const actual_sub_type of Object.values(sub_type[
+							0
+						].conditionally.parentDataProperty)
+					) {
+						this.#handle_imports(
+							existing,
+							prepend_with_imports,
+							actual_sub_type,
+							checking[0].name,
+						);
+					}
+
+					existing[checking[0].name] = new ConditionalPredicate(
+						'parentDataProperty',
+						sub_type[0].conditionally.parentDataProperty,
+					);
+				} else {
+					this.#handle_imports(
+						existing,
+						prepend_with_imports,
+						sub_type,
+						checking[0].name,
+					);
+				}
 
 				if (4 === sub_type.length && checking[0].name in info) {
 					this.#specify_types_from_collected_outside_in_deep_dive(
@@ -629,10 +673,56 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 						existing,
 						prepend_with_imports,
 					);
+				} else if (
+					this.#is_conditional(sub_type)
+					&& 3 === sub_type.length
+					&& checking[0].name in info
+				) {
+					this.#specify_types_from_collected_outside_in_deep_dive(
+						info,
+						checking[0].name,
+						sub_type[2],
+						existing,
+						prepend_with_imports,
+					);
 				}
 			} else if (checking.length > 0) {
 				throw new Error('Unexpected matches found!');
 			}
 		}
+	}
+
+	static #handle_imports(
+		existing: specify_types_instance,
+		prepend_with_imports: prepend_with_imports,
+		sub_type: [
+			specify_types_config,
+			string,
+			...unknown[],
+		],
+		function_name: string,
+	) {
+		if (!(sub_type[1] in prepend_with_imports)) {
+			prepend_with_imports[sub_type[1]] = new Types();
+		}
+
+		existing[function_name] = prepend_with_imports[
+			sub_type[1]
+		].add(sub_type[0]);
+	}
+
+	static #is_conditional(
+		maybe: specify_type_nested,
+	): maybe is (
+		| specify_type_conditionally_without_nested
+		| specify_type_conditionally_with_nested
+	) {
+		return 'string' !== typeof maybe[0] && 'conditionally' in maybe[0];
+	}
+
+	static #is_generic(
+		maybe: specify_type_nested,
+	): maybe is specify_type_without_nested_but_generic {
+		return 'T' === maybe[0];
 	}
 }

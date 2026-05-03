@@ -1,7 +1,10 @@
 import type {
 	ArrayTypeNode,
+	ConditionalTypeNode,
 	ImportSpecifier,
 	IndexedAccessTypeNode,
+	KeywordTypeNode,
+	ParenthesizedTypeNode,
 	TupleTypeNode,
 	TypeReferenceNode,
 } from 'typescript';
@@ -11,10 +14,12 @@ import {
 	EmitHint,
 	factory,
 	ScriptTarget,
+	SyntaxKind,
 } from 'typescript';
 
 import type {
 	as_array_config,
+	specify_type_without_nested,
 	specify_types_config,
 } from './types.ts';
 
@@ -30,11 +35,13 @@ interface HasOutput<
 		| IndexedAccessTypeNode
 		| TupleTypeNode
 		| ArrayTypeNode
+		| ConditionalTypeNode
 	) = (
 		| TypeReferenceNode
 		| IndexedAccessTypeNode
 		| TupleTypeNode
 		| ArrayTypeNode
+		| ConditionalTypeNode
 	),
 > {
 	toTypeResult(): TypeResult;
@@ -216,6 +223,75 @@ class WithArray extends AbstractOutput<TupleTypeNode | ArrayTypeNode> {
 					factory.createArrayTypeNode(this.#parent.toTypeResult()),
 				),
 			],
+		);
+	}
+}
+
+export class GenericT implements HasOutput<TypeReferenceNode> {
+	readonly possibilities: [string, ...string[]];
+
+	constructor(possibilities: [string, ...string[]]) {
+		this.possibilities = [
+			...possibilities,
+		].sort() as [string, ...string[]];
+	}
+
+	toTypeResult() {
+		return factory.createTypeReferenceNode('T');
+	}
+}
+
+export class ConditionalPredicate implements HasOutput<ConditionalTypeNode> {
+	#property: 'parentDataProperty';
+
+	#spec: {
+		[key: string]: specify_type_without_nested,
+	};
+
+	constructor(property: 'parentDataProperty', spec: {
+		[key: string]: specify_type_without_nested,
+	}) {
+		this.#property = property;
+		this.#spec = spec;
+	}
+
+	toTypeResult() {
+		const [
+			first,
+			...remaining
+		] = Object.entries(this.#spec);
+
+		const checkType = () => factory.createTypeQueryNode(
+			factory.createIdentifier(this.#property),
+		);
+
+		let when_false: (
+			| KeywordTypeNode
+			| ParenthesizedTypeNode
+		) = factory.createKeywordTypeNode(
+			SyntaxKind.NeverKeyword,
+		);
+
+		for (const possibility of remaining) {
+			when_false = factory.createParenthesizedType(
+				factory.createConditionalTypeNode(
+					checkType(),
+					factory.createLiteralTypeNode(factory.createStringLiteral(
+						possibility[0],
+					)),
+					Types.toObject(possibility[1][0]).toTypeResult(),
+					when_false,
+				),
+			);
+		}
+
+		return factory.createConditionalTypeNode(
+			checkType(),
+			factory.createLiteralTypeNode(factory.createStringLiteral(
+				first[0],
+			)),
+			Types.toObject(first[1][0]).toTypeResult(),
+			when_false,
 		);
 	}
 }

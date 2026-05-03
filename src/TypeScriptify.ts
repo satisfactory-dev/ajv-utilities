@@ -120,6 +120,8 @@ import CollectValidateCalls from './TypeScriptify/preprocessors/CollectValidateC
 // oxlint-disable-next-line @stylistic/max-len
 import ModifyValidateWrapper from './TypeScriptify/modifiers/ModifyValidateWrapper.ts';
 
+import AddGenericT from './TypeScriptify/modifiers/AddGenericT.ts';
+
 export default class TypeScript {
 	ify(code: string, config: Partial<Config>): string {
 		code = esmify(code);
@@ -329,6 +331,7 @@ export default class TypeScript {
 				new ModifyValidateOptionsByConfig(
 					specify_modify_options_name_config,
 				),
+				new AddGenericT(specify_types),
 			],
 		);
 

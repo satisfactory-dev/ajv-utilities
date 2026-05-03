@@ -1,6 +1,6 @@
 import type { ErrorObject } from 'ajv';
 import type { IsStandalone, StandaloneDataValidationCxt } from '@satisfactory-dev/ajv-utilities';
-import type { stub_CanConvertJson, stub_Collection, stub_Distributor_json, stub_IntermediaryCalculation, stub_IntermediaryNumber, stub_Pool, stub_Settings, stub_State_Json } from './types.ts';
+import type { stub_CanConvertJson, stub_Collection, stub_Distributor_json, stub_Group, stub_IntermediaryCalculation, stub_IntermediaryNumber, stub_Pool, stub_Settings, stub_State_Json } from './types.ts';
 function ajv_utiltiies__definitely_evaluated<T>(maybe: IsStandalone<T>): Exclude<IsStandalone<T>["evaluated"], undefined> { if (undefined === maybe.evaluated)
     throw new Error(`${maybe.name}.evaluated not set!`); return maybe.evaluated; }
 function ajv_utilities__is_probably_object(maybe: unknown): maybe is Record<string, unknown> { return !!maybe && typeof maybe === "object" && !Array.isArray(maybe); }
@@ -800,7 +800,7 @@ function validate21(data: unknown, { instancePath = "", parentData, parentDataPr
 (validate21 as IsStandalone).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
 const schema47 = { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/collection" } };
 const schema48 = { "type": "object", "required": ["id", "items"] as const, "unevaluatedProperties": false, "additionalProperties": false, "properties": { "id": { "$ref": "#/$defs/id" }, "name": { "$ref": "#/$defs/name" }, "recipe_selection": { "$ref": "#/$defs/recipe_selection" }, "items": { "type": "array", "minItems": 0, "items": { "$ref": "#/$defs/id" } } } };
-function validate39(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is stub_Collection {
+function validate39<T extends stub_Collection | stub_Group = stub_Collection | stub_Group>(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is T {
     let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = ajv_utiltiies__definitely_evaluated(validate39);
@@ -943,10 +943,13 @@ function validate39(data: unknown, { instancePath = "", parentData, parentDataPr
     return errors === 0;
 }
 (validate39 as IsStandalone).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
-function validate38(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is [
+function validate38(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is typeof parentDataProperty extends "collections" ? [
     stub_Collection,
     ...stub_Collection[]
-] {
+] : (typeof parentDataProperty extends "groups" ? [
+    stub_Group,
+    ...stub_Group[]
+] : never) {
     let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = ajv_utiltiies__definitely_evaluated(validate38);

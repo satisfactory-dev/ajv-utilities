@@ -1125,17 +1125,35 @@ void describe('AjvUtilities', () => {
 								],
 								[
 									{
+										conditionally: {
+											parentDataProperty: {
+												collections: [
+									{
 										name: 'stub_Collection',
 										as_array: {minimum: 1},
 									},
 									'./types.ts',
+												],
+												groups: [
+													{
+														name: 'stub_Group',
+														as_array: {minimum: 1},
+													},
+													'./types.ts',
+												],
+											},
+										},
+									},
 									{
 										instancePath_partial: '/collections',
 									},
 									[
 										[
-											'stub_Collection',
-											'./types.ts',
+											'T',
+											[
+												['stub_Group', './types.ts'],
+												['stub_Collection', './types.ts'],
+											],
 											{
 												instancePath_partial: '/',
 											},
