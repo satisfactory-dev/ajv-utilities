@@ -635,7 +635,11 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 						sub_type[1].map((e) => (
 							'string' === typeof e[0]
 								? e[0]
-								: e[0].name
+								: (
+									('as' in e[0] && e[0].as)
+										? e[0].as
+										: e[0].name
+								)
 						)),
 					);
 				} else if (this.#is_conditional(sub_type)) {
