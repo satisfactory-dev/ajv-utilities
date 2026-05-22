@@ -16,6 +16,10 @@
     "./ajv": {
       "default": "./ajv.js",
       "types": "./ajv.d.ts"
+    },
+    "./modified/*": {
+      "default": "./modified/*.js",
+      "types": "./modified/*.d.ts"
     }
   },
   "files": [
