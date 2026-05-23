@@ -5,13 +5,6 @@ import type {
 	PropertyAssignment,
 	VariableDeclaration,
 } from 'typescript';
-import {
-	factory,
-	isIdentifier,
-	isObjectLiteralExpression,
-	isPropertyAssignment,
-	isVariableDeclaration,
-} from 'typescript';
 
 import {
 	ConditionalModification,
@@ -21,6 +14,10 @@ import KnownImports from '../known_imports.ts';
 import type {
 	prepend_with_imports,
 } from '../TypeReferences.ts';
+
+import type {
+	ts,
+} from '../../TypeScriptify.ts';
 
 type Candidate = (
 	& VariableDeclaration
@@ -65,7 +62,16 @@ type Candidate = (
 export default class ModifyValidateWrapper extends ConditionalModification<
 	Candidate
 > {
-	constructor(prepend_with_imports: prepend_with_imports) {
+	constructor(
+		{
+			factory,
+			isIdentifier,
+			isObjectLiteralExpression,
+			isPropertyAssignment,
+			isVariableDeclaration,
+		}: ts,
+		prepend_with_imports: prepend_with_imports,
+	) {
 		super(
 			(maybe): maybe is Candidate => (
 				isVariableDeclaration(maybe)

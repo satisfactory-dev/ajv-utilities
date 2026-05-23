@@ -2,15 +2,14 @@ import type {
 	Identifier,
 	PropertyAccessExpression,
 } from 'typescript';
-import {
-	factory,
-	isIdentifier,
-	isPropertyAccessExpression,
-} from 'typescript';
 
 import {
 	ConditionalModification,
 } from '../abstracts.ts';
+
+import type {
+	ts,
+} from '../../TypeScriptify.ts';
 
 type ucs2lengthCorrectionCandidate = (
 	& PropertyAccessExpression
@@ -33,7 +32,11 @@ type ucs2lengthCorrectionCandidate = (
 export default class Ucs2LengthCorrection extends ConditionalModification<
 	ucs2lengthCorrectionCandidate
 > {
-	constructor() {
+	constructor({
+		factory,
+		isIdentifier,
+		isPropertyAccessExpression,
+	}: ts) {
 		super(
 			(node): node is ucs2lengthCorrectionCandidate => (
 				isPropertyAccessExpression(node)

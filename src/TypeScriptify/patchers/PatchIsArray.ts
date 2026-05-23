@@ -6,18 +6,14 @@ import type {
 	NodeArray,
 	PropertyAccessExpression,
 } from 'typescript';
-import {
-	factory,
-	isCallExpression,
-	isIdentifier,
-	isIfStatement,
-	isPropertyAccessExpression,
-	SyntaxKind,
-} from 'typescript';
 
 import {
 	ConditionalModification,
 } from '../abstracts.ts';
+
+import type {
+	ts,
+} from '../../TypeScriptify.ts';
 
 type PatchIsArrayCandidate = (
 	& IfStatement
@@ -51,6 +47,7 @@ export default class PatchIsArray extends ConditionalModification<
 	PatchIsArrayCandidate
 > {
 	#replace_is_array(
+		factory: ts['factory'],
 		args?: Expression[]|NodeArray<Expression>,
 	) {
 		return factory.createCallExpression(
@@ -60,7 +57,16 @@ export default class PatchIsArray extends ConditionalModification<
 		);
 	}
 
-	constructor(patch_needed: () => void) {
+	constructor(
+		{
+			factory,
+			isCallExpression,
+			isIdentifier,
+			isIfStatement,
+			isPropertyAccessExpression,
+		}: ts,
+		patch_needed: () => void,
+	) {
 		super(
 			(node): node is PatchIsArrayCandidate => (
 				isIfStatement(node)
@@ -80,7 +86,10 @@ export default class PatchIsArray extends ConditionalModification<
 				return (
 					factory.updateIfStatement(
 						node,
-						this.#replace_is_array(node.expression.arguments),
+						this.#replace_is_array(
+							factory,
+							node.expression.arguments,
+						),
 						node.thenStatement,
 						node.elseStatement,
 					)
@@ -89,7 +98,10 @@ export default class PatchIsArray extends ConditionalModification<
 		);
 	}
 
-	static patch() {
+	static patch({
+		factory,
+		SyntaxKind,
+	}: ts) {
 		return factory.createFunctionDeclaration(
 			undefined,
 			undefined,

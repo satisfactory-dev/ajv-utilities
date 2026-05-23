@@ -3,17 +3,14 @@ import type {
 	PropertyAccessExpression,
 	VariableDeclaration,
 } from 'typescript';
-import {
-	factory,
-	isIdentifier,
-	isPropertyAccessExpression,
-	isVariableDeclaration,
-	SyntaxKind,
-} from 'typescript';
 
 import {
 	ConditionalModification,
 } from '../abstracts.ts';
+
+import type {
+	ts,
+} from '../../TypeScriptify.ts';
 
 type Candidate_hasOwnProperty = (
 	& VariableDeclaration
@@ -59,7 +56,13 @@ type Candidate_hasOwnProperty = (
 export default class UnboundThis_hasOwnProperty extends ConditionalModification<
 	Candidate_hasOwnProperty
 > {
-	constructor() {
+	constructor({
+		factory,
+		isIdentifier,
+		isPropertyAccessExpression,
+		isVariableDeclaration,
+		SyntaxKind,
+	}: ts) {
 		super(
 			(maybe): maybe is Candidate_hasOwnProperty => (
 				isVariableDeclaration(maybe)

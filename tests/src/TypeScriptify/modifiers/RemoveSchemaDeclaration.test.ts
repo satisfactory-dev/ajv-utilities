@@ -5,7 +5,7 @@ import {
 	it,
 } from 'node:test';
 
-import {
+import ts, {
 	factory,
 	isIdentifier,
 	isVariableStatement,
@@ -16,7 +16,7 @@ import RemoveSchemaDeclaration from '../../../../src/TypeScriptify/modifiers/Rem
 
 void describe(`${RemoveSchemaDeclaration.name}::visit()`, () => {
 	void it('returns false when expected', () => {
-		const instance = new RemoveSchemaDeclaration();
+		const instance = new RemoveSchemaDeclaration(ts);
 
 		const declaration = factory.createVariableStatement(
 			undefined,
@@ -33,7 +33,7 @@ void describe(`${RemoveSchemaDeclaration.name}::visit()`, () => {
 	});
 
 	void it('returns undefined when expected', () => {
-		const instance = new RemoveSchemaDeclaration();
+		const instance = new RemoveSchemaDeclaration(ts);
 
 		const declaration = factory.createVariableStatement(
 			undefined,
@@ -50,7 +50,7 @@ void describe(`${RemoveSchemaDeclaration.name}::visit()`, () => {
 	});
 
 	void it('returns statement when expected', () => {
-		const instance = new RemoveSchemaDeclaration();
+		const instance = new RemoveSchemaDeclaration(ts);
 
 		const declaration = factory.createVariableStatement(
 			undefined,

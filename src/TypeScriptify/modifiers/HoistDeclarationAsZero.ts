@@ -4,22 +4,18 @@ import type {
 	IfStatement,
 	Node,
 	NodeArray,
+	SyntaxKind,
 	VariableDeclaration,
 	VariableDeclarationList,
-} from 'typescript';
-import {
-	factory,
-	isBlock,
-	isIdentifier,
-	isIfStatement,
-	isVariableStatement,
-	NodeFlags,
-	SyntaxKind,
 } from 'typescript';
 
 import {
 	ConditionalModification,
 } from '../abstracts.ts';
+
+import type {
+	ts,
+} from '../../TypeScriptify.ts';
 
 type HoistDeclarationAsZeroCandidateDeclaration = (
 	& VariableDeclaration
@@ -107,7 +103,15 @@ type HoistDeclarationAsZeroCandidate<
 export default class HoistDeclarationAsZero extends ConditionalModification<
 	HoistDeclarationAsZeroCandidate
 > {
-	constructor() {
+	constructor({
+		factory,
+		isBlock,
+		isIdentifier,
+		isIfStatement,
+		isVariableStatement,
+		NodeFlags,
+		SyntaxKind,
+	}: ts) {
 		super(
 			(maybe): maybe is HoistDeclarationAsZeroCandidate => (
 				isBlock(maybe)

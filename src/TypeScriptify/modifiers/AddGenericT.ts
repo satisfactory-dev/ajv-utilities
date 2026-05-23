@@ -2,10 +2,6 @@ import type {
 	FunctionDeclaration,
 	Identifier,
 } from 'typescript';
-import {
-	factory,
-	isFunctionDeclaration,
-} from 'typescript';
 
 import {
 	ConditionalModification,
@@ -18,6 +14,10 @@ import type {
 import {
 	GenericT,
 } from '../TypeReferences.ts';
+
+import type {
+	ts,
+} from '../../TypeScriptify.ts';
 
 type Candidate = (
 	& FunctionDeclaration
@@ -34,7 +34,13 @@ type Candidate = (
 export default class AddGenericT extends ConditionalModification<
 	Candidate
 > {
-	constructor(specified_types: specify_types_instance) {
+	constructor(
+		{
+			factory,
+			isFunctionDeclaration,
+		}: ts,
+		specified_types: specify_types_instance,
+	) {
 		super(
 			(maybe): maybe is Candidate => (
 				isFunctionDeclaration(maybe)

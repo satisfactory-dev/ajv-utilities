@@ -5,6 +5,8 @@ import {
 	it,
 } from 'node:test';
 
+import ts from 'typescript';
+
 import {
 	ConditionalModification,
 	ConditionalPreprocessor,
@@ -26,7 +28,7 @@ void describe(`${ConditionalPreprocessor.name}::check()`, () => {
 	void it('passes', () => {
 		assert.doesNotThrow(() => ConditionalPreprocessor.check([]));
 		assert.doesNotThrow(() => ConditionalPreprocessor.check([
-			new SpecifyTypesBySourceURL({
+			new SpecifyTypesBySourceURL(ts, {
 				ajv: new Types(),
 				'@satisfactory-dev/ajv-utilities': new Types(),
 			}, {}),
@@ -36,11 +38,11 @@ void describe(`${ConditionalPreprocessor.name}::check()`, () => {
 	void it('fails', () => {
 		assert.throws(() => ConditionalPreprocessor.check([1]));
 		assert.throws(() => ConditionalPreprocessor.check([
-			new SpecifyTypesBySourceURL({
+			new SpecifyTypesBySourceURL(ts, {
 				ajv: new Types(),
 				'@satisfactory-dev/ajv-utilities': new Types(),
 			}, {}),
-			new Ucs2LengthCorrection(),
+			new Ucs2LengthCorrection(ts),
 		]));
 	});
 });
@@ -49,18 +51,18 @@ void describe(`${ConditionalModification.name}::check()`, () => {
 	void it('passes', () => {
 		assert.doesNotThrow(() => ConditionalModification.check([]));
 		assert.doesNotThrow(() => ConditionalModification.check([
-			new Ucs2LengthCorrection(),
+			new Ucs2LengthCorrection(ts),
 		]));
 	});
 
 	void it('fails', () => {
 		assert.throws(() => ConditionalModification.check([1]));
 		assert.throws(() => ConditionalModification.check([
-			new SpecifyTypesBySourceURL({
+			new SpecifyTypesBySourceURL(ts, {
 				ajv: new Types(),
 				'@satisfactory-dev/ajv-utilities': new Types(),
 			}, {}),
-			new Ucs2LengthCorrection(),
+			new Ucs2LengthCorrection(ts),
 		]));
 	});
 });

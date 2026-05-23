@@ -2,15 +2,14 @@ import type {
 	VariableDeclarationList,
 	VariableStatement,
 } from 'typescript';
-import {
-	factory,
-	isIdentifier,
-	isVariableStatement,
-} from 'typescript';
 
 import {
 	ConditionalModification,
 } from '../abstracts.ts';
+
+import type {
+	ts,
+} from '../../TypeScriptify.ts';
 
 type RemoveSchemaDeclarationCandiate = (
 	& VariableStatement
@@ -28,7 +27,11 @@ type RemoveSchemaDeclarationCandiate = (
 export default class RemoveSchemaDeclaration extends ConditionalModification<
 	RemoveSchemaDeclarationCandiate
 > {
-	constructor() {
+	constructor({
+		factory,
+		isIdentifier,
+		isVariableStatement,
+	}: ts) {
 		super(
 			(node, config): node is RemoveSchemaDeclarationCandiate => (
 				!!config

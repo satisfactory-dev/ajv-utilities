@@ -2,15 +2,14 @@ import type {
 	ArrayLiteralExpression,
 	PropertyAssignment,
 } from 'typescript';
-import {
-	factory,
-	isArrayLiteralExpression,
-	isPropertyAssignment,
-} from 'typescript';
 
 import {
 	ConditionalModification,
 } from '../abstracts.ts';
+
+import type {
+	ts,
+} from '../../TypeScriptify.ts';
 
 type Candidate = (
 	& PropertyAssignment
@@ -22,7 +21,11 @@ type Candidate = (
 export default class TypecastArrayAsConst extends ConditionalModification<
 	Candidate
 > {
-	constructor() {
+	constructor({
+		factory,
+		isArrayLiteralExpression,
+		isPropertyAssignment,
+	}: ts) {
 		super(
 			(maybe): maybe is Candidate => (
 				isPropertyAssignment(maybe)

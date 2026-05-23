@@ -2,16 +2,14 @@ import type {
 	Identifier,
 	VariableDeclaration,
 } from 'typescript';
-import {
-	factory,
-	isIdentifier,
-	isVariableDeclaration,
-	SyntaxKind,
-} from 'typescript';
 
 import {
 	ConditionalModification,
 } from '../abstracts.ts';
+
+import type {
+	ts,
+} from '../../TypeScriptify.ts';
 
 type Candidate = (
 	& VariableDeclaration
@@ -28,7 +26,12 @@ type Candidate = (
 export default class SpecifyIndicesType extends ConditionalModification<
 	Candidate
 > {
-	constructor() {
+	constructor({
+		factory,
+		isIdentifier,
+		isVariableDeclaration,
+		SyntaxKind,
+	}: ts) {
 		super(
 			(maybe): maybe is Candidate => (
 				isVariableDeclaration(maybe)

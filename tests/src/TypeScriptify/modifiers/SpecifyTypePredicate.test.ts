@@ -5,7 +5,7 @@ import {
 	it,
 } from 'node:test';
 
-import {
+import ts, {
 	factory,
 } from 'typescript';
 
@@ -14,7 +14,7 @@ import SpecifyTypePredicate from '../../../../src/TypeScriptify/modifiers/Specif
 
 void describe(SpecifyTypePredicate.name, () => {
 	void it('does not pass if an ajv_utilities__-prefixed function', () => {
-		const instance = new SpecifyTypePredicate({});
+		const instance = new SpecifyTypePredicate(ts, {});
 
 		const func = factory.createFunctionDeclaration(
 			undefined,
@@ -32,7 +32,7 @@ void describe(SpecifyTypePredicate.name, () => {
 	void it(
 		'does pass if not an ajv_utilities__-prefixed function',
 		(t) => {
-			const instance = new SpecifyTypePredicate({});
+			const instance = new SpecifyTypePredicate(ts, {});
 
 			const func = factory.createFunctionDeclaration(
 				undefined,

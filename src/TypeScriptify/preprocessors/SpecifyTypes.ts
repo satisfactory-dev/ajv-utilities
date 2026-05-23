@@ -3,10 +3,6 @@ import type {
 	FunctionDeclaration,
 	Identifier,
 } from 'typescript';
-import {
-	isEmptyStatement,
-	isFunctionDeclaration,
-} from 'typescript';
 
 import {
 	ConditionalPreprocessor,
@@ -23,6 +19,10 @@ import type {
 import {
 	Types,
 } from '../TypeReferences.ts';
+
+import type {
+	ts,
+} from '../../TypeScriptify.ts';
 
 type SpecifyTypesCandidate = (
 	& EmptyStatement
@@ -81,9 +81,15 @@ export class SpecifyTypesBySourceURL extends ConditionalPreprocessor<
 	}
 
 	constructor(
+		ts: ts,
 		prepend_with_imports: prepend_with_imports,
 		specify_types: specify_types_instance,
 	) {
+		const {
+			isEmptyStatement,
+			isFunctionDeclaration,
+		} = ts;
+
 		super(
 			(node, config): node is SpecifyTypesCandidate => (
 				!!config
@@ -105,7 +111,7 @@ export class SpecifyTypesBySourceURL extends ConditionalPreprocessor<
 
 					specify_types[
 						node.parent.parent.name.text
-					] = prepend_with_imports[maybe[1]].add(maybe[0]);
+					] = prepend_with_imports[maybe[1]].add(ts, maybe[0]);
 				}
 			},
 		);

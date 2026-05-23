@@ -3,17 +3,14 @@ import type {
 	IfStatement,
 	PropertyAccessExpression,
 } from 'typescript';
-import {
-	factory,
-	isIdentifier,
-	isIfStatement,
-	isPropertyAccessExpression,
-	SyntaxKind,
-} from 'typescript';
 
 import {
 	ConditionalModification,
 } from '../abstracts.ts';
+
+import type {
+	ts,
+} from '../../TypeScriptify.ts';
 
 type QuestionableConditionCandidate = (
 	& PropertyAccessExpression
@@ -36,7 +33,13 @@ type QuestionableConditionCandidate = (
 export default class QuestionableCondition extends ConditionalModification<
 	QuestionableConditionCandidate
 > {
-	constructor() {
+	constructor({
+		factory,
+		isIdentifier,
+		isIfStatement,
+		isPropertyAccessExpression,
+		SyntaxKind,
+	}: ts) {
 		super(
 			(node): node is QuestionableConditionCandidate => (
 				isPropertyAccessExpression(node)

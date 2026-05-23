@@ -8,20 +8,16 @@ import type {
 	TupleTypeNode,
 	TypeReferenceNode,
 } from 'typescript';
-import {
-	createPrinter,
-	createSourceFile,
-	EmitHint,
-	factory,
-	ScriptTarget,
-	SyntaxKind,
-} from 'typescript';
 
 import type {
 	as_array_config,
 	specify_type_without_nested,
 	specify_types_config,
 } from './types.ts';
+
+import type {
+	ts,
+} from '../TypeScriptify.ts';
 
 export type prepend_with_imports = {
 	[key: string]: Types,
@@ -44,18 +40,23 @@ interface HasOutput<
 		| ConditionalTypeNode
 	),
 > {
+	readonly ts: ts;
+
 	toTypeResult(): TypeResult;
 }
 
-export function to_string(instance: HasOutput) {
-	const printer = createPrinter({
+export function to_string(
+	ts: ts,
+	instance: HasOutput,
+) {
+	const printer = ts.createPrinter({
 		omitTrailingSemicolon: true,
 	});
 
 	return printer.printNode(
-		EmitHint.Unspecified,
+		ts.EmitHint.Unspecified,
 		instance.toTypeResult(),
-		createSourceFile('foo.ts', '', ScriptTarget.ESNext),
+		ts.createSourceFile('foo.ts', '', ts.ScriptTarget.ESNext),
 	);
 }
 
@@ -67,6 +68,12 @@ abstract class AbstractOutput<
 		| ArrayTypeNode
 	),
 > implements HasOutput<TypeResult> {
+	readonly ts: ts;
+
+	constructor(ts: ts) {
+		this.ts = ts;
+	}
+
 	abstract toTypeResult(): TypeResult;
 
 	withSubTypeChain(
@@ -106,11 +113,12 @@ export class Type<
 	}
 
 	constructor(
+		ts: ts,
 		name: Exclude<string, ''>,
 		as: As,
 		args?: [string, ...string[]],
 	) {
-		super();
+		super(ts);
 
 		this.name = name;
 		this.as = as;
@@ -119,31 +127,31 @@ export class Type<
 
 	toImportSpecifier(): ImportSpecifier {
 		if (this.as) {
-			return factory.createImportSpecifier(
+			return this.ts.factory.createImportSpecifier(
 				false,
-				factory.createIdentifier(this.name),
-				factory.createIdentifier(this.as),
+				this.ts.factory.createIdentifier(this.name),
+				this.ts.factory.createIdentifier(this.as),
 			);
 		}
 
-		return factory.createImportSpecifier(
+		return this.ts.factory.createImportSpecifier(
 			false,
 			undefined,
-			factory.createIdentifier(this.name),
+			this.ts.factory.createIdentifier(this.name),
 		);
 	}
 
 	toTypeResult(): TypeReferenceNode {
-		return factory.createTypeReferenceNode(
+		return this.ts.factory.createTypeReferenceNode(
 			this.as || this.name,
-			this.args?.map((value) => factory.createLiteralTypeNode(
-				factory.createStringLiteral(value),
+			this.args?.map((value) => this.ts.factory.createLiteralTypeNode(
+				this.ts.factory.createStringLiteral(value),
 			)),
 		);
 	}
 
 	withArgs(args: [string, ...string[]]) {
-		return new Type(this.name, this.as, args);
+		return new Type(this.ts, this.name, this.as, args);
 	}
 }
 
@@ -156,7 +164,7 @@ class WithSubTypeChain extends AbstractOutput<IndexedAccessTypeNode> {
 		parent: HasOutput,
 		sub_type_chain: [string, ...string[]],
 	) {
-		super();
+		super(parent.ts);
 
 		this.#parent = parent;
 		this.sub_type_chain = sub_type_chain;
@@ -168,19 +176,23 @@ class WithSubTypeChain extends AbstractOutput<IndexedAccessTypeNode> {
 			...remaining
 		] = this.sub_type_chain;
 
-		let access = factory.createIndexedAccessTypeNode(
+		let access = this.ts.factory.createIndexedAccessTypeNode(
 			this.#parent.toTypeResult(),
-			factory.createLiteralTypeNode(factory.createStringLiteral(
-				first,
-			)),
+			this.ts.factory.createLiteralTypeNode(
+				this.ts.factory.createStringLiteral(
+					first,
+				),
+			),
 		);
 
 		for (const sub_type of remaining) {
-			access = factory.createIndexedAccessTypeNode(
+			access = this.ts.factory.createIndexedAccessTypeNode(
 				access,
-				factory.createLiteralTypeNode(factory.createStringLiteral(
-					sub_type,
-				)),
+				this.ts.factory.createLiteralTypeNode(
+					this.ts.factory.createStringLiteral(
+						sub_type,
+					),
+				),
 			);
 		}
 
@@ -197,7 +209,7 @@ class WithArray extends AbstractOutput<TupleTypeNode | ArrayTypeNode> {
 		parent: HasOutput,
 		as_array: as_array_config,
 	) {
-		super();
+		super(parent.ts);
 
 		this.#parent = parent;
 		this.as_array = as_array;
@@ -205,7 +217,9 @@ class WithArray extends AbstractOutput<TupleTypeNode | ArrayTypeNode> {
 
 	toTypeResult() {
 		if (true === this.as_array || this.as_array.minimum < 1) {
-			return factory.createArrayTypeNode(this.#parent.toTypeResult());
+			return this.ts.factory.createArrayTypeNode(
+				this.#parent.toTypeResult(),
+			);
 		}
 
 		const args: ReturnType<HasOutput['toTypeResult']>[] = [];
@@ -216,11 +230,13 @@ class WithArray extends AbstractOutput<TupleTypeNode | ArrayTypeNode> {
 			args.push(this.#parent.toTypeResult());
 		}
 
-		return factory.createTupleTypeNode(
+		return this.ts.factory.createTupleTypeNode(
 			[
 				...args,
-				factory.createRestTypeNode(
-					factory.createArrayTypeNode(this.#parent.toTypeResult()),
+				this.ts.factory.createRestTypeNode(
+					this.ts.factory.createArrayTypeNode(
+						this.#parent.toTypeResult(),
+					),
 				),
 			],
 		);
@@ -230,27 +246,41 @@ class WithArray extends AbstractOutput<TupleTypeNode | ArrayTypeNode> {
 export class GenericT implements HasOutput<TypeReferenceNode> {
 	readonly possibilities: [string, ...string[]];
 
-	constructor(possibilities: [string, ...string[]]) {
+	readonly ts: ts;
+
+	constructor(
+		ts: ts,
+		possibilities: [string, ...string[]],
+	) {
+		this.ts = ts;
+
 		this.possibilities = [
 			...possibilities,
 		].sort() as [string, ...string[]];
 	}
 
 	toTypeResult() {
-		return factory.createTypeReferenceNode('T');
+		return this.ts.factory.createTypeReferenceNode('T');
 	}
 }
 
 export class ConditionalPredicate implements HasOutput<ConditionalTypeNode> {
+	readonly ts: ts;
+
 	#property: 'parentDataProperty';
 
 	#spec: {
 		[key: string]: specify_type_without_nested,
 	};
 
-	constructor(property: 'parentDataProperty', spec: {
-		[key: string]: specify_type_without_nested,
-	}) {
+	constructor(
+		ts: ts,
+		property: 'parentDataProperty',
+		spec: {
+			[key: string]: specify_type_without_nested,
+		},
+	) {
+		this.ts = ts;
 		this.#property = property;
 		this.#spec = spec;
 	}
@@ -261,36 +291,46 @@ export class ConditionalPredicate implements HasOutput<ConditionalTypeNode> {
 			...remaining
 		] = Object.entries(this.#spec);
 
-		const checkType = () => factory.createTypeQueryNode(
-			factory.createIdentifier(this.#property),
+		const checkType = () => this.ts.factory.createTypeQueryNode(
+			this.ts.factory.createIdentifier(this.#property),
 		);
 
 		let when_false: (
 			| KeywordTypeNode
 			| ParenthesizedTypeNode
-		) = factory.createKeywordTypeNode(
-			SyntaxKind.NeverKeyword,
+		) = this.ts.factory.createKeywordTypeNode(
+			this.ts.SyntaxKind.NeverKeyword,
 		);
 
 		for (const possibility of remaining) {
-			when_false = factory.createParenthesizedType(
-				factory.createConditionalTypeNode(
+			when_false = this.ts.factory.createParenthesizedType(
+				this.ts.factory.createConditionalTypeNode(
 					checkType(),
-					factory.createLiteralTypeNode(factory.createStringLiteral(
-						possibility[0],
-					)),
-					Types.toObject(possibility[1][0]).toTypeResult(),
+					this.ts.factory.createLiteralTypeNode(
+						this.ts.factory.createStringLiteral(
+							possibility[0],
+						),
+					),
+					Types.toObject(
+						this.ts,
+						possibility[1][0],
+					).toTypeResult(),
 					when_false,
 				),
 			);
 		}
 
-		return factory.createConditionalTypeNode(
+		return this.ts.factory.createConditionalTypeNode(
 			checkType(),
-			factory.createLiteralTypeNode(factory.createStringLiteral(
-				first[0],
-			)),
-			Types.toObject(first[1][0]).toTypeResult(),
+			this.ts.factory.createLiteralTypeNode(
+				this.ts.factory.createStringLiteral(
+					first[0],
+				),
+			),
+			Types.toObject(
+				this.ts,
+				first[1][0],
+			).toTypeResult(),
 			when_false,
 		);
 	}
@@ -318,8 +358,12 @@ export class Types {
 		return 'string' !== typeof type;
 	}
 
-	add<T extends specify_types_config>(type: T) {
+	add<T extends specify_types_config>(
+		ts: ts,
+		type: T,
+	) {
 		return Types.toObject(
+			ts,
 			type,
 			(as_object) => {
 				if (undefined === this.list_of_types) {
@@ -352,6 +396,7 @@ export class Types {
 	}
 
 	static toObject(
+		ts: ts,
 		type: specify_types_config,
 		juggle?: (as_object: (
 			| Type<Exclude<string, ''>>
@@ -368,11 +413,11 @@ export class Types {
 			| Type<undefined>
 		) = (
 			!is_object
-				? new Type(type, undefined)
+				? new Type(ts, type, undefined)
 				: (
 					'as' in type && type.as
-						? new Type(type.name, type.as)
-						: new Type(type.name, undefined)
+						? new Type(ts, type.name, type.as)
+						: new Type(ts, type.name, undefined)
 				)
 		);
 

@@ -12,22 +12,8 @@ import type {
 	Node,
 	NodeArray,
 	PropertyAccessExpression,
-	VariableDeclaration,
-} from 'typescript';
-import {
-	factory,
-	isArrayLiteralExpression,
-	isBinaryExpression,
-	isBlock,
-	isCallExpression,
-	isConditionalExpression,
-	isExpressionStatement,
-	isIdentifier,
-	isIfStatement,
-	isPropertyAccessExpression,
-	isToken,
-	isVariableDeclaration,
 	SyntaxKind,
+	VariableDeclaration,
 } from 'typescript';
 
 import {
@@ -38,6 +24,10 @@ import type {
 	prepend_with_imports,
 } from '../TypeReferences.ts';
 import KnownImports from '../known_imports.ts';
+
+import type {
+	ts,
+} from '../../TypeScriptify.ts';
 
 type VErrors = (
 	& VariableDeclaration
@@ -58,6 +48,12 @@ export class ModifyVErrors extends ConditionalModification<
 	VErrors
 > {
 	constructor(
+		{
+			factory,
+			isIdentifier,
+			isVariableDeclaration,
+			SyntaxKind,
+		}: ts,
 		prepend_with_imports: prepend_with_imports,
 	) {
 		super(
@@ -215,7 +211,19 @@ type ConditionalPushCandidate<
 export class ReplaceVErrorsPushIfElse extends ConditionalModification<
 	ConditionalPushCandidate
 > {
-	constructor() {
+	constructor({
+		factory,
+		isArrayLiteralExpression,
+		isBinaryExpression,
+		isBlock,
+		isCallExpression,
+		isExpressionStatement,
+		isIdentifier,
+		isIfStatement,
+		isPropertyAccessExpression,
+		isToken,
+		SyntaxKind,
+	}: ts) {
 		super(
 			(maybe): maybe is ConditionalPushCandidate => (
 				isIfStatement(maybe)
@@ -461,7 +469,16 @@ type ConditionalLengthSetCandidate<
 export class ConditionalLengthSet extends ConditionalModification<
 	ConditionalLengthSetCandidate
 > {
-	constructor() {
+	constructor({
+		factory,
+		isBinaryExpression,
+		isBlock,
+		isExpressionStatement,
+		isIdentifier,
+		isIfStatement,
+		isPropertyAccessExpression,
+		SyntaxKind,
+	}: ts) {
 		super(
 			(maybe): maybe is ConditionalLengthSetCandidate => (
 				isIfStatement(maybe)
@@ -648,6 +665,14 @@ abstract class TernaryConcat<
 	T extends PropertyAccessExpression,
 > extends ConditionalModification<TernaryConcatCandidate<T>> {
 	constructor(
+		{
+			isBinaryExpression,
+			isCallExpression,
+			isConditionalExpression,
+			isIdentifier,
+			isPropertyAccessExpression,
+			SyntaxKind,
+		}: ts,
 		prepend_with_imports: prepend_with_imports,
 		is_property_access_expression: (maybe: Node) => maybe is T,
 		accesses_match: (a: T, b: T) => boolean,
@@ -704,9 +729,18 @@ export class DirectTernaryConcat extends TernaryConcat<
 	DirectTernaryConcatPropertyAccessExpression
 > {
 	constructor(
+		ts: ts,
 		prepend_with_imports: prepend_with_imports,
 	) {
+		const {
+			factory,
+			isIdentifier,
+			isPropertyAccessExpression,
+			SyntaxKind,
+		} = ts;
+
 		super(
+			ts,
 			prepend_with_imports,
 			(maybe): maybe is DirectTernaryConcatPropertyAccessExpression => (
 				isPropertyAccessExpression(maybe)
@@ -788,9 +822,18 @@ export class WrappedTernaryConcat extends TernaryConcat<
 	WrappedTernaryConcatPropertyAccessExpression
 > {
 	constructor(
+		ts: ts,
 		prepend_with_imports: prepend_with_imports,
 	) {
+		const {
+			factory,
+			isIdentifier,
+			isPropertyAccessExpression,
+			SyntaxKind,
+		} = ts;
+
 		super(
+			ts,
 			prepend_with_imports,
 			(maybe): maybe is WrappedTernaryConcatPropertyAccessExpression => (
 				isPropertyAccessExpression(maybe)

@@ -18,6 +18,8 @@ import Ajv from 'ajv/dist/2020.js';
 
 import standaloneCode from 'ajv/dist/standalone/index.js';
 
+import ts from 'typescript';
+
 import type {
 	TypeScriptifyConfig,
 } from '../../index.ts';
@@ -1193,7 +1195,7 @@ void describe('AjvUtilities', () => {
 					`${
 						import.meta.dirname
 					}/../debugging/typescriptify.${i}.ts`,
-					typescriptify(input, config),
+					typescriptify(input, ts, config),
 				);
 			}
 
@@ -1207,7 +1209,7 @@ void describe('AjvUtilities', () => {
 				}][1]`,
 				() => {
 					assert.equal(
-						typescriptify(input, config),
+						typescriptify(input, ts, config),
 						expectation,
 					);
 				},

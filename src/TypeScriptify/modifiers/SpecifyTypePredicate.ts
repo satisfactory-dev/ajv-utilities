@@ -2,11 +2,6 @@ import type {
 	FunctionDeclaration,
 	Identifier,
 } from 'typescript';
-import {
-	factory,
-	isFunctionDeclaration,
-	isIdentifier,
-} from 'typescript';
 
 import {
 	ConditionalModification,
@@ -15,6 +10,10 @@ import {
 import type {
 	specify_types_instance,
 } from '../types.ts';
+
+import type {
+	ts,
+} from '../../TypeScriptify.ts';
 
 type SpecifyTypePredicateCandidate = (
 	& FunctionDeclaration
@@ -32,6 +31,11 @@ export default class SpecifyTypePredicate extends ConditionalModification<
 	SpecifyTypePredicateCandidate
 > {
 	constructor(
+		{
+			factory,
+			isFunctionDeclaration,
+			isIdentifier,
+		}: ts,
 		specify_types: Readonly<specify_types_instance>,
 	) {
 		super(

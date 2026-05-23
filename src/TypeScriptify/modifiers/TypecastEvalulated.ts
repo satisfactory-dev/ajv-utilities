@@ -3,13 +3,6 @@ import type {
 	PropertyAccessExpression,
 	VariableDeclaration,
 } from 'typescript';
-import {
-	factory,
-	isIdentifier,
-	isPropertyAccessExpression,
-	isVariableDeclaration,
-	SyntaxKind,
-} from 'typescript';
 
 import {
 	ConditionalModification,
@@ -19,6 +12,10 @@ import type {
 	prepend_with_imports,
 } from '../TypeReferences.ts';
 import KnownImports from '../known_imports.ts';
+
+import type {
+	ts,
+} from '../../TypeScriptify.ts';
 
 type QuestionableEvaluatedPropertyCandidate = (
 	& PropertyAccessExpression
@@ -48,7 +45,12 @@ type QuestionableEvaluatedPropertyCandidate = (
 export class QuestionableEvaluatedProperty extends ConditionalModification<
 	QuestionableEvaluatedPropertyCandidate
 > {
-	constructor() {
+	constructor({
+		factory,
+		isIdentifier,
+		isPropertyAccessExpression,
+		SyntaxKind,
+	}: ts) {
 		super(
 			(maybe): maybe is QuestionableEvaluatedPropertyCandidate => (
 				isPropertyAccessExpression(maybe)
@@ -93,7 +95,15 @@ type TypecastEvalulatedCandidate = (
 export class TypecastEvalulated extends ConditionalModification<
 	TypecastEvalulatedCandidate
 > {
-	constructor(prepend_with_imports: prepend_with_imports) {
+	constructor(
+		{
+			factory,
+			isIdentifier,
+			isPropertyAccessExpression,
+			isVariableDeclaration,
+		}: ts,
+		prepend_with_imports: prepend_with_imports,
+	) {
 		super(
 			(node): node is TypecastEvalulatedCandidate => (
 				isPropertyAccessExpression(node)

@@ -3,13 +3,6 @@ import type {
 	PropertyAccessExpression,
 	VariableDeclaration,
 } from 'typescript';
-import {
-	factory,
-	isIdentifier,
-	isPropertyAccessExpression,
-	isVariableDeclaration,
-	SyntaxKind,
-} from 'typescript';
 
 import {
 	ConditionalModification,
@@ -19,6 +12,10 @@ import type {
 	prepend_with_imports,
 } from '../TypeReferences.ts';
 import KnownImports from '../known_imports.ts';
+
+import type {
+	ts,
+} from '../../TypeScriptify.ts';
 
 type Candidate = (
 	& PropertyAccessExpression
@@ -44,6 +41,12 @@ export default class PatchDefinitelyHasEvaluated extends ConditionalModification
 	Candidate
 > {
 	constructor(
+		{
+			factory,
+			isIdentifier,
+			isPropertyAccessExpression,
+			isVariableDeclaration,
+		}: ts,
 		prepend_with_imports: prepend_with_imports,
 		patch_needed: () => void,
 	) {
@@ -75,7 +78,10 @@ export default class PatchDefinitelyHasEvaluated extends ConditionalModification
 		);
 	}
 
-	static patch() {
+	static patch({
+		factory,
+		SyntaxKind,
+	}: ts) {
 		return factory.createFunctionDeclaration(
 			undefined,
 			undefined,

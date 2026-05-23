@@ -5,6 +5,8 @@ import {
 
 import assert from 'node:assert/strict';
 
+import ts from 'typescript';
+
 import {
 	to_string,
 	Types,
@@ -140,11 +142,11 @@ void describe(Types.name, () => {
 			}]`, () => {
 				const instance = new Types();
 
-				const first = instance.add(a);
-				const second = instance.add(b);
+				const first = instance.add(ts, a);
+				const second = instance.add(ts, b);
 
-				assert.equal(to_string(first), expected_first_as_string);
-				assert.equal(to_string(second), expected_second_as_string);
+				assert.equal(to_string(ts, first), expected_first_as_string);
+				assert.equal(to_string(ts, second), expected_second_as_string);
 			});
 		}
 
@@ -154,9 +156,9 @@ void describe(Types.name, () => {
 			void it(`behaves with expectations_dataset[${i}]`, () => {
 				const instance = new Types();
 
-				const result = instance.add(input);
+				const result = instance.add(ts, input);
 
-				assert.equal(to_string(result), expectation);
+				assert.equal(to_string(ts, result), expectation);
 			});
 		}
 	});

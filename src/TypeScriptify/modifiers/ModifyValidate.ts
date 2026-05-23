@@ -5,14 +5,6 @@ import type {
 	ObjectBindingPattern,
 	ParameterDeclaration,
 } from 'typescript';
-import {
-	factory,
-	isEmptyStatement,
-	isFunctionDeclaration,
-	isIdentifier,
-	isObjectBindingPattern,
-	SyntaxKind,
-} from 'typescript';
 
 import {
 	ConditionalModification,
@@ -29,6 +21,10 @@ import type {
 } from '../TypeReferences.ts';
 
 import KnownImports from '../known_imports.ts';
+
+import type {
+	ts,
+} from '../../TypeScriptify.ts';
 
 type options = (
 	ParameterDeclaration
@@ -57,6 +53,10 @@ abstract class ModifyValidate extends ConditionalModification<
 	ValidateFunctionDeclaration
 > {
 	protected maybe_modify_name(
+		{
+			factory,
+			isIdentifier,
+		}: ts,
 		options_name: ValidateFunctionDeclaration['parameters'][1]['name'],
 		config?: remove_dataCtxKeys,
 	) {
@@ -91,7 +91,15 @@ abstract class ModifyValidate extends ConditionalModification<
 export class ModifyValidateOptions extends ModifyValidate {
 	#prepend_with_imports: prepend_with_imports;
 
-	constructor(prepend_with_imports: prepend_with_imports) {
+	constructor(
+		ts: ts,
+		prepend_with_imports: prepend_with_imports,
+	) {
+		const {
+			isFunctionDeclaration,
+			isObjectBindingPattern,
+		} = ts;
+
 		super(
 			(node): node is ValidateFunctionDeclaration => (
 				isFunctionDeclaration(node)
@@ -102,13 +110,17 @@ export class ModifyValidateOptions extends ModifyValidate {
 				&& 2 === node.parameters.length
 				&& isObjectBindingPattern(node.parameters[1].name)
 			),
-			(node, config) => this.#modify_validate(node, config),
+			(node, config) => this.#modify_validate(
+				ts,
+				node,
+				config,
+			),
 		);
 
 		this.#prepend_with_imports = prepend_with_imports;
 	}
 
-	#shim_DataValidationCxt() {
+	#shim_DataValidationCxt({factory}: ts) {
 		KnownImports.StandaloneDataValidationCxt(this.#prepend_with_imports);
 
 		return factory.createTypeReferenceNode(
@@ -117,9 +129,15 @@ export class ModifyValidateOptions extends ModifyValidate {
 	}
 
 	#modify_validate(
+		ts: ts,
 		node: ValidateFunctionDeclaration,
 		config?: Partial<Config>,
 	) {
+		const {
+			factory,
+			SyntaxKind,
+		} = ts;
+
 		const [
 			data,
 			options,
@@ -136,6 +154,7 @@ export class ModifyValidateOptions extends ModifyValidate {
 		);
 
 		const options_name = this.maybe_modify_name(
+			ts,
 			options.name,
 			(config && Array.isArray(config.remove_dataCtxKeys))
 				? config.remove_dataCtxKeys
@@ -149,7 +168,7 @@ export class ModifyValidateOptions extends ModifyValidate {
 			options_name,
 			options.questionToken,
 			factory.createTypeReferenceNode('Partial', [
-				this.#shim_DataValidationCxt(),
+				this.#shim_DataValidationCxt(ts),
 			]),
 			options.initializer,
 		);
@@ -235,6 +254,10 @@ export class SpecifyModifyCandidates extends ConditionalPreprocessor<
 	}
 
 	constructor(
+		{
+			isEmptyStatement,
+			isFunctionDeclaration,
+		}: ts,
 		specify_config: specify_modify_options_name_config,
 	) {
 		super(
@@ -268,8 +291,14 @@ export class SpecifyModifyCandidates extends ConditionalPreprocessor<
 
 export class ModifyValidateOptionsByConfig extends ModifyValidate {
 	constructor(
+		ts: ts,
 		specify_modify_options_name_config: specify_modify_options_name_config,
 	) {
+		const {
+			isFunctionDeclaration,
+			isObjectBindingPattern,
+		} = ts;
+
 		super(
 			(node): node is ValidateFunctionDeclaration => (
 				isFunctionDeclaration(node)
@@ -282,6 +311,7 @@ export class ModifyValidateOptionsByConfig extends ModifyValidate {
 				&& isObjectBindingPattern(node.parameters[1].name)
 			),
 			(node) => this.#modify_validate(
+				ts,
 				node,
 				specify_modify_options_name_config,
 			),
@@ -289,15 +319,21 @@ export class ModifyValidateOptionsByConfig extends ModifyValidate {
 	}
 
 	#modify_validate(
+		ts: ts,
 		node: ValidateFunctionDeclaration,
 		config: specify_modify_options_name_config,
 	) {
+		const {
+			factory,
+		} = ts;
+
 		const [
 			data,
 			options,
 		] = node.parameters;
 
 		const options_name = this.maybe_modify_name(
+			ts,
 			options.name,
 			config[node.name.text],
 		);

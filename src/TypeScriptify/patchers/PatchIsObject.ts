@@ -10,24 +10,17 @@ import type {
 	PropertyAccessExpression,
 	Statement,
 	StringLiteral,
-	TypeOfExpression,
-} from 'typescript';
-import {
-	factory,
-	isBinaryExpression,
-	isCallExpression,
-	isIdentifier,
-	isIfStatement,
-	isPrefixUnaryExpression,
-	isPropertyAccessExpression,
-	isStringLiteral,
-	isTypeOfExpression,
 	SyntaxKind,
+	TypeOfExpression,
 } from 'typescript';
 
 import {
 	ConditionalModification,
 } from '../abstracts.ts';
+
+import type {
+	ts,
+} from '../../TypeScriptify.ts';
 
 type PatchIsObjectCandidate<
 	IdentifierText extends string = string,
@@ -137,6 +130,7 @@ export default class PatchIsObject extends ConditionalModification<
 	PatchIsObjectCandidate
 > {
 	#replace_is_object(
+		factory: ts['factory'],
 		name: Expression,
 		then: Statement,
 		else_statement?: Statement,
@@ -152,7 +146,21 @@ export default class PatchIsObject extends ConditionalModification<
 		);
 	}
 
-	constructor(patch_needed: () => void) {
+	constructor(
+		{
+			factory,
+			isBinaryExpression,
+			isCallExpression,
+			isIdentifier,
+			isIfStatement,
+			isPrefixUnaryExpression,
+			isPropertyAccessExpression,
+			isStringLiteral,
+			isTypeOfExpression,
+			SyntaxKind,
+		}: ts,
+		patch_needed: () => void,
+	) {
 		super(
 			(node): node is PatchIsObjectCandidate => (
 				isIfStatement(node)
@@ -211,6 +219,7 @@ export default class PatchIsObject extends ConditionalModification<
 				patch_needed();
 
 				return this.#replace_is_object(
+					factory,
 					node.expression.left.left,
 					node.thenStatement,
 					node.elseStatement,
@@ -219,7 +228,10 @@ export default class PatchIsObject extends ConditionalModification<
 		);
 	}
 
-	static patch() {
+	static patch({
+		factory,
+		SyntaxKind,
+	}: ts) {
 		return factory.createFunctionDeclaration(
 			undefined,
 			undefined,

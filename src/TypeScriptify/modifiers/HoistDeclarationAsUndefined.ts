@@ -6,19 +6,14 @@ import type {
 	VariableDeclarationList,
 	VariableStatement,
 } from 'typescript';
-import {
-	factory,
-	isFunctionDeclaration,
-	isIdentifier,
-	isVariableDeclaration,
-	isVariableStatement,
-	NodeFlags,
-	SyntaxKind,
-} from 'typescript';
 
 import {
 	ConditionalModification,
 } from '../abstracts.ts';
+
+import type {
+	ts,
+} from '../../TypeScriptify.ts';
 
 type Candidate = (
 	& VariableStatement
@@ -72,7 +67,17 @@ export type hoist_candidates = {
 export class FindHoistCandidate extends ConditionalModification<
 	Candidate
 > {
-	constructor(hoist_candidates: hoist_candidates) {
+	constructor(
+		{
+			factory,
+			isFunctionDeclaration,
+			isIdentifier,
+			isVariableDeclaration,
+			isVariableStatement,
+			SyntaxKind,
+		}: ts,
+		hoist_candidates: hoist_candidates,
+	) {
 		super(
 			(maybe): maybe is Candidate => {
 				if (
@@ -146,7 +151,12 @@ export class FindHoistCandidate extends ConditionalModification<
 export class HoistDeclarationsHere extends ConditionalModification<
 	HoistingToHereCandidate
 > {
-	#createHoistedType() {
+	#createHoistedType(
+		{
+			factory,
+			SyntaxKind,
+		}: ts,
+	) {
 		return factory.createParenthesizedType(factory.createUnionTypeNode([
 			factory.createLiteralTypeNode(factory.createTrue()),
 			factory.createTypeLiteralNode([
@@ -172,7 +182,17 @@ export class HoistDeclarationsHere extends ConditionalModification<
 		]));
 	}
 
-	constructor(hoist_candidates: Readonly<hoist_candidates>) {
+	constructor(
+		ts: ts,
+		hoist_candidates: Readonly<hoist_candidates>,
+	) {
+		const {
+			factory,
+			isFunctionDeclaration,
+			isIdentifier,
+			NodeFlags,
+		} = ts;
+
 		super(
 			(maybe): maybe is HoistingToHereCandidate => (
 				isFunctionDeclaration(maybe)
@@ -201,7 +221,7 @@ export class HoistDeclarationsHere extends ConditionalModification<
 									) => factory.createVariableDeclaration(
 										variable_name,
 										undefined,
-										this.#createHoistedType(),
+										this.#createHoistedType(ts),
 										factory.createIdentifier('undefined'),
 									)),
 								NodeFlags.Let,

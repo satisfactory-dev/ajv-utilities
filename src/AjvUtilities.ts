@@ -8,6 +8,9 @@ import type {
 	Config,
 } from './TypeScriptify/types.ts';
 
+import type {
+	ts,
+} from './TypeScriptify.ts';
 import TypeScript from './TypeScriptify.ts';
 
 const cache = new WeakMap<SchemaObject, ValidateFunction>();
@@ -99,7 +102,8 @@ export function esmify(code: string): string {
 
 export function typescriptify(
 	code: string,
+	ts: ts,
 	config?: Partial<Config>,
 ): string {
-	return (new TypeScript()).ify(code, config || {});
+	return (new TypeScript(ts)).ify(code, config || {});
 }

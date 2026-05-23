@@ -2,12 +2,6 @@ import type {
 	BinaryExpression,
 	Identifier,
 	PropertyAccessExpression,
-} from 'typescript';
-import {
-	factory,
-	isBinaryExpression,
-	isIdentifier,
-	isPropertyAccessExpression,
 	SyntaxKind,
 } from 'typescript';
 
@@ -20,6 +14,10 @@ import type {
 } from '../TypeReferences.ts';
 
 import KnownImports from '../known_imports.ts';
+
+import type {
+	ts,
+} from '../../TypeScriptify.ts';
 
 type TypecastSetErrorsCandidate = (
 	& BinaryExpression
@@ -58,7 +56,16 @@ type TypecastSetErrorsCandidate = (
 export default class TypecastSetErrors extends ConditionalModification<
 	TypecastSetErrorsCandidate
 > {
-	constructor(prepend_with_imports: prepend_with_imports) {
+	constructor(
+		{
+			factory,
+			isBinaryExpression,
+			isIdentifier,
+			isPropertyAccessExpression,
+			SyntaxKind,
+		}: ts,
+		prepend_with_imports: prepend_with_imports,
+	) {
 		super(
 			(node): node is TypecastSetErrorsCandidate => (
 				isBinaryExpression(node)

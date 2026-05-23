@@ -3,22 +3,44 @@ import {
 } from './AjvUtilities.ts';
 
 import type {
-	ImportDeclaration,
-	Node,
-	SourceFile,
-	Statement,
-	TransformationContext,
-	Visitor,
-} from 'typescript';
-import {
 	createPrinter,
 	createSourceFile,
+	EmitHint,
 	factory,
+	ImportDeclaration,
+	isArrayLiteralExpression,
+	isBinaryExpression,
+	isBlock,
+	isCallExpression,
+	isConditionalExpression,
+	isElementAccessExpression,
+	isEmptyStatement,
+	isExpressionStatement,
+	isFunctionDeclaration,
+	isIdentifier,
+	isIfStatement,
+	isObjectBindingPattern,
+	isObjectLiteralExpression,
+	isPrefixUnaryExpression,
+	isPropertyAccessExpression,
+	isPropertyAssignment,
+	isShorthandPropertyAssignment,
+	isStringLiteral,
+	isToken,
+	isTypeOfExpression,
+	isVariableDeclaration,
+	isVariableStatement,
+	Node,
+	NodeFlags,
 	ScriptTarget,
+	SourceFile,
+	Statement,
 	SyntaxKind,
 	transform,
+	TransformationContext,
 	visitEachChild,
 	visitNode,
+	Visitor,
 } from 'typescript';
 
 import {
@@ -122,13 +144,54 @@ import ModifyValidateWrapper from './TypeScriptify/modifiers/ModifyValidateWrapp
 
 import AddGenericT from './TypeScriptify/modifiers/AddGenericT.ts';
 
+export type ts = {
+	createPrinter: typeof createPrinter,
+	createSourceFile: typeof createSourceFile,
+	EmitHint: typeof EmitHint,
+	factory: typeof factory,
+	isArrayLiteralExpression: typeof isArrayLiteralExpression,
+	isBinaryExpression: typeof isBinaryExpression,
+	isBlock: typeof isBlock,
+	isCallExpression: typeof isCallExpression,
+	isConditionalExpression: typeof isConditionalExpression,
+	isElementAccessExpression: typeof isElementAccessExpression,
+	isEmptyStatement: typeof isEmptyStatement,
+	isExpressionStatement: typeof isExpressionStatement,
+	isFunctionDeclaration: typeof isFunctionDeclaration,
+	isIdentifier: typeof isIdentifier,
+	isIfStatement: typeof isIfStatement,
+	isObjectBindingPattern: typeof isObjectBindingPattern,
+	isObjectLiteralExpression: typeof isObjectLiteralExpression,
+	isPrefixUnaryExpression: typeof isPrefixUnaryExpression,
+	isPropertyAccessExpression: typeof isPropertyAccessExpression,
+	isPropertyAssignment: typeof isPropertyAssignment,
+	isShorthandPropertyAssignment: typeof isShorthandPropertyAssignment,
+	isStringLiteral: typeof isStringLiteral,
+	isToken: typeof isToken,
+	isTypeOfExpression: typeof isTypeOfExpression,
+	isVariableDeclaration: typeof isVariableDeclaration,
+	isVariableStatement: typeof isVariableStatement,
+	NodeFlags: typeof NodeFlags,
+	ScriptTarget: typeof ScriptTarget,
+	SyntaxKind: typeof SyntaxKind,
+	transform: typeof transform,
+	visitEachChild: typeof visitEachChild,
+	visitNode: typeof visitNode,
+};
+
 export default class TypeScript {
+	#ts: ts;
+
+	constructor(ts: ts) {
+		this.#ts = ts;
+	}
+
 	ify(code: string, config: Partial<Config>): string {
 		code = esmify(code);
-		const source = createSourceFile(
+		const source = this.#ts.createSourceFile(
 			'ify.js',
 			code,
-			ScriptTarget.ESNext,
+			this.#ts.ScriptTarget.ESNext,
 			true,
 		);
 
@@ -149,7 +212,7 @@ export default class TypeScript {
 		let patch_with_is_object = false;
 		let patch_with_definitely_has_evaluated = false;
 
-		let result = transform(source, [
+		let result = this.#ts.transform(source, [
 			(context) => this.#first_pass(
 				context,
 				config,
@@ -174,6 +237,7 @@ export default class TypeScript {
 
 		if (Object.keys(validate_calls).length > 0) {
 			CollectValidateCalls.specify_types_from_collected(
+				this.#ts,
 				validate_calls,
 				config,
 				specify_types,
@@ -181,7 +245,7 @@ export default class TypeScript {
 			);
 		}
 
-		result = transform(result.transformed[0], [
+		result = this.#ts.transform(result.transformed[0], [
 			(context) => this.#second_pass(
 				context,
 				config,
@@ -199,7 +263,7 @@ export default class TypeScript {
 			),
 		]);
 
-		code = createPrinter().printFile(result.transformed[0]);
+		code = this.#ts.createPrinter().printFile(result.transformed[0]);
 
 		return code.replace('"use strict";\n', '');
 	}
@@ -234,7 +298,7 @@ export default class TypeScript {
 				}
 			}
 
-			return visitEachChild(node, visitor, context);
+			return this.#ts.visitEachChild(node, visitor, context);
 		};
 
 		return visitor;
@@ -263,47 +327,50 @@ export default class TypeScript {
 			context,
 			config,
 			[
-				new CollectValidateCalls(validate_calls),
+				new CollectValidateCalls(this.#ts, validate_calls),
 				new SpecifyTypesBySourceURL(
+					this.#ts,
 					prepend_with_imports,
 					specify_types,
 				),
 				new SpecifyModifyCandidates(
+					this.#ts,
 					specify_modify_options_name_config,
 				),
 			],
 			[
-				new RemoveSchemaDeclaration(),
-				new ModifyValidateOptions(prepend_with_imports),
-				new ModifyVErrors(prepend_with_imports),
-				new ReplaceVErrorsPushIfElse(),
-				new ConditionalLengthSet(),
-				new DirectTernaryConcat(prepend_with_imports),
-				new WrappedTernaryConcat(prepend_with_imports),
-				new QuestionableEvaluatedProperty(),
-				new TypecastEvalulated(prepend_with_imports),
-				new TypecastSetErrors(prepend_with_imports),
-				new AddErrorObjectType(prepend_with_imports),
-				new QuestionableCondition(),
-				new Ucs2LengthCorrection(),
-				new PatchIsObject(patch_with.is_object),
-				new PatchIsArray(patch_with.is_array),
-				new SpecifyIndicesType(),
-				new FindHoistCandidate(hoist_candidates),
-				new TypecastArrayAsConst(),
-				new UnboundThis_hasOwnProperty(),
-				new HoistDeclarationAsZero(),
+				new RemoveSchemaDeclaration(this.#ts),
+				new ModifyValidateOptions(this.#ts, prepend_with_imports),
+				new ModifyVErrors(this.#ts, prepend_with_imports),
+				new ReplaceVErrorsPushIfElse(this.#ts),
+				new ConditionalLengthSet(this.#ts),
+				new DirectTernaryConcat(this.#ts, prepend_with_imports),
+				new WrappedTernaryConcat(this.#ts, prepend_with_imports),
+				new QuestionableEvaluatedProperty(this.#ts),
+				new TypecastEvalulated(this.#ts, prepend_with_imports),
+				new TypecastSetErrors(this.#ts, prepend_with_imports),
+				new AddErrorObjectType(this.#ts, prepend_with_imports),
+				new QuestionableCondition(this.#ts),
+				new Ucs2LengthCorrection(this.#ts),
+				new PatchIsObject(this.#ts, patch_with.is_object),
+				new PatchIsArray(this.#ts, patch_with.is_array),
+				new SpecifyIndicesType(this.#ts),
+				new FindHoistCandidate(this.#ts, hoist_candidates),
+				new TypecastArrayAsConst(this.#ts),
+				new UnboundThis_hasOwnProperty(this.#ts),
+				new HoistDeclarationAsZero(this.#ts),
 				new PatchDefinitelyHasEvaluated(
+					this.#ts,
 					prepend_with_imports,
 					patch_with.definitely_has_evaluated,
 				),
-				new ModifyValidateWrapper(prepend_with_imports),
+				new ModifyValidateWrapper(this.#ts, prepend_with_imports),
 			],
 		);
 
 		return (
 			source: SourceFile,
-		) => visitNode(source, visitor) as SourceFile;
+		) => this.#ts.visitNode(source, visitor) as SourceFile;
 	}
 
 	#second_pass(
@@ -326,19 +393,20 @@ export default class TypeScript {
 			config,
 			[],
 			[
-				new SpecifyTypePredicate(specify_types),
-				new HoistDeclarationsHere(hoist_candidates),
+				new SpecifyTypePredicate(this.#ts, specify_types),
+				new HoistDeclarationsHere(this.#ts, hoist_candidates),
 				new ModifyValidateOptionsByConfig(
+					this.#ts,
 					specify_modify_options_name_config,
 				),
-				new AddGenericT(specify_types),
+				new AddGenericT(this.#ts, specify_types),
 			],
 		);
 
 		const transformer = (
 			source: SourceFile,
 		) => {
-			const result = visitNode(source, visitor) as SourceFile;
+			const result = this.#ts.visitNode(source, visitor) as SourceFile;
 
 			const imports: ImportDeclaration[] = [];
 
@@ -347,18 +415,18 @@ export default class TypeScript {
 					continue;
 				}
 
-				imports.push(factory.createImportDeclaration(
+				imports.push(this.#ts.factory.createImportDeclaration(
 					undefined,
-					factory.createImportClause(
-						SyntaxKind.TypeKeyword,
+					this.#ts.factory.createImportClause(
+						this.#ts.SyntaxKind.TypeKeyword,
 						undefined,
-						factory.createNamedImports([
+						this.#ts.factory.createNamedImports([
 							...types,
 						].sort((a, b) => a.id.localeCompare(b.id)).map((
 							identifier,
 						) => identifier.toImportSpecifier())),
 					),
-					factory.createStringLiteral(from, true),
+					this.#ts.factory.createStringLiteral(from, true),
 				));
 			}
 
@@ -366,21 +434,21 @@ export default class TypeScript {
 
 			if (patch_with.is_array) {
 				modified = [
-					PatchIsArray.patch(),
+					PatchIsArray.patch(this.#ts),
 					...(modified || result.statements),
 				];
 			}
 
 			if (patch_with.is_object) {
 				modified = [
-					PatchIsObject.patch(),
+					PatchIsObject.patch(this.#ts),
 					...(modified || result.statements),
 				];
 			}
 
 			if (patch_with.definitely_has_evaluated) {
 				modified = [
-					PatchDefinitelyHasEvaluated.patch(),
+					PatchDefinitelyHasEvaluated.patch(this.#ts),
 					...(modified || result.statements),
 				];
 			}
@@ -393,7 +461,7 @@ export default class TypeScript {
 			}
 
 			if (modified) {
-				return factory.updateSourceFile(
+				return this.#ts.factory.updateSourceFile(
 					source,
 					modified,
 				);

@@ -2,11 +2,6 @@ import type {
 	Identifier,
 	VariableDeclaration,
 } from 'typescript';
-import {
-	factory,
-	isIdentifier,
-	isVariableDeclaration,
-} from 'typescript';
 
 import {
 	ConditionalModification,
@@ -16,6 +11,10 @@ import type {
 	prepend_with_imports,
 } from '../TypeReferences.ts';
 import KnownImports from '../known_imports.ts';
+
+import type {
+	ts,
+} from '../../TypeScriptify.ts';
 
 type AddErrorObjectTypeCandidate = (
 	& VariableDeclaration
@@ -32,7 +31,14 @@ type AddErrorObjectTypeCandidate = (
 export default class AddErrorObjectType extends ConditionalModification<
 	AddErrorObjectTypeCandidate
 > {
-	constructor(prepend_with_imports: prepend_with_imports) {
+	constructor(
+		{
+			factory,
+			isIdentifier,
+			isVariableDeclaration,
+		}: ts,
+		prepend_with_imports: prepend_with_imports,
+	) {
 		super(
 			(node): node is AddErrorObjectTypeCandidate => (
 				isVariableDeclaration(node)

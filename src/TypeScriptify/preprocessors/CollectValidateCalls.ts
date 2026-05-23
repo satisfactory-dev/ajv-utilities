@@ -13,18 +13,6 @@ import type {
 	PropertyAssignment,
 	ShorthandPropertyAssignment,
 	StringLiteral,
-} from 'typescript';
-import {
-	isBinaryExpression,
-	isCallExpression,
-	isElementAccessExpression,
-	isFunctionDeclaration,
-	isIdentifier,
-	isObjectLiteralExpression,
-	isPropertyAccessExpression,
-	isPropertyAssignment,
-	isShorthandPropertyAssignment,
-	isStringLiteral,
 	SyntaxKind,
 } from 'typescript';
 
@@ -53,6 +41,10 @@ import {
 	to_string,
 	Types,
 } from '../TypeReferences.ts';
+
+import type {
+	ts,
+} from '../../TypeScriptify.ts';
 
 type CandidateBinaryExpressionString = (
 	& BinaryExpression
@@ -181,12 +173,27 @@ export type ValidateCallInfo = {
 export default class CollectValidateCalls extends ConditionalPreprocessor<
 	Candidate
 > {
-	constructor(validate_calls: {
-		[key: string]: [
-			ValidateCallInfo,
-			...ValidateCallInfo[],
-		],
-	}) {
+	constructor(
+		ts: ts,
+		validate_calls: {
+			[key: string]: [
+				ValidateCallInfo,
+				...ValidateCallInfo[],
+			],
+		},
+	) {
+		const {
+			isCallExpression,
+			isElementAccessExpression,
+			isFunctionDeclaration,
+			isIdentifier,
+			isObjectLiteralExpression,
+			isPropertyAccessExpression,
+			isPropertyAssignment,
+			isShorthandPropertyAssignment,
+			isStringLiteral,
+		} = ts;
+
 		super(
 			(maybe): maybe is Candidate => (
 				isCallExpression(maybe)
@@ -210,6 +217,7 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 								maybe.arguments[1].properties[0],
 							)
 							&& this.#is_instancePath_initializer(
+								ts,
 								maybe.arguments[
 									1
 								].properties[
@@ -281,6 +289,7 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 						} else {
 							// oxlint-disable-next-line @stylistic/max-len
 							instancePath = this.#unpack_CandidateBinaryExpression(
+								ts,
 								node.arguments[1].properties[0].initializer,
 							);
 						}
@@ -342,13 +351,24 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 	}
 
 	#is_CandidateBinaryExpressionString(
+		ts: ts,
 		maybe: Node,
 	): maybe is CandidateBinaryExpressionString {
+		const {
+			isBinaryExpression,
+			isIdentifier,
+			isStringLiteral,
+			SyntaxKind,
+		} = ts;
+
 		return (
 			isBinaryExpression(maybe)
 			&& (
 				isIdentifier(maybe.left)
-				|| this.#is_CandidateBinaryExpressionStringConcat(maybe.left)
+				|| this.#is_CandidateBinaryExpressionStringConcat(
+					ts,
+					maybe.left,
+				)
 			)
 			&& SyntaxKind.PlusToken === maybe.operatorToken.kind
 			&& isStringLiteral(maybe.right)
@@ -356,12 +376,21 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 	}
 
 	#is_CandidateBinaryExpressionStringConcat(
+		ts: ts,
 		maybe: Node,
 	): maybe is CandidateBinaryExpressionStringConcat {
+		const {
+			isBinaryExpression,
+			isCallExpression,
+			isIdentifier,
+			isPropertyAccessExpression,
+			SyntaxKind,
+		} = ts;
+
 		return (
 			isBinaryExpression(maybe)
 			&& (
-				this.#is_CandidateBinaryExpressionString(maybe.left)
+				this.#is_CandidateBinaryExpressionString(ts, maybe.left)
 			)
 			&& SyntaxKind.PlusToken === maybe.operatorToken.kind
 			&& (
@@ -373,16 +402,22 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 	}
 
 	#is_instancePath_initializer(
+		ts: ts,
 		maybe: Node,
 	): maybe is instancePath_initializer {
+		const {
+			isStringLiteral,
+		} = ts;
+
 		return (
 			isStringLiteral(maybe)
-			|| this.#is_CandidateBinaryExpressionString(maybe)
-			|| this.#is_CandidateBinaryExpressionStringConcat(maybe)
+			|| this.#is_CandidateBinaryExpressionString(ts, maybe)
+			|| this.#is_CandidateBinaryExpressionStringConcat(ts, maybe)
 		);
 	}
 
 	#unpack_CandidateBinaryExpression(
+		ts: ts,
 		from: (
 			| CandidateBinaryExpressionString
 			| CandidateBinaryExpressionStringConcat
@@ -392,6 +427,11 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 		(string | null),
 		...(string | null)[],
 	] {
+		const {
+			isIdentifier,
+			isStringLiteral,
+		} = ts;
+
 		if (isIdentifier(from.left)) {
 			return [
 				null,
@@ -404,10 +444,11 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 			];
 		}
 
-		return this.#unpack_CandidateBinaryExpression(from.left, [null]);
+		return this.#unpack_CandidateBinaryExpression(ts, from.left, [null]);
 	}
 
 	static specify_types_from_collected(
+		ts: ts,
 		info: {
 			[key: string]: [
 				ValidateCallInfo,
@@ -419,12 +460,14 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 		prepend_with_imports: prepend_with_imports,
 	) {
 		this.#specify_types_from_collected_inside_out(
+			ts,
 			info,
 			config,
 			existing,
 			prepend_with_imports,
 		);
 		this.#specify_types_from_collected_outside_in(
+			ts,
 			info,
 			config,
 			existing,
@@ -433,6 +476,7 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 	}
 
 	static #specify_types_from_collected_outside_in(
+		ts: ts,
 		info: {
 			[key: string]: [
 				ValidateCallInfo,
@@ -457,7 +501,7 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 					string,
 				],
 			] => {
-				const as_object = Types.toObject(not_object[0]);
+				const as_object = Types.toObject(ts, not_object[0]);
 
 				return [
 					key,
@@ -465,7 +509,7 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 						as_object,
 						not_object[1],
 						not_object[2],
-						to_string(as_object),
+						to_string(ts, as_object),
 					],
 				];
 			});
@@ -485,7 +529,7 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 			],
 		] of configurable) {
 			const found = existing_entries.find((maybe) => (
-				to_string(maybe[1]) === as_string
+				to_string(ts, maybe[1]) === as_string
 			));
 
 			if (!found) {
@@ -499,6 +543,7 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 			}
 
 			this.#specify_types_from_collected_outside_in_deep_dive(
+				ts,
 				info,
 				function_name,
 				sub_types,
@@ -509,6 +554,7 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 	}
 
 	static #specify_types_from_collected_inside_out(
+		ts: ts,
 		info: {
 			[key: string]: [
 				ValidateCallInfo,
@@ -550,11 +596,11 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 
 					existing[checking[0].name] = prepend_with_imports[
 						source
-					].add(sub_type);
+					].add(ts, sub_type);
 
 					existing[parent_function] = prepend_with_imports[
 						parent_is[1]
-					].add(parent_is[0]);
+					].add(ts, parent_is[0]);
 				}
 			}
 		}
@@ -599,6 +645,7 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 	}
 
 	static #specify_types_from_collected_outside_in_deep_dive(
+		ts: ts,
 		info: {
 			[key: string]: [
 				ValidateCallInfo,
@@ -624,6 +671,7 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 				if (this.#is_generic(sub_type)) {
 					for (const actual_sub_type of sub_type[1]) {
 						this.#handle_imports(
+							ts,
 							existing,
 							prepend_with_imports,
 							actual_sub_type,
@@ -632,6 +680,7 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 					}
 
 					existing[checking[0].name] = new GenericT(
+						ts,
 						sub_type[1].map((e) => (
 							'string' === typeof e[0]
 								? e[0]
@@ -649,6 +698,7 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 						].conditionally.parentDataProperty)
 					) {
 						this.#handle_imports(
+							ts,
 							existing,
 							prepend_with_imports,
 							actual_sub_type,
@@ -657,11 +707,13 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 					}
 
 					existing[checking[0].name] = new ConditionalPredicate(
+						ts,
 						'parentDataProperty',
 						sub_type[0].conditionally.parentDataProperty,
 					);
 				} else {
 					this.#handle_imports(
+						ts,
 						existing,
 						prepend_with_imports,
 						sub_type,
@@ -671,6 +723,7 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 
 				if (4 === sub_type.length && checking[0].name in info) {
 					this.#specify_types_from_collected_outside_in_deep_dive(
+						ts,
 						info,
 						checking[0].name,
 						sub_type[3],
@@ -683,6 +736,7 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 					&& checking[0].name in info
 				) {
 					this.#specify_types_from_collected_outside_in_deep_dive(
+						ts,
 						info,
 						checking[0].name,
 						sub_type[2],
@@ -697,6 +751,7 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 	}
 
 	static #handle_imports(
+		ts: ts,
 		existing: specify_types_instance,
 		prepend_with_imports: prepend_with_imports,
 		sub_type: [
@@ -712,7 +767,7 @@ export default class CollectValidateCalls extends ConditionalPreprocessor<
 
 		existing[function_name] = prepend_with_imports[
 			sub_type[1]
-		].add(sub_type[0]);
+		].add(ts, sub_type[0]);
 	}
 
 	static #is_conditional(
