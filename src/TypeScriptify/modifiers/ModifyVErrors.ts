@@ -48,14 +48,16 @@ export class ModifyVErrors extends ConditionalModification<
 	VErrors
 > {
 	constructor(
-		{
+		ts: ts,
+		prepend_with_imports: prepend_with_imports,
+	) {
+		const {
 			factory,
 			isIdentifier,
 			isVariableDeclaration,
 			SyntaxKind,
-		}: ts,
-		prepend_with_imports: prepend_with_imports,
-	) {
+		} = ts;
+
 		super(
 			(node): node is VErrors => (
 				isVariableDeclaration(node)
@@ -64,7 +66,7 @@ export class ModifyVErrors extends ConditionalModification<
 				&& node.initializer?.kind === SyntaxKind.NullKeyword
 			),
 			(node) => {
-				KnownImports.ErrorObject(prepend_with_imports);
+				KnownImports.ErrorObject(ts, prepend_with_imports);
 
 				return factory.updateVariableDeclaration(
 					node,
@@ -755,7 +757,7 @@ export class DirectTernaryConcat extends TernaryConcat<
 				a.name.text === b.name.text
 			),
 			(node) => {
-				KnownImports.IsStandalone(prepend_with_imports);
+				KnownImports.IsStandalone(ts, prepend_with_imports);
 
 				return factory.createCallExpression(
 					factory.updatePropertyAccessExpression(

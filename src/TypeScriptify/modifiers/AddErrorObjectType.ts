@@ -32,13 +32,15 @@ export default class AddErrorObjectType extends ConditionalModification<
 	AddErrorObjectTypeCandidate
 > {
 	constructor(
-		{
+		ts: ts,
+		prepend_with_imports: prepend_with_imports,
+	) {
+		const {
 			factory,
 			isIdentifier,
 			isVariableDeclaration,
-		}: ts,
-		prepend_with_imports: prepend_with_imports,
-	) {
+		} = ts;
+
 		super(
 			(node): node is AddErrorObjectTypeCandidate => (
 				isVariableDeclaration(node)
@@ -46,7 +48,7 @@ export default class AddErrorObjectType extends ConditionalModification<
 				&& /^err\d+$/.test(node.name.text)
 			),
 			(node) => {
-				KnownImports.ErrorObject(prepend_with_imports);
+				KnownImports.ErrorObject(ts, prepend_with_imports);
 
 				return factory.updateVariableDeclaration(
 					node,

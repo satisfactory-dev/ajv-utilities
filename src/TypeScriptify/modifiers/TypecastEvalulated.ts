@@ -96,14 +96,16 @@ export class TypecastEvalulated extends ConditionalModification<
 	TypecastEvalulatedCandidate
 > {
 	constructor(
-		{
+		ts: ts,
+		prepend_with_imports: prepend_with_imports,
+	) {
+		const {
 			factory,
 			isIdentifier,
 			isPropertyAccessExpression,
 			isVariableDeclaration,
-		}: ts,
-		prepend_with_imports: prepend_with_imports,
-	) {
+		} = ts;
+
 		super(
 			(node): node is TypecastEvalulatedCandidate => (
 				isPropertyAccessExpression(node)
@@ -118,7 +120,7 @@ export class TypecastEvalulated extends ConditionalModification<
 				)
 			),
 			(node) => {
-				KnownImports.IsStandalone(prepend_with_imports);
+				KnownImports.IsStandalone(ts, prepend_with_imports);
 
 				return factory.createPropertyAccessExpression(
 					factory.createParenthesizedExpression(

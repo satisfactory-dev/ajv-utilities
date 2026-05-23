@@ -63,15 +63,17 @@ export default class ModifyValidateWrapper extends ConditionalModification<
 	Candidate
 > {
 	constructor(
-		{
+		ts: ts,
+		prepend_with_imports: prepend_with_imports,
+	) {
+		const {
 			factory,
 			isIdentifier,
 			isObjectLiteralExpression,
 			isPropertyAssignment,
 			isVariableDeclaration,
-		}: ts,
-		prepend_with_imports: prepend_with_imports,
-	) {
+		} = ts;
+
 		super(
 			(maybe): maybe is Candidate => (
 				isVariableDeclaration(maybe)
@@ -93,7 +95,7 @@ export default class ModifyValidateWrapper extends ConditionalModification<
 				)
 			),
 			(node) => {
-				KnownImports.IsStandalone(prepend_with_imports);
+				KnownImports.IsStandalone(ts, prepend_with_imports);
 
 				return factory.updateVariableDeclaration(
 					node,

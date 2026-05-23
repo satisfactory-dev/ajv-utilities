@@ -41,15 +41,17 @@ export default class PatchDefinitelyHasEvaluated extends ConditionalModification
 	Candidate
 > {
 	constructor(
-		{
+		ts: ts,
+		prepend_with_imports: prepend_with_imports,
+		patch_needed: () => void,
+	) {
+		const {
 			factory,
 			isIdentifier,
 			isPropertyAccessExpression,
 			isVariableDeclaration,
-		}: ts,
-		prepend_with_imports: prepend_with_imports,
-		patch_needed: () => void,
-	) {
+		} = ts;
+
 		super(
 			(maybe): maybe is Candidate => (
 				isPropertyAccessExpression(maybe)
@@ -62,7 +64,7 @@ export default class PatchDefinitelyHasEvaluated extends ConditionalModification
 				&& isVariableDeclaration(maybe.parent)
 			),
 			(node) => {
-				KnownImports.IsStandalone(prepend_with_imports);
+				KnownImports.IsStandalone(ts, prepend_with_imports);
 				patch_needed();
 
 				return factory.createCallExpression(

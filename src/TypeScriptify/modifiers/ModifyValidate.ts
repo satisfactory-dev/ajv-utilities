@@ -120,8 +120,13 @@ export class ModifyValidateOptions extends ModifyValidate {
 		this.#prepend_with_imports = prepend_with_imports;
 	}
 
-	#shim_DataValidationCxt({factory}: ts) {
-		KnownImports.StandaloneDataValidationCxt(this.#prepend_with_imports);
+	#shim_DataValidationCxt(ts: ts) {
+		const {factory} = ts;
+
+		KnownImports.StandaloneDataValidationCxt(
+			ts,
+			this.#prepend_with_imports,
+		);
 
 		return factory.createTypeReferenceNode(
 			'StandaloneDataValidationCxt',

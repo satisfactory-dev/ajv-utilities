@@ -57,15 +57,17 @@ export default class TypecastSetErrors extends ConditionalModification<
 	TypecastSetErrorsCandidate
 > {
 	constructor(
-		{
+		ts: ts,
+		prepend_with_imports: prepend_with_imports,
+	) {
+		const {
 			factory,
 			isBinaryExpression,
 			isIdentifier,
 			isPropertyAccessExpression,
 			SyntaxKind,
-		}: ts,
-		prepend_with_imports: prepend_with_imports,
-	) {
+		} = ts;
+
 		super(
 			(node): node is TypecastSetErrorsCandidate => (
 				isBinaryExpression(node)
@@ -85,7 +87,7 @@ export default class TypecastSetErrors extends ConditionalModification<
 				)
 			),
 			(node) => {
-				KnownImports.IsStandalone(prepend_with_imports);
+				KnownImports.IsStandalone(ts, prepend_with_imports);
 
 				return factory.updateBinaryExpression(
 					node,
