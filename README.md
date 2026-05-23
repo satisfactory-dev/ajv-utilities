@@ -60,6 +60,8 @@ import Ajv2020 from 'ajv/dist/2020.js';
 
 import standaloneCode from 'ajv/dist/standalone/index.js';
 
+import ts from 'typescript';
+
 // oxlint-disable-next-line @stylistic/max-len
 import ConstString from './schema/lib/PropertySchemaToRegex/ConstString.schema.json' with {type: 'json'};
 
@@ -216,6 +218,7 @@ const code = `// oxlint-disable @stylistic/max-len${'\n'}${typescriptify(
 		PropertySchemaToRegex_ref: $ref_schema.$id,
 		PropertySchemaToRegex_TemplatedString: TemplatedString_schema.$id,
 	}),
+	ts,
 	{
 		remove_dataCtxKeys: {
 			[ConstString.$id]: [
