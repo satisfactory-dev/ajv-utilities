@@ -84,6 +84,7 @@ export default class TypecastSetErrors extends ConditionalModification<
 						&& 'vErrors' === node.right.getText()
 					)
 					|| SyntaxKind.NullKeyword === node.right.kind
+					|| SyntaxKind.ArrayLiteralExpression === node.right.kind
 				)
 			),
 			(node) => {
