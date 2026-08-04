@@ -1,7 +1,7 @@
 import type {
 	Identifier,
 	VariableDeclaration,
-} from 'typescript';
+} from '@typescript/typescript6';
 
 import {
 	ConditionalModification,

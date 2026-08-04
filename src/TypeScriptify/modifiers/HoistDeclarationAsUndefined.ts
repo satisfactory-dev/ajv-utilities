@@ -5,7 +5,7 @@ import type {
 	VariableDeclaration,
 	VariableDeclarationList,
 	VariableStatement,
-} from 'typescript';
+} from '@typescript/typescript6';
 
 import {
 	ConditionalModification,

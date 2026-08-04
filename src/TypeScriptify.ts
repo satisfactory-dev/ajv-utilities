@@ -41,7 +41,7 @@ import type {
 	visitEachChild,
 	visitNode,
 	Visitor,
-} from 'typescript';
+} from '@typescript/typescript6';
 
 import {
 	ConditionalModification,

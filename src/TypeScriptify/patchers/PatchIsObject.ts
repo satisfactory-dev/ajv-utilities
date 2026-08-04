@@ -12,7 +12,7 @@ import type {
 	StringLiteral,
 	SyntaxKind,
 	TypeOfExpression,
-} from 'typescript';
+} from '@typescript/typescript6';
 
 import {
 	ConditionalModification,

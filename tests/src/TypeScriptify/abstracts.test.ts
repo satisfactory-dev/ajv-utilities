@@ -5,7 +5,7 @@ import {
 	it,
 } from 'node:test';
 
-import ts from 'typescript';
+import ts from '@typescript/typescript6';
 
 import {
 	ConditionalModification,

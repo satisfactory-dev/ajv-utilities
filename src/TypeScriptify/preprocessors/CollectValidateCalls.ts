@@ -14,7 +14,7 @@ import type {
 	ShorthandPropertyAssignment,
 	StringLiteral,
 	SyntaxKind,
-} from 'typescript';
+} from '@typescript/typescript6';
 
 import {
 	ConditionalPreprocessor,

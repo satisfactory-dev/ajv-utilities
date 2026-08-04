@@ -1,7 +1,7 @@
 import type {
 	FunctionDeclaration,
 	Identifier,
-} from 'typescript';
+} from '@typescript/typescript6';
 
 import {
 	ConditionalModification,

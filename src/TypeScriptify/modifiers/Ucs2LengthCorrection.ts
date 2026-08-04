@@ -1,7 +1,7 @@
 import type {
 	Identifier,
 	PropertyAccessExpression,
-} from 'typescript';
+} from '@typescript/typescript6';
 
 import {
 	ConditionalModification,

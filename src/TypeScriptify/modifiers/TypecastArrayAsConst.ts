@@ -1,7 +1,7 @@
 import type {
 	ArrayLiteralExpression,
 	PropertyAssignment,
-} from 'typescript';
+} from '@typescript/typescript6';
 
 import {
 	ConditionalModification,

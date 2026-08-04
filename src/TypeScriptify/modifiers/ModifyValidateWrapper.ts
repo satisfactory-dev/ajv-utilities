@@ -4,7 +4,7 @@ import type {
 	ObjectLiteralExpression,
 	PropertyAssignment,
 	VariableDeclaration,
-} from 'typescript';
+} from '@typescript/typescript6';
 
 import {
 	ConditionalModification,

@@ -7,7 +7,7 @@ import {
 
 import ts, {
 	factory,
-} from 'typescript';
+} from '@typescript/typescript6';
 
 // oxlint-disable-next-line @stylistic/max-len
 import SpecifyTypePredicate from '../../../../src/TypeScriptify/modifiers/SpecifyTypePredicate.ts';

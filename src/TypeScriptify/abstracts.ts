@@ -1,6 +1,6 @@
 import type {
 	Node,
-} from 'typescript';
+} from '@typescript/typescript6';
 
 import type {
 	Config,

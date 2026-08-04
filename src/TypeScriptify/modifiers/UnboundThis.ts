@@ -2,7 +2,7 @@ import type {
 	Identifier,
 	PropertyAccessExpression,
 	VariableDeclaration,
-} from 'typescript';
+} from '@typescript/typescript6';
 
 import {
 	ConditionalModification,

@@ -60,7 +60,7 @@ import Ajv2020 from 'ajv/dist/2020.js';
 
 import standaloneCode from 'ajv/dist/standalone/index.js';
 
-import ts from 'typescript';
+import ts from '@typescript/typescript6';
 
 // oxlint-disable-next-line @stylistic/max-len
 import ConstString from './schema/lib/PropertySchemaToRegex/ConstString.schema.json' with {type: 'json'};

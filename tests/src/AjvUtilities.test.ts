@@ -18,7 +18,7 @@ import Ajv from 'ajv/dist/2020.js';
 
 import standaloneCode from 'ajv/dist/standalone/index.js';
 
-import ts from 'typescript';
+import ts from '@typescript/typescript6';
 
 import type {
 	TypeScriptifyConfig,

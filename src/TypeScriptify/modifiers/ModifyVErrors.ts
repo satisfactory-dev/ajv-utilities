@@ -14,7 +14,7 @@ import type {
 	PropertyAccessExpression,
 	SyntaxKind,
 	VariableDeclaration,
-} from 'typescript';
+} from '@typescript/typescript6';
 
 import {
 	ConditionalModification,

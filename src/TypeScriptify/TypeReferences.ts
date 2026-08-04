@@ -7,7 +7,7 @@ import type {
 	ParenthesizedTypeNode,
 	TupleTypeNode,
 	TypeReferenceNode,
-} from 'typescript';
+} from '@typescript/typescript6';
 
 import type {
 	as_array_config,

@@ -7,7 +7,7 @@ import type {
 	SyntaxKind,
 	VariableDeclaration,
 	VariableDeclarationList,
-} from 'typescript';
+} from '@typescript/typescript6';
 
 import {
 	ConditionalModification,

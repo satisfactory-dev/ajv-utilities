@@ -9,7 +9,7 @@ import ts, {
 	factory,
 	isIdentifier,
 	isVariableStatement,
-} from 'typescript';
+} from '@typescript/typescript6';
 
 // oxlint-disable-next-line @stylistic/max-len
 import RemoveSchemaDeclaration from '../../../../src/TypeScriptify/modifiers/RemoveSchemaDeclaration.ts';

@@ -4,7 +4,7 @@ import type {
 	Identifier,
 	ObjectBindingPattern,
 	ParameterDeclaration,
-} from 'typescript';
+} from '@typescript/typescript6';
 
 import {
 	ConditionalModification,
