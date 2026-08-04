@@ -15,6 +15,12 @@ import type {
 	ts,
 } from '../../TypeScriptify.ts';
 
+import type {
+	prepend_with_imports,
+} from '../TypeReferences.ts';
+
+import KnownImports from '../known_imports.ts';
+
 type Candidate = (
 	& VariableStatement
 	& {
@@ -158,26 +164,7 @@ export class HoistDeclarationsHere extends ConditionalModification<
 		}: ts,
 	) {
 		return factory.createParenthesizedType(factory.createUnionTypeNode([
-			factory.createLiteralTypeNode(factory.createTrue()),
-			factory.createTypeLiteralNode([
-				factory.createIndexSignature(
-					undefined,
-					[
-						factory.createParameterDeclaration(
-							undefined,
-							undefined,
-							'key',
-							undefined,
-							factory.createKeywordTypeNode(
-								SyntaxKind.StringKeyword,
-							),
-						),
-					],
-					factory.createLiteralTypeNode(
-						factory.createTrue(),
-					),
-				),
-			]),
+			factory.createTypeReferenceNode('EvaluatedProperties'),
 			factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword),
 		]));
 	}
@@ -185,6 +172,7 @@ export class HoistDeclarationsHere extends ConditionalModification<
 	constructor(
 		ts: ts,
 		hoist_candidates: Readonly<hoist_candidates>,
+		prepend_with_imports: prepend_with_imports,
 	) {
 		const {
 			factory,
@@ -201,7 +189,10 @@ export class HoistDeclarationsHere extends ConditionalModification<
 				&& maybe.name.text in hoist_candidates
 				&& undefined !== maybe.body
 			),
-			(node) => factory.updateFunctionDeclaration(
+			(node) => {
+				KnownImports.EvaluatedProperties(ts, prepend_with_imports);
+
+				return factory.updateFunctionDeclaration(
 				node,
 				node.modifiers,
 				node.asteriskToken,
@@ -230,7 +221,7 @@ export class HoistDeclarationsHere extends ConditionalModification<
 						...node.body.statements,
 					],
 				),
-			),
+			)},
 		);
 	}
 }

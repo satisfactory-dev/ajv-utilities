@@ -1,4 +1,5 @@
 import type { ErrorObject } from 'ajv';
+import type { EvaluatedProperties } from 'ajv/dist/types/index.js';
 import type { IsStandalone, StandaloneDataValidationCxt } from '@satisfactory-dev/ajv-utilities';
 import type { stub_amount_string_alt1, stub_CanConvertJson, stub_IntermediaryCalculation, stub_IntermediaryNumber, stub_numeric, stub_production_output, stub_production_request, stub_recipe_selection } from './types.ts';
 function ajv_utiltiies__definitely_evaluated<T>(maybe: IsStandalone<T>): Exclude<IsStandalone<T>["evaluated"], undefined> { if (undefined === maybe.evaluated)
@@ -8758,9 +8759,7 @@ function validate28(data: unknown, { instancePath = "", parentData, parentDataPr
 }
 (validate28 as IsStandalone).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
 function validate23(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is stub_CanConvertJson {
-    let props0: (true | {
-        [key: string]: true;
-    } | undefined) = undefined;
+    let props0: (EvaluatedProperties | undefined) = undefined;
     let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = ajv_utiltiies__definitely_evaluated(validate23);
@@ -8885,9 +8884,7 @@ function validate23(data: unknown, { instancePath = "", parentData, parentDataPr
 }
 (validate23 as IsStandalone).evaluated = { "dynamicProps": true, "dynamicItems": false };
 function validate22(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is stub_numeric {
-    let props0: (true | {
-        [key: string]: true;
-    } | undefined) = undefined;
+    let props0: (EvaluatedProperties | undefined) = undefined;
     let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = ajv_utiltiies__definitely_evaluated(validate22);
@@ -9045,9 +9042,7 @@ function validate32(data: unknown, { instancePath = "", parentData, parentDataPr
 }
 (validate32 as IsStandalone).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
 function validate21(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is stub_production_request {
-    let props0: (true | {
-        [key: string]: true;
-    } | undefined) = undefined;
+    let props0: (EvaluatedProperties | undefined) = undefined;
     /*# sourceURL="docs.json.ts--production-planner--lib--0.8.3.3--production-request" */ ;
     let vErrors: ErrorObject[] = [];
     let errors = 0;

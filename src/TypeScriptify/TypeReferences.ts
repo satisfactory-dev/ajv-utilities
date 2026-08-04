@@ -22,6 +22,7 @@ import type {
 export type prepend_with_imports = {
 	[key: string]: Types,
 	ajv: Types,
+	'ajv/dist/types/index.js': Types,
 	'@satisfactory-dev/ajv-utilities': Types,
 };
 

@@ -1,4 +1,5 @@
 import type { ErrorObject } from 'ajv';
+import type { EvaluatedProperties } from 'ajv/dist/types/index.js';
 import type { IsStandalone, StandaloneDataValidationCxt } from '@satisfactory-dev/ajv-utilities';
 import type { stub_CanConvertJson, stub_Collection, stub_Distributor_json, stub_Group, stub_IntermediaryCalculation, stub_IntermediaryNumber, stub_Pool, stub_Settings, stub_State_Json } from './types.ts';
 function ajv_utiltiies__definitely_evaluated<T>(maybe: IsStandalone<T>): Exclude<IsStandalone<T>["evaluated"], undefined> { if (undefined === maybe.evaluated)
@@ -349,9 +350,7 @@ function validate29(data: unknown, { instancePath = "", parentData, parentDataPr
 }
 (validate29 as IsStandalone).evaluated = { "props": true, "dynamicProps": false, "dynamicItems": false };
 function validate24(data: unknown, { instancePath = "", parentData, parentDataProperty, rootData = data, dynamicAnchors = {} }: Partial<StandaloneDataValidationCxt> = {}): data is stub_CanConvertJson {
-    let props0: (true | {
-        [key: string]: true;
-    } | undefined) = undefined;
+    let props0: (EvaluatedProperties | undefined) = undefined;
     let vErrors: ErrorObject[] = [];
     let errors = 0;
     const evaluated0 = ajv_utiltiies__definitely_evaluated(validate24);

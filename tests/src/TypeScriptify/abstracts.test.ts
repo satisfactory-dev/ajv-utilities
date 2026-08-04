@@ -30,6 +30,7 @@ void describe(`${ConditionalPreprocessor.name}::check()`, () => {
 		assert.doesNotThrow(() => ConditionalPreprocessor.check([
 			new SpecifyTypesBySourceURL(ts, {
 				ajv: new Types(),
+				'ajv/dist/types/index.js': new Types(),
 				'@satisfactory-dev/ajv-utilities': new Types(),
 			}, {}),
 		]));
@@ -40,6 +41,7 @@ void describe(`${ConditionalPreprocessor.name}::check()`, () => {
 		assert.throws(() => ConditionalPreprocessor.check([
 			new SpecifyTypesBySourceURL(ts, {
 				ajv: new Types(),
+				'ajv/dist/types/index.js': new Types(),
 				'@satisfactory-dev/ajv-utilities': new Types(),
 			}, {}),
 			new Ucs2LengthCorrection(ts),
@@ -60,6 +62,7 @@ void describe(`${ConditionalModification.name}::check()`, () => {
 		assert.throws(() => ConditionalModification.check([
 			new SpecifyTypesBySourceURL(ts, {
 				ajv: new Types(),
+				'ajv/dist/types/index.js': new Types(),
 				'@satisfactory-dev/ajv-utilities': new Types(),
 			}, {}),
 			new Ucs2LengthCorrection(ts),

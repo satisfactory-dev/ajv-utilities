@@ -205,6 +205,7 @@ export default class TypeScript {
 
 		const prepend_with_imports: prepend_with_imports = {
 			ajv: new Types(),
+			'ajv/dist/types/index.js': new Types(),
 			'@satisfactory-dev/ajv-utilities': new Types(),
 		};
 
@@ -394,7 +395,11 @@ export default class TypeScript {
 			[],
 			[
 				new SpecifyTypePredicate(this.#ts, specify_types),
-				new HoistDeclarationsHere(this.#ts, hoist_candidates),
+				new HoistDeclarationsHere(
+					this.#ts,
+					hoist_candidates,
+					prepend_with_imports,
+				),
 				new ModifyValidateOptionsByConfig(
 					this.#ts,
 					specify_modify_options_name_config,

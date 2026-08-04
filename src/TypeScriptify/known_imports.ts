@@ -14,6 +14,15 @@ export default class KnownImports {
 		prepend_with_imports.ajv.add(ts, 'ErrorObject');
 	}
 
+	static EvaluatedProperties(
+		ts: ts,
+		prepend_with_imports: prepend_with_imports,
+	) {
+		prepend_with_imports[
+			'ajv/dist/types/index.js'
+		].add(ts, 'EvaluatedProperties');
+	}
+
 	static IsStandalone(
 		ts: ts,
 		prepend_with_imports: prepend_with_imports,

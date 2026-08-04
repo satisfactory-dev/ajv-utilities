@@ -1,4 +1,5 @@
 import type { ErrorObject } from 'ajv';
+import type { EvaluatedProperties } from 'ajv/dist/types/index.js';
 import type { IsStandalone, StandaloneDataValidationCxt } from '@satisfactory-dev/ajv-utilities';
 import type { FlexibleArray_type } from './types.ts';
 function ajv_utiltiies__definitely_evaluated<T>(maybe: IsStandalone<T>): Exclude<IsStandalone<T>["evaluated"], undefined> { if (undefined === maybe.evaluated)
@@ -11,13 +12,7 @@ const schema31 = { "$id": "docs.json.ts--lib--PropertySchemaToRegex--FlexibleArr
 const func1 = ucs2length;
 const pattern4 = new RegExp("^(.+)?#\\/\\$defs\\/(.+)$", "u");
 function validate20(data: unknown, { instancePath = "" }: Partial<StandaloneDataValidationCxt> = {}): data is FlexibleArray_type<"items"> {
-    let props0: (true | {
-        [key: string]: true;
-    } | undefined) = undefined, props1: (true | {
-        [key: string]: true;
-    } | undefined) = undefined, props2: (true | {
-        [key: string]: true;
-    } | undefined) = undefined;
+    let props0: (EvaluatedProperties | undefined) = undefined, props1: (EvaluatedProperties | undefined) = undefined, props2: (EvaluatedProperties | undefined) = undefined;
     /*# sourceURL="docs.json.ts--lib--PropertySchemaToRegex--FlexibleArray--items" */ ;
     let vErrors: ErrorObject[] = [];
     let errors = 0;
