@@ -193,35 +193,38 @@ export class HoistDeclarationsHere extends ConditionalModification<
 				KnownImports.EvaluatedProperties(ts, prepend_with_imports);
 
 				return factory.updateFunctionDeclaration(
-				node,
-				node.modifiers,
-				node.asteriskToken,
-				node.name,
-				node.typeParameters,
-				node.parameters,
-				node.type,
-				factory.updateBlock(
-					node.body,
-					[
-						factory.createVariableStatement(
-							undefined,
-							factory.createVariableDeclarationList(
-								[...hoist_candidates[node.name.getText()]]
-									.map((
-										variable_name,
-									) => factory.createVariableDeclaration(
-										variable_name,
-										undefined,
-										this.#createHoistedType(ts),
-										factory.createIdentifier('undefined'),
-									)),
-								NodeFlags.Let,
+					node,
+					node.modifiers,
+					node.asteriskToken,
+					node.name,
+					node.typeParameters,
+					node.parameters,
+					node.type,
+					factory.updateBlock(
+						node.body,
+						[
+							factory.createVariableStatement(
+								undefined,
+								factory.createVariableDeclarationList(
+									[...hoist_candidates[node.name.getText()]]
+										.map((
+											variable_name,
+										) => factory.createVariableDeclaration(
+											variable_name,
+											undefined,
+											this.#createHoistedType(ts),
+											factory.createIdentifier(
+												'undefined',
+											),
+										)),
+									NodeFlags.Let,
+								),
 							),
-						),
-						...node.body.statements,
-					],
-				),
-			)},
+							...node.body.statements,
+						],
+					),
+				);
+			},
 		);
 	}
 }
