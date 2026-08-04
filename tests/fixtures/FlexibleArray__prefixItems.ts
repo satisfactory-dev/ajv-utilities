@@ -2,6 +2,7 @@ import type { ErrorObject } from 'ajv';
 import type { EvaluatedProperties } from 'ajv/dist/types/index.js';
 import type { IsStandalone, StandaloneDataValidationCxt } from '@satisfactory-dev/ajv-utilities';
 import type { FlexibleArray_type } from './types.ts';
+function ajv_utilities__is_definitely_not_true<T>(maybe: unknown): maybe is Exclude<T, true> { return maybe !== true; }
 function ajv_utiltiies__definitely_evaluated<T>(maybe: IsStandalone<T>): Exclude<IsStandalone<T>["evaluated"], undefined> { if (undefined === maybe.evaluated)
     throw new Error(`${maybe.name}.evaluated not set!`); return maybe.evaluated; }
 function ajv_utilities__is_probably_object(maybe: unknown): maybe is Record<string, unknown> { return !!maybe && typeof maybe === "object" && !Array.isArray(maybe); }
@@ -256,7 +257,7 @@ function validate20(data: unknown, { instancePath = "" }: Partial<StandaloneData
                                         if (_valid1) {
                                             valid7 = true;
                                             passing1 = 1;
-                                            if (props1 !== true) {
+                                            if (ajv_utilities__is_definitely_not_true(props1)) {
                                                 props1 = true;
                                             }
                                         }
@@ -300,7 +301,7 @@ function validate20(data: unknown, { instancePath = "" }: Partial<StandaloneData
                         if (_valid0) {
                             valid2 = true;
                             passing0 = 1;
-                            if (props0 !== true) {
+                            if (ajv_utilities__is_definitely_not_true(props0)) {
                                 props0 = true;
                             }
                         }
@@ -411,7 +412,7 @@ function validate20(data: unknown, { instancePath = "" }: Partial<StandaloneData
                                             if (_valid2) {
                                                 valid13 = true;
                                                 passing2 = 1;
-                                                if (props2 !== true) {
+                                                if (ajv_utilities__is_definitely_not_true(props2)) {
                                                     props2 = true;
                                                 }
                                             }
@@ -455,7 +456,7 @@ function validate20(data: unknown, { instancePath = "" }: Partial<StandaloneData
                             if (_valid0) {
                                 valid2 = true;
                                 passing0 = 2;
-                                if (props0 !== true) {
+                                if (ajv_utilities__is_definitely_not_true(props0)) {
                                     props0 = true;
                                 }
                             }

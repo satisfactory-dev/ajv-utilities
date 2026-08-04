@@ -2,6 +2,7 @@ import type { ErrorObject } from 'ajv';
 import type { EvaluatedProperties } from 'ajv/dist/types/index.js';
 import type { IsStandalone, StandaloneDataValidationCxt } from '@satisfactory-dev/ajv-utilities';
 import type { stub_CanConvertJson, stub_Collection, stub_Distributor_json, stub_Group, stub_IntermediaryCalculation, stub_IntermediaryNumber, stub_Pool, stub_Settings, stub_State_Json } from './types.ts';
+function ajv_utilities__is_definitely_not_true<T>(maybe: unknown): maybe is Exclude<T, true> { return maybe !== true; }
 function ajv_utiltiies__definitely_evaluated<T>(maybe: IsStandalone<T>): Exclude<IsStandalone<T>["evaluated"], undefined> { if (undefined === maybe.evaluated)
     throw new Error(`${maybe.name}.evaluated not set!`); return maybe.evaluated; }
 function ajv_utilities__is_probably_object(maybe: unknown): maybe is Record<string, unknown> { return !!maybe && typeof maybe === "object" && !Array.isArray(maybe); }
@@ -388,7 +389,7 @@ function validate24(data: unknown, { instancePath = "", parentData, parentDataPr
         if (_valid0) {
             valid0 = true;
             passing0 = 1;
-            if (props0 !== true) {
+            if (ajv_utilities__is_definitely_not_true(props0)) {
                 props0 = true;
             }
         }
@@ -447,7 +448,7 @@ function validate24(data: unknown, { instancePath = "", parentData, parentDataPr
             if (_valid0) {
                 valid0 = true;
                 passing0 = 2;
-                if (props0 !== true) {
+                if (ajv_utilities__is_definitely_not_true(props0)) {
                     props0 = true;
                 }
             }

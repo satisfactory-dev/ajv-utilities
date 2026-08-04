@@ -1,0 +1,48 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "props0--checker",
+	"oneOf": [
+		{
+			"type": "object",
+			"required": ["foo", "bar"],
+			"properties": {
+				"foo": {
+					"type": "string",
+					"pattern": "^foo\\d+$"
+				},
+				"bar": {
+					"type": "string",
+					"pattern": "^bar\\d+$"
+				}
+			}
+		},
+		{
+			"type": "object",
+			"required": ["foo", "bar"],
+			"properties": {
+				"foo": {
+					"type": "string",
+					"pattern": "^foo\\d+$"
+				},
+				"bar": {
+					"type": "string",
+					"const": ""
+				}
+			}
+		},
+		{
+			"type": "object",
+			"required": ["foo", "bar"],
+			"properties": {
+				"foo": {
+					"type": "string",
+					"const": ""
+				},
+				"bar": {
+					"type": "string",
+					"const": ""
+				}
+			}
+		}
+	]
+}

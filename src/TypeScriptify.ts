@@ -144,6 +144,9 @@ import ModifyValidateWrapper from './TypeScriptify/modifiers/ModifyValidateWrapp
 
 import AddGenericT from './TypeScriptify/modifiers/AddGenericT.ts';
 
+// oxlint-disable-next-line @stylistic/max-len
+import PatchIsDefinitelyNotTrue from './TypeScriptify/patchers/PatchIsDefinitelyNotTrue.ts';
+
 export type ts = {
 	createPrinter: typeof createPrinter,
 	createSourceFile: typeof createSourceFile,
@@ -212,6 +215,7 @@ export default class TypeScript {
 		let patch_with_is_array = false;
 		let patch_with_is_object = false;
 		let patch_with_definitely_has_evaluated = false;
+		let patch_with_definitely_not_true = false;
 
 		let result = this.#ts.transform(source, [
 			(context) => this.#first_pass(
@@ -231,6 +235,9 @@ export default class TypeScript {
 					},
 					definitely_has_evaluated: () => {
 						patch_with_definitely_has_evaluated = true;
+					},
+					definitely_not_true: () => {
+						patch_with_definitely_not_true = true;
 					},
 				},
 			),
@@ -259,6 +266,9 @@ export default class TypeScript {
 					is_object: patch_with_is_object,
 					definitely_has_evaluated: (
 						patch_with_definitely_has_evaluated
+					),
+					definitely_not_true: (
+						patch_with_definitely_not_true
 					),
 				},
 			),
@@ -322,6 +332,7 @@ export default class TypeScript {
 			is_array: () => void,
 			is_object: () => void,
 			definitely_has_evaluated: () => void,
+			definitely_not_true: () => void,
 		},
 	) {
 		const visitor = this.#generate_visitor(
@@ -365,6 +376,10 @@ export default class TypeScript {
 					prepend_with_imports,
 					patch_with.definitely_has_evaluated,
 				),
+				new PatchIsDefinitelyNotTrue(
+					this.#ts,
+					patch_with.definitely_not_true,
+				),
 				new ModifyValidateWrapper(this.#ts, prepend_with_imports),
 			],
 		);
@@ -387,6 +402,7 @@ export default class TypeScript {
 			is_array: boolean,
 			is_object: boolean,
 			definitely_has_evaluated: boolean,
+			definitely_not_true: boolean,
 		},
 	) {
 		const visitor = this.#generate_visitor(
@@ -454,6 +470,13 @@ export default class TypeScript {
 			if (patch_with.definitely_has_evaluated) {
 				modified = [
 					PatchDefinitelyHasEvaluated.patch(this.#ts),
+					...(modified || result.statements),
+				];
+			}
+
+			if (patch_with.definitely_not_true) {
+				modified = [
+					PatchIsDefinitelyNotTrue.patch(this.#ts),
 					...(modified || result.statements),
 				];
 			}

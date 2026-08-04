@@ -68,6 +68,8 @@ import CanConvertTypeJsonDefs from '../fixtures/CanConvertTypeJsonDefs.schema.js
 
 import version_6 from '../fixtures/version_6.schema.json' with {type: 'json'};
 
+import props0_checker from '../fixtures/props0.schema.json' with {type: 'json'};
+
 void describe('AjvUtilities', () => {
 	void describe('compile', () => {
 		const ajv = new Ajv();
@@ -235,6 +237,9 @@ void describe('AjvUtilities', () => {
 		);
 		const version_6_expectation = await readFile(
 			`${import.meta.dirname}/../fixtures/version_6.ts`,
+		);
+		const props0_checker_expectation = await readFile(
+			`${import.meta.dirname}/../fixtures/props0.ts`,
 		);
 
 		const data_sets: (
@@ -1182,6 +1187,36 @@ void describe('AjvUtilities', () => {
 							],
 						],
 					],
+				},
+			],
+			[
+				standaloneCode(
+					new Ajv({
+						verbose: false,
+						logger: false,
+						allErrors: true,
+						code: {
+							source: true,
+							esm: true,
+							lines: true,
+							optimize: 2,
+						},
+						schemas: [
+							props0_checker,
+						],
+					}),
+					{
+						props0_checker: 'props0--checker',
+					},
+				),
+				props0_checker_expectation.toString(),
+				{
+					specify_types: {
+						'props0--checker': [
+							'props0',
+							'./types.ts',
+						],
+					},
 				},
 			],
 		];

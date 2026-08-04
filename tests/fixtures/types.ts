@@ -174,6 +174,21 @@ type stubs = {
 	Distributor_json: stub_Distributor_json,
 };
 
+type props0 = (
+	| {
+		foo: `foo${number}`,
+		bar: `bar${number}`,
+	}
+	| {
+		foo: `foo${number}`,
+		bar: '',
+	}
+	| {
+		foo: '',
+		bar: '',
+	}
+);
+
 export type {
 	const_string,
 	enum_string,
@@ -197,4 +212,5 @@ export type {
 	stub_Pool,
 	stub_Distributor_json,
 	stubs,
+	props0,
 };
