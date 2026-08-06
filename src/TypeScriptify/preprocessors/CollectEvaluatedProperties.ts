@@ -386,7 +386,7 @@ export default class CollectEvaluatedProperties extends ConditionalPreprocessor<
 			isExpressionStatement(maybe)
 			&& isBinaryExpression(maybe.expression)
 			&& isIdentifier(maybe.expression.left)
-			&& /^prop\d+/.test(
+			&& /^props\d+$/.test(
 				maybe.expression.left.text,
 			)
 			&& (
@@ -418,7 +418,7 @@ export default class CollectEvaluatedProperties extends ConditionalPreprocessor<
 			isExpressionStatement(maybe)
 			&& isBinaryExpression(maybe.expression)
 			&& isIdentifier(maybe.expression.left)
-			&& /^prop\d+/.test(
+			&& /^props\d+$/.test(
 				maybe.expression.left.text,
 			)
 			&& (
@@ -455,7 +455,7 @@ export default class CollectEvaluatedProperties extends ConditionalPreprocessor<
 			ts.isVariableStatement(maybe)
 			&& 1 === maybe.declarationList.declarations.length
 			&& ts.isIdentifier(maybe.declarationList.declarations[0].name)
-			&& /^props\d+/.test(
+			&& /^props\d+$/.test(
 				maybe.declarationList.declarations[0].name.getText(),
 			)
 		);
