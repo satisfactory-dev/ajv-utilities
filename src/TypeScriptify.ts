@@ -409,6 +409,7 @@ export default class TypeScript {
 				new PatchIsDefinitelyNotTrue(
 					this.#ts,
 					patch_with.definitely_not_true,
+					collected_properties,
 				),
 				new ModifyValidateWrapper(this.#ts, prepend_with_imports),
 				new TypecastEvalulatedProperties(

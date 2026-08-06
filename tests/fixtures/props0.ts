@@ -147,8 +147,8 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
             passing0 = 1;
             if (ajv_utilities__is_definitely_not_true(props0)) {
                 props0 = props0 || {};
-                props0.foo = true;
-                props0.bar = true;
+                (props0 as ajv_EvaluatedProperties<foobar>).foo = true;
+                (props0 as ajv_EvaluatedProperties<foobar>).bar = true;
             }
         }
         const _errs15 = errors;
@@ -206,8 +206,8 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
                 passing0 = 2;
                 if (ajv_utilities__is_definitely_not_true(props0)) {
                     props0 = props0 || {};
-                    props0.foo = true;
-                    props0.bar = true;
+                    (props0 as ajv_EvaluatedProperties<foobar>).foo = true;
+                    (props0 as ajv_EvaluatedProperties<foobar>).bar = true;
                 }
             }
         }

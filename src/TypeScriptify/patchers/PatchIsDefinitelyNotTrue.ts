@@ -13,6 +13,12 @@ import type {
 	ts,
 } from '../../TypeScriptify.ts';
 
+import type {
+	Collected,
+	ContainingCandidate,
+	Match,
+} from '../preprocessors/CollectEvaluatedProperties.ts';
+
 export type PatchIsDefinitelyNotTrueCandidate = (
 	& IfStatement
 	& {
@@ -43,6 +49,7 @@ export default class PatchIsDefinitelyNotTrue extends ConditionalModification<
 	constructor(
 		ts: ts,
 		patch_needed: () => void,
+		collected_properties: Collected,
 	) {
 		const {factory} = ts;
 
@@ -53,12 +60,25 @@ export default class PatchIsDefinitelyNotTrue extends ConditionalModification<
 			(node) => {
 				patch_needed();
 
-				return factory.updateIfStatement(
+				const replacement = factory.updateIfStatement(
 					node,
 					this.#replace_comparison(factory, node.expression.left),
 					node.thenStatement,
 					node.elseStatement,
 				);
+
+				if (collected_properties.has(
+					node as unknown as ContainingCandidate,
+				)) {
+					collected_properties.set(
+						replacement as ContainingCandidate,
+						collected_properties.get(
+							node as unknown as ContainingCandidate,
+						) as Match,
+					);
+				}
+
+				return replacement;
 			},
 		);
 	}
