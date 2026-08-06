@@ -1,6 +1,7 @@
 import type {
 	BinaryExpression,
 	IfStatement,
+	Node,
 	SyntaxKind,
 } from '@typescript/typescript6';
 
@@ -12,7 +13,7 @@ import type {
 	ts,
 } from '../../TypeScriptify.ts';
 
-type PatchIsDefinitelyNotTrueCandidate = (
+export type PatchIsDefinitelyNotTrueCandidate = (
 	& IfStatement
 	& {
 		expression: (
@@ -40,23 +41,15 @@ export default class PatchIsDefinitelyNotTrue extends ConditionalModification<
 	}
 
 	constructor(
-		{
-			factory,
-			isIfStatement,
-			isBinaryExpression,
-			SyntaxKind,
-		}: ts,
+		ts: ts,
 		patch_needed: () => void,
 	) {
+		const {factory} = ts;
+
 		super(
-			(node): node is PatchIsDefinitelyNotTrueCandidate => (
-				isIfStatement(node)
-				&& isBinaryExpression(node.expression)
-				&& SyntaxKind.ExclamationEqualsEqualsToken === (
-					node.expression.operatorToken.kind
-				)
-				&& SyntaxKind.TrueKeyword === node.expression.right.kind
-			),
+			(node): node is PatchIsDefinitelyNotTrueCandidate => {
+				return PatchIsDefinitelyNotTrue.isCandidate(node, ts);
+			},
 			(node) => {
 				patch_needed();
 
@@ -67,6 +60,24 @@ export default class PatchIsDefinitelyNotTrue extends ConditionalModification<
 					node.elseStatement,
 				);
 			},
+		);
+	}
+
+	static isCandidate(
+		maybe: Node,
+		{
+			isIfStatement,
+			isBinaryExpression,
+			SyntaxKind,
+		}: ts,
+	): maybe is PatchIsDefinitelyNotTrueCandidate {
+		return (
+			isIfStatement(maybe)
+			&& isBinaryExpression(maybe.expression)
+			&& SyntaxKind.ExclamationEqualsEqualsToken === (
+				maybe.expression.operatorToken.kind
+			)
+			&& SyntaxKind.TrueKeyword === maybe.expression.right.kind
 		);
 	}
 

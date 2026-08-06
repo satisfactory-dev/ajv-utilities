@@ -147,6 +147,19 @@ import AddGenericT from './TypeScriptify/modifiers/AddGenericT.ts';
 // oxlint-disable-next-line @stylistic/max-len
 import PatchIsDefinitelyNotTrue from './TypeScriptify/patchers/PatchIsDefinitelyNotTrue.ts';
 
+import type {
+	Collected,
+} from './TypeScriptify/preprocessors/CollectEvaluatedProperties.ts';
+
+// oxlint-disable-next-line @stylistic/max-len
+import CollectEvaluatedProperties from './TypeScriptify/preprocessors/CollectEvaluatedProperties.ts';
+
+// oxlint-disable-next-line @stylistic/max-len
+import TypecastEvalulatedProperties from './TypeScriptify/modifiers/TypecastEvaluatedProperties.ts';
+
+// oxlint-disable-next-line @stylistic/max-len
+import PatchEvaluatedPropertiesLike from './TypeScriptify/patchers/PatchEvaluatedPropertiesLike.ts';
+
 export type ts = {
 	createPrinter: typeof createPrinter,
 	createSourceFile: typeof createSourceFile,
@@ -216,6 +229,9 @@ export default class TypeScript {
 		let patch_with_is_object = false;
 		let patch_with_definitely_has_evaluated = false;
 		let patch_with_definitely_not_true = false;
+		let patch_with_evaluated_properties_like = false;
+
+		const collected_properties: Collected = new Map();
 
 		let result = this.#ts.transform(source, [
 			(context) => this.#first_pass(
@@ -239,7 +255,11 @@ export default class TypeScript {
 					definitely_not_true: () => {
 						patch_with_definitely_not_true = true;
 					},
+					evaluated_properties_like: () => {
+						patch_with_evaluated_properties_like = true;
+					},
 				},
+				collected_properties,
 			),
 		]);
 
@@ -269,6 +289,9 @@ export default class TypeScript {
 					),
 					definitely_not_true: (
 						patch_with_definitely_not_true
+					),
+					evaluated_properties_like: (
+						patch_with_evaluated_properties_like
 					),
 				},
 			),
@@ -333,7 +356,9 @@ export default class TypeScript {
 			is_object: () => void,
 			definitely_has_evaluated: () => void,
 			definitely_not_true: () => void,
+			evaluated_properties_like: () => void,
 		},
+		collected_properties: Collected,
 	) {
 		const visitor = this.#generate_visitor(
 			context,
@@ -348,6 +373,11 @@ export default class TypeScript {
 				new SpecifyModifyCandidates(
 					this.#ts,
 					specify_modify_options_name_config,
+				),
+				new CollectEvaluatedProperties(
+					this.#ts,
+					config.specify_properties || [],
+					collected_properties,
 				),
 			],
 			[
@@ -381,6 +411,12 @@ export default class TypeScript {
 					patch_with.definitely_not_true,
 				),
 				new ModifyValidateWrapper(this.#ts, prepend_with_imports),
+				new TypecastEvalulatedProperties(
+					this.#ts,
+					prepend_with_imports,
+					collected_properties,
+					patch_with.evaluated_properties_like,
+				),
 			],
 		);
 
@@ -403,6 +439,7 @@ export default class TypeScript {
 			is_object: boolean,
 			definitely_has_evaluated: boolean,
 			definitely_not_true: boolean,
+			evaluated_properties_like: boolean,
 		},
 	) {
 		const visitor = this.#generate_visitor(
@@ -477,6 +514,13 @@ export default class TypeScript {
 			if (patch_with.definitely_not_true) {
 				modified = [
 					PatchIsDefinitelyNotTrue.patch(this.#ts),
+					...(modified || result.statements),
+				];
+			}
+
+			if (patch_with.evaluated_properties_like) {
+				modified = [
+					PatchEvaluatedPropertiesLike.patch(this.#ts),
 					...(modified || result.statements),
 				];
 			}

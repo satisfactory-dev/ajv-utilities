@@ -1,46 +1,26 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "props0--checker",
-	"oneOf": [
+	"allOf": [
 		{
-			"type": "object",
-			"required": ["foo", "bar"],
-			"properties": {
-				"foo": {
-					"type": "string",
-					"pattern": "^foo\\d+$"
-				},
-				"bar": {
-					"type": "string",
-					"pattern": "^bar\\d+$"
-				}
-			}
+			"$ref": "props0--checker--foobar"
+		},
+		{
+			"$ref": "props0--checker--bazbat"
 		},
 		{
 			"type": "object",
-			"required": ["foo", "bar"],
+			"required": ["nested"],
 			"properties": {
-				"foo": {
-					"type": "string",
-					"pattern": "^foo\\d+$"
-				},
-				"bar": {
-					"type": "string",
-					"const": ""
-				}
-			}
-		},
-		{
-			"type": "object",
-			"required": ["foo", "bar"],
-			"properties": {
-				"foo": {
-					"type": "string",
-					"const": ""
-				},
-				"bar": {
-					"type": "string",
-					"const": ""
+				"nested": {
+					"type": "object",
+					"required": ["ohhai"],
+					"properties": {
+						"ohhai": {
+							"type": "string",
+							"const": "there"
+						}
+					}
 				}
 			}
 		}

@@ -68,7 +68,14 @@ import CanConvertTypeJsonDefs from '../fixtures/CanConvertTypeJsonDefs.schema.js
 
 import version_6 from '../fixtures/version_6.schema.json' with {type: 'json'};
 
+// oxlint-disable-next-line @stylistic/max-len
 import props0_checker from '../fixtures/props0.schema.json' with {type: 'json'};
+
+// oxlint-disable-next-line @stylistic/max-len
+import props0_checker_foobar from '../fixtures/props0.foobar.schema.json' with {type: 'json'};
+
+// oxlint-disable-next-line @stylistic/max-len
+import props0_checker_bazbat from '../fixtures/props0.bazbat.schema.json' with {type: 'json'};
 
 void describe('AjvUtilities', () => {
 	void describe('compile', () => {
@@ -1203,6 +1210,8 @@ void describe('AjvUtilities', () => {
 						},
 						schemas: [
 							props0_checker,
+							props0_checker_foobar,
+							props0_checker_bazbat,
 						],
 					}),
 					{
@@ -1217,6 +1226,16 @@ void describe('AjvUtilities', () => {
 							'./types.ts',
 						],
 					},
+					specify_properties: [
+						{
+							type: {
+								name: 'props0',
+								as: 'foobar',
+							},
+							from: './types.ts',
+							properties: ['foo', 'bar'],
+						},
+					],
 				},
 			],
 		];

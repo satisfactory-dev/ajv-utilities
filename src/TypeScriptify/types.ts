@@ -13,6 +13,10 @@ import type {
 	WithSubTypeChain,
 } from './TypeReferences.ts';
 
+import type {
+	Config as PropertiesConfig,
+} from './preprocessors/CollectEvaluatedProperties.ts';
+
 export type StandaloneDataValidationCxt = (
 	& Omit<
 		DataValidationCxt,
@@ -185,4 +189,5 @@ export type Config = {
 		specify_type_inside_out,
 		...specify_type_inside_out[],
 	],
+	specify_properties: PropertiesConfig[],
 };
