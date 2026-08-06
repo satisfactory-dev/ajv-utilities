@@ -116,10 +116,10 @@ function validate20(data: unknown, { instancePath = "" }: Partial<StandaloneData
                 }
                 for (const key1 in data4) {
                     let data5 = data4[key1];
-                    const _errs14 = errors;
+                    const _errs14: number = errors;
                     let valid2 = false;
                     let passing0 = null;
-                    const _errs15 = errors;
+                    const _errs15: number = errors;
                     if (ajv_utilities__is_probably_object(data5)) {
                         if (data5.type === undefined) {
                             const err14: ErrorObject = { instancePath: instancePath + "/$defs/" + key1.replace(/~/g, "~0").replace(/\//g, "~1"), schemaPath: "#/properties/%24defs/additionalProperties/oneOf/0/required", keyword: "required", params: { missingProperty: "type" }, message: "must have required property '" + "type" + "'", schema: schema31.properties.$defs.additionalProperties.oneOf[0].required, parentSchema: schema31.properties.$defs.additionalProperties.oneOf[0], data: data5 };
@@ -154,7 +154,7 @@ function validate20(data: unknown, { instancePath = "" }: Partial<StandaloneData
                         props0 = {};
                         props0.type = true;
                     }
-                    const _errs19 = errors;
+                    const _errs19: number = errors;
                     if (ajv_utilities__is_probably_object(data5)) {
                         if (data5.allOf === undefined) {
                             const err18: ErrorObject = { instancePath: instancePath + "/$defs/" + key1.replace(/~/g, "~0").replace(/\//g, "~1"), schemaPath: "#/properties/%24defs/additionalProperties/oneOf/1/required", keyword: "required", params: { missingProperty: "allOf" }, message: "must have required property '" + "allOf" + "'", schema: schema31.properties.$defs.additionalProperties.oneOf[1].required, parentSchema: schema31.properties.$defs.additionalProperties.oneOf[1], data: data5 };
@@ -179,10 +179,10 @@ function validate20(data: unknown, { instancePath = "" }: Partial<StandaloneData
                                 const len0 = data7.length;
                                 for (let i0 = 0; i0 < len0; i0++) {
                                     let data8 = data7[i0];
-                                    const _errs25 = errors;
+                                    const _errs25: number = errors;
                                     let valid7 = false;
                                     let passing1 = null;
-                                    const _errs26 = errors;
+                                    const _errs26: number = errors;
                                     if (ajv_utilities__is_probably_object(data8)) {
                                         if (data8.type === undefined) {
                                             const err21: ErrorObject = { instancePath: instancePath + "/$defs/" + key1.replace(/~/g, "~0").replace(/\//g, "~1") + "/allOf/" + i0, schemaPath: "#/properties/%24defs/additionalProperties/oneOf/1/properties/allOf/items/oneOf/0/required", keyword: "required", params: { missingProperty: "type" }, message: "must have required property '" + "type" + "'", schema: schema31.properties.$defs.additionalProperties.oneOf[1].properties.allOf.items.oneOf[0].required, parentSchema: schema31.properties.$defs.additionalProperties.oneOf[1].properties.allOf.items.oneOf[0], data: data8 };
@@ -217,7 +217,7 @@ function validate20(data: unknown, { instancePath = "" }: Partial<StandaloneData
                                         props1 = {};
                                         props1.type = true;
                                     }
-                                    const _errs30 = errors;
+                                    const _errs30: number = errors;
                                     if (ajv_utilities__is_probably_object(data8)) {
                                         if (data8.$ref === undefined) {
                                             const err25: ErrorObject = { instancePath: instancePath + "/$defs/" + key1.replace(/~/g, "~0").replace(/\//g, "~1") + "/allOf/" + i0, schemaPath: "#/properties/%24defs/additionalProperties/oneOf/1/properties/allOf/items/oneOf/1/required", keyword: "required", params: { missingProperty: "$ref" }, message: "must have required property '" + "$ref" + "'", schema: schema31.properties.$defs.additionalProperties.oneOf[1].properties.allOf.items.oneOf[1].required, parentSchema: schema31.properties.$defs.additionalProperties.oneOf[1].properties.allOf.items.oneOf[1], data: data8 };
@@ -309,7 +309,7 @@ function validate20(data: unknown, { instancePath = "" }: Partial<StandaloneData
                                 props0 = true;
                             }
                         }
-                        const _errs35 = errors;
+                        const _errs35: number = errors;
                         if (ajv_utilities__is_probably_object(data5)) {
                             if (data5.oneOf === undefined) {
                                 const err33: ErrorObject = { instancePath: instancePath + "/$defs/" + key1.replace(/~/g, "~0").replace(/\//g, "~1"), schemaPath: "#/properties/%24defs/additionalProperties/oneOf/2/required", keyword: "required", params: { missingProperty: "oneOf" }, message: "must have required property '" + "oneOf" + "'", schema: schema31.properties.$defs.additionalProperties.oneOf[2].required, parentSchema: schema31.properties.$defs.additionalProperties.oneOf[2], data: data5 };
@@ -334,10 +334,10 @@ function validate20(data: unknown, { instancePath = "" }: Partial<StandaloneData
                                     const len1 = data11.length;
                                     for (let i1 = 0; i1 < len1; i1++) {
                                         let data12 = data11[i1];
-                                        const _errs41 = errors;
+                                        const _errs41: number = errors;
                                         let valid13 = false;
                                         let passing2 = null;
-                                        const _errs42 = errors;
+                                        const _errs42: number = errors;
                                         if (ajv_utilities__is_probably_object(data12)) {
                                             if (data12.type === undefined) {
                                                 const err36: ErrorObject = { instancePath: instancePath + "/$defs/" + key1.replace(/~/g, "~0").replace(/\//g, "~1") + "/oneOf/" + i1, schemaPath: "#/properties/%24defs/additionalProperties/oneOf/2/properties/oneOf/items/oneOf/0/required", keyword: "required", params: { missingProperty: "type" }, message: "must have required property '" + "type" + "'", schema: schema31.properties.$defs.additionalProperties.oneOf[2].properties.oneOf.items.oneOf[0].required, parentSchema: schema31.properties.$defs.additionalProperties.oneOf[2].properties.oneOf.items.oneOf[0], data: data12 };
@@ -372,7 +372,7 @@ function validate20(data: unknown, { instancePath = "" }: Partial<StandaloneData
                                             props2 = {};
                                             props2.type = true;
                                         }
-                                        const _errs46 = errors;
+                                        const _errs46: number = errors;
                                         if (ajv_utilities__is_probably_object(data12)) {
                                             if (data12.$ref === undefined) {
                                                 const err40: ErrorObject = { instancePath: instancePath + "/$defs/" + key1.replace(/~/g, "~0").replace(/\//g, "~1") + "/oneOf/" + i1, schemaPath: "#/properties/%24defs/additionalProperties/oneOf/2/properties/oneOf/items/oneOf/1/required", keyword: "required", params: { missingProperty: "$ref" }, message: "must have required property '" + "$ref" + "'", schema: schema31.properties.$defs.additionalProperties.oneOf[2].properties.oneOf.items.oneOf[1].required, parentSchema: schema31.properties.$defs.additionalProperties.oneOf[2].properties.oneOf.items.oneOf[1], data: data12 };

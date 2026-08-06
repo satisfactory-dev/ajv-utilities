@@ -31,10 +31,10 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
     if (evaluated0?.dynamicItems) {
         evaluated0.items = undefined;
     }
-    const _errs2 = errors;
+    const _errs2: number = errors;
     let valid2 = false;
     let passing0 = null;
-    const _errs3 = errors;
+    const _errs3: number = errors;
     if (ajv_utilities__is_probably_object(data)) {
         if (data.foo === undefined) {
             const err0: ErrorObject = { instancePath, schemaPath: "props0--checker--foobar/oneOf/0/required", keyword: "required", params: { missingProperty: "foo" }, message: "must have required property '" + "foo" + "'" };
@@ -90,7 +90,7 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
         (props0 as ajv_EvaluatedProperties<foobar>).foo = true;
         (props0 as ajv_EvaluatedProperties<foobar>).bar = true;
     }
-    const _errs9 = errors;
+    const _errs9: number = errors;
     if (ajv_utilities__is_probably_object(data)) {
         if (data.foo === undefined) {
             const err7: ErrorObject = { instancePath, schemaPath: "props0--checker--foobar/oneOf/1/required", keyword: "required", params: { missingProperty: "foo" }, message: "must have required property '" + "foo" + "'" };
@@ -151,7 +151,7 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
                 (props0 as ajv_EvaluatedProperties<foobar>).bar = true;
             }
         }
-        const _errs15 = errors;
+        const _errs15: number = errors;
         if (ajv_utilities__is_probably_object(data)) {
             if (data.foo === undefined) {
                 const err14: ErrorObject = { instancePath, schemaPath: "props0--checker--foobar/oneOf/2/required", keyword: "required", params: { missingProperty: "foo" }, message: "must have required property '" + "foo" + "'" };

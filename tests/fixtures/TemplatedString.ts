@@ -82,10 +82,10 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
                 const len0 = data3.length;
                 for (let i0 = 0; i0 < len0; i0++) {
                     let data4 = data3[i0];
-                    const _errs12 = errors;
+                    const _errs12: number = errors;
                     let valid4 = false;
                     let passing0 = null;
-                    const _errs13 = errors;
+                    const _errs13: number = errors;
                     if (typeof data4 === "string") {
                         if (func1(data4) < 1) {
                             const err8: ErrorObject = { instancePath: instancePath + "/templated_string/" + i0, schemaPath: "#/properties/templated_string/items/oneOf/0/minLength", keyword: "minLength", params: { limit: 1 }, message: "must NOT have fewer than 1 characters", schema: 1, parentSchema: schema31.properties.templated_string.items.oneOf[0], data: data4 };
@@ -103,7 +103,7 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
                         valid4 = true;
                         passing0 = 0;
                     }
-                    const _errs15 = errors;
+                    const _errs15: number = errors;
                     if (!(data4 && typeof data4 == "object" && !Array.isArray(data4))) {
                         const err10: ErrorObject = { instancePath: instancePath + "/templated_string/" + i0, schemaPath: "#/properties/templated_string/items/oneOf/1/type", keyword: "type", params: { type: "object" }, message: "must be object", schema: schema31.properties.templated_string.items.oneOf[1].type, parentSchema: schema31.properties.templated_string.items.oneOf[1], data: data4 };
                         vErrors.push(err10)
@@ -124,7 +124,7 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
                             valid4 = true;
                             passing0 = 1;
                         }
-                        const _errs17 = errors;
+                        const _errs17: number = errors;
                         if (!(data4 && typeof data4 == "object" && !Array.isArray(data4))) {
                             const err12: ErrorObject = { instancePath: instancePath + "/templated_string/" + i0, schemaPath: "#/properties/templated_string/items/oneOf/2/type", keyword: "type", params: { type: "object" }, message: "must be object", schema: schema31.properties.templated_string.items.oneOf[2].type, parentSchema: schema31.properties.templated_string.items.oneOf[2], data: data4 };
                             vErrors.push(err12)
@@ -145,7 +145,7 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
                                 valid4 = true;
                                 passing0 = 2;
                             }
-                            const _errs19 = errors;
+                            const _errs19: number = errors;
                             if (ajv_utilities__is_probably_array(data4)) {
                                 if (data4.length < 2) {
                                     const err14: ErrorObject = { instancePath: instancePath + "/templated_string/" + i0, schemaPath: "#/properties/templated_string/items/oneOf/3/minItems", keyword: "minItems", params: { limit: 2 }, message: "must NOT have fewer than 2 items", schema: 2, parentSchema: schema31.properties.templated_string.items.oneOf[3], data: data4 };
@@ -155,10 +155,10 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
                                 const len1 = data4.length;
                                 for (let i1 = 0; i1 < len1; i1++) {
                                     let data5 = data4[i1];
-                                    const _errs22 = errors;
+                                    const _errs22: number = errors;
                                     let valid7 = false;
                                     let passing1 = null;
-                                    const _errs23 = errors;
+                                    const _errs23: number = errors;
                                     if (typeof data5 === "string") {
                                         if (func1(data5) < 1) {
                                             const err15: ErrorObject = { instancePath: instancePath + "/templated_string/" + i0 + "/" + i1, schemaPath: "#/properties/templated_string/items/oneOf/3/items/oneOf/0/minLength", keyword: "minLength", params: { limit: 1 }, message: "must NOT have fewer than 1 characters", schema: 1, parentSchema: schema31.properties.templated_string.items.oneOf[3].items.oneOf[0], data: data5 };
@@ -176,7 +176,7 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
                                         valid7 = true;
                                         passing1 = 0;
                                     }
-                                    const _errs25 = errors;
+                                    const _errs25: number = errors;
                                     if (!(data5 && typeof data5 == "object" && !Array.isArray(data5))) {
                                         const err17: ErrorObject = { instancePath: instancePath + "/templated_string/" + i0 + "/" + i1, schemaPath: "#/properties/templated_string/items/oneOf/3/items/oneOf/1/type", keyword: "type", params: { type: "object" }, message: "must be object", schema: schema31.properties.templated_string.items.oneOf[3].items.oneOf[1].type, parentSchema: schema31.properties.templated_string.items.oneOf[3].items.oneOf[1], data: data5 };
                                         vErrors.push(err17)
@@ -233,7 +233,7 @@ function validate20(data: unknown, { instancePath = "", parentData, parentDataPr
                                     passing0 = 3;
                                     items0 = true;
                                 }
-                                const _errs27 = errors;
+                                const _errs27: number = errors;
                                 if (!(validate20(data4, { instancePath: instancePath + "/templated_string/" + i0, parentData: data3, parentDataProperty: i0, rootData, dynamicAnchors }))) {
                                     vErrors = vErrors.concat((validate20 as IsStandalone).errors || []);
                                     errors = vErrors.length;

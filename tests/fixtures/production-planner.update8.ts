@@ -8447,10 +8447,10 @@ function validate25(data: unknown, { instancePath = "", parentData, parentDataPr
     if (evaluated0?.dynamicItems) {
         evaluated0.items = undefined;
     }
-    const _errs0 = errors;
+    const _errs0: number = errors;
     let valid0 = false;
     let passing0 = null;
-    const _errs1 = errors;
+    const _errs1: number = errors;
     if (typeof data === "string") {
         if (!pattern5.test(data)) {
             const err0: ErrorObject = { instancePath, schemaPath: "#/$defs/amount_string/pattern", keyword: "pattern", params: { pattern: "^\\d+(?:\\.\\d{1,6})?$" }, message: "must match pattern \"" + "^\\d+(?:\\.\\d{1,6})?$" + "\"", schema: "^\\d+(?:\\.\\d{1,6})?$", parentSchema: schema34, data };
@@ -8468,7 +8468,7 @@ function validate25(data: unknown, { instancePath = "", parentData, parentDataPr
         valid0 = true;
         passing0 = 0;
     }
-    const _errs4 = errors;
+    const _errs4: number = errors;
     if (typeof data === "string") {
         if (!pattern7.test(data)) {
             const err2: ErrorObject = { instancePath, schemaPath: "#/oneOf/1/pattern", keyword: "pattern", params: { pattern: "^\\d*(?:\\.\\d{1,6})$" }, message: "must match pattern \"" + "^\\d*(?:\\.\\d{1,6})$" + "\"", schema: "^\\d*(?:\\.\\d{1,6})$", parentSchema: schema37.oneOf[1], data };
@@ -8491,7 +8491,7 @@ function validate25(data: unknown, { instancePath = "", parentData, parentDataPr
             valid0 = true;
             passing0 = 1;
         }
-        const _errs6 = errors;
+        const _errs6: number = errors;
         if (typeof data === "string") {
             if (!pattern8.test(data)) {
                 const err4: ErrorObject = { instancePath, schemaPath: "#/oneOf/2/pattern", keyword: "pattern", params: { pattern: "^\\d+$" }, message: "must match pattern \"" + "^\\d+$" + "\"", schema: "^\\d+$", parentSchema: schema37.oneOf[2], data };
@@ -8581,10 +8581,10 @@ function validate24(data: unknown, { instancePath = "", parentData, parentDataPr
         }
         if (data.value !== undefined) {
             let data1 = data.value;
-            const _errs5 = errors;
+            const _errs5: number = errors;
             let valid1 = false;
             let passing0 = null;
-            const _errs6 = errors;
+            const _errs6: number = errors;
             if (!(validate25(data1, { instancePath: instancePath + "/value", parentData: data, parentDataProperty: "value", rootData, dynamicAnchors }))) {
                 vErrors = vErrors.concat((validate25 as IsStandalone).errors || []);
                 errors = vErrors.length;
@@ -8594,7 +8594,7 @@ function validate24(data: unknown, { instancePath = "", parentData, parentDataPr
                 valid1 = true;
                 passing0 = 0;
             }
-            const _errs7 = errors;
+            const _errs7: number = errors;
             if (typeof data1 === "string") {
                 if (!pattern9.test(data1)) {
                     const err5: ErrorObject = { instancePath: instancePath + "/value", schemaPath: "#/$defs/numeric_string/pattern", keyword: "pattern", params: { pattern: "^-?(?:\\d*\\.\\d+|\\d+(?:\\.\\d+)?)$" }, message: "must match pattern \"" + "^-?(?:\\d*\\.\\d+|\\d+(?:\\.\\d+)?)$" + "\"", schema: "^-?(?:\\d*\\.\\d+|\\d+(?:\\.\\d+)?)$", parentSchema: schema39, data: data1 };
@@ -8617,7 +8617,7 @@ function validate24(data: unknown, { instancePath = "", parentData, parentDataPr
                     valid1 = true;
                     passing0 = 1;
                 }
-                const _errs10 = errors;
+                const _errs10: number = errors;
                 if (typeof data1 === "string") {
                     if (!pattern10.test(data1)) {
                         const err7: ErrorObject = { instancePath: instancePath + "/value", schemaPath: "#/properties/value/oneOf/2/pattern", keyword: "pattern", params: { pattern: "^(-?\\d+(?:\\.\\d+))e([+-])(\\d+)$" }, message: "must match pattern \"" + "^(-?\\d+(?:\\.\\d+))e([+-])(\\d+)$" + "\"", schema: "^(-?\\d+(?:\\.\\d+))e([+-])(\\d+)$", parentSchema: schema36.properties.value.oneOf[2], data: data1 };
@@ -8770,10 +8770,10 @@ function validate23(data: unknown, { instancePath = "", parentData, parentDataPr
     if (evaluated0?.dynamicItems) {
         evaluated0.items = undefined;
     }
-    const _errs0 = errors;
+    const _errs0: number = errors;
     let valid0 = false;
     let passing0 = null;
-    const _errs1 = errors;
+    const _errs1: number = errors;
     if (!(validate24(data, { instancePath, parentData, parentDataProperty, rootData, dynamicAnchors }))) {
         vErrors = vErrors.concat((validate24 as IsStandalone).errors || []);
         errors = vErrors.length;
@@ -8784,7 +8784,7 @@ function validate23(data: unknown, { instancePath = "", parentData, parentDataPr
         passing0 = 0;
         props0 = true;
     }
-    const _errs2 = errors;
+    const _errs2: number = errors;
     if (!(validate28(data, { instancePath, parentData, parentDataProperty, rootData, dynamicAnchors }))) {
         vErrors = vErrors.concat((validate28 as IsStandalone).errors || []);
         errors = vErrors.length;
@@ -8802,7 +8802,7 @@ function validate23(data: unknown, { instancePath = "", parentData, parentDataPr
                 props0 = true;
             }
         }
-        const _errs3 = errors;
+        const _errs3: number = errors;
         if (ajv_utilities__is_probably_object(data)) {
             if (data.type === undefined) {
                 const err0: ErrorObject = { instancePath, schemaPath: "#/$defs/TokenScan/required", keyword: "required", params: { missingProperty: "type" }, message: "must have required property '" + "type" + "'", schema: schema41.required, parentSchema: schema41, data };
@@ -8895,10 +8895,10 @@ function validate22(data: unknown, { instancePath = "", parentData, parentDataPr
     if (evaluated0?.dynamicItems) {
         evaluated0.items = undefined;
     }
-    const _errs0 = errors;
+    const _errs0: number = errors;
     let valid0 = false;
     let passing0 = null;
-    const _errs1 = errors;
+    const _errs1: number = errors;
     if ((typeof data == "number") && (isFinite(data))) {
         if (data < 0 || isNaN(data)) {
             const err0: ErrorObject = { instancePath, schemaPath: "#/oneOf/0/minimum", keyword: "minimum", params: { comparison: ">=", limit: 0 }, message: "must be >= 0", schema: 0, parentSchema: schema33.oneOf[0], data };
@@ -8922,7 +8922,7 @@ function validate22(data: unknown, { instancePath = "", parentData, parentDataPr
         valid0 = true;
         passing0 = 0;
     }
-    const _errs3 = errors;
+    const _errs3: number = errors;
     if (typeof data === "string") {
         if (!pattern5.test(data)) {
             const err3: ErrorObject = { instancePath, schemaPath: "#/$defs/amount_string/pattern", keyword: "pattern", params: { pattern: "^\\d+(?:\\.\\d{1,6})?$" }, message: "must match pattern \"" + "^\\d+(?:\\.\\d{1,6})?$" + "\"", schema: "^\\d+(?:\\.\\d{1,6})?$", parentSchema: schema34, data };
@@ -8945,7 +8945,7 @@ function validate22(data: unknown, { instancePath = "", parentData, parentDataPr
             valid0 = true;
             passing0 = 1;
         }
-        const _errs6 = errors;
+        const _errs6: number = errors;
         if (!(validate23(data, { instancePath, parentData, parentDataProperty, rootData, dynamicAnchors }))) {
             vErrors = vErrors.concat((validate23 as IsStandalone).errors || []);
             errors = vErrors.length;
@@ -9000,7 +9000,7 @@ function validate32(data: unknown, { instancePath = "", parentData, parentDataPr
     }
     if (ajv_utilities__is_probably_object(data)) {
         for (const key0 in data) {
-            const _errs1 = errors;
+            const _errs1: number = errors;
             if (typeof key0 !== "string") {
                 const err0: ErrorObject = { instancePath, schemaPath: "#/propertyNames/type", keyword: "type", params: { type: "string" }, message: "must be string", schema: schema43.propertyNames.type, parentSchema: schema43.propertyNames, data: key0, propertyName: key0 };
                 vErrors.push(err0)

@@ -160,6 +160,8 @@ import TypecastEvalulatedProperties from './TypeScriptify/modifiers/TypecastEval
 // oxlint-disable-next-line @stylistic/max-len
 import PatchEvaluatedPropertiesLike from './TypeScriptify/patchers/PatchEvaluatedPropertiesLike.ts';
 
+import SpecifyErrsType from './TypeScriptify/modifiers/SpecifyErrsType.ts';
+
 export type ts = {
 	createPrinter: typeof createPrinter,
 	createSourceFile: typeof createSourceFile,
@@ -418,6 +420,7 @@ export default class TypeScript {
 					collected_properties,
 					patch_with.evaluated_properties_like,
 				),
+				new SpecifyErrsType(this.#ts),
 			],
 		);
 
